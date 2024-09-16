@@ -1,0 +1,11 @@
+0000000000000000000000000000000000000000 f38d9acc2e0152786b20b3e36991008093dc38d5 LennartHildebrandt <eneli317@htw-dresden.de> 1724751507 +0200	commit (initial): First commit and push on v0.6
+f38d9acc2e0152786b20b3e36991008093dc38d5 01be0e5aaa6cc67a0abf3ad50e89f2adfdcc4df2 LennartHildebrandt <eneli317@htw-dresden.de> 1724762082 +0200	commit: general improvements
+01be0e5aaa6cc67a0abf3ad50e89f2adfdcc4df2 db2ebad42d68d29617e1985c21c3fd5bad2fd73f LennartHildebrandt <eneli317@htw-dresden.de> 1724839080 +0200	commit: Improved logging & documentation
+db2ebad42d68d29617e1985c21c3fd5bad2fd73f f4472276f9b244af77686f06aa814ffb873a2a2d LennartHildebrandt <eneli317@htw-dresden.de> 1724930865 +0200	commit: Docker improvement
+f4472276f9b244af77686f06aa814ffb873a2a2d dca65b746b8e6cc933c42180cf9d887c2c72ae32 LennartHildebrandt <eneli317@htw-dresden.de> 1724931396 +0200	commit (merge): Merging
+dca65b746b8e6cc933c42180cf9d887c2c72ae32 bde06078bb90cf4b4ea3d91c76aab1acb162f62d LennartHildebrandt <eneli317@htw-dresden.de> 1725024044 +0200	commit: proxy config rework
+bde06078bb90cf4b4ea3d91c76aab1acb162f62d 2f327ec770256ac0943dece93d0cb367c4789818 LennartHildebrandt <eneli317@htw-dresden.de> 1725285827 +0200	commit: refreshing mechanism (not functional)
+2f327ec770256ac0943dece93d0cb367c4789818 83caee3d7429cdc2933911dfd8190d3168878eed LennartHildebrandt <eneli317@htw-dresden.de> 1725285992 +0200	commit: new specification version
+83caee3d7429cdc2933911dfd8190d3168878eed 297474250424b515863a6367d6f68599f8c5c03c LennartHildebrandt <eneli317@htw-dresden.de> 1725371754 +0200	commit: improved customRestTemplate with authentication (not long term tested)
+297474250424b515863a6367d6f68599f8c5c03c eb57de6028f69abc43f421fd84ad4a11c4ce6341 LennartHildebrandt <eneli317@htw-dresden.de> 1725371776 +0200	commit: smaller code reworks
+eb57de6028f69abc43f421fd84ad4a11c4ce6341 21d1d795790667a1bffc99723ab6743990c9a9c8 LennartHildebrandt <eneli317@htw-dresden.de> 1726469109 +0200	commit: Deleted depricated classes and specifications

@@ -1,0 +1,44 @@
+
+Vorbereitung:
+ - Ablage der YAML Spezifikation unter „init/“
+ - Angabe von Name (und Verzeichnis) der YAML in der „pom.xml“ im Projektverzeichnis ( Plugin -> <inputSpec> )
+ - Fehler bei <execution> weißt auf falsche Pfadangabe hin (oder yml != yaml)
+ - Generator sollte „spring“ sein ( Plugin -> <generatorName> )
+ - Angabe zum Output in das Projektverzeichnis mit „${project.basedir} ( Plugin -> <output> )
+ - Prüfung der „.openapi-generator-ignore“ auf Richtigkeit und Vollständigkeit der Angaben
+ - Prüfung auf Vollständigkeit für „Component Scan“ in der Main Class
+
+====================================================================================================================
+
+Ausführung:
+ - Maven mittels Terminalbefehl compilieren, dabei wird der Generator gestartet
+ - „mvn clean compile“ löscht das target-Verzeichnis und überschreibt/erzeugt die Klassen neu
+ - „mvn compile“ überschreibt die generierten Dateien
+
+====================================================================================================================
+
+Nachbereitung:
+ - bei Angabe des Projektverzeichnisses als Output sollten keine Dateien im target-Verzeichnis geschrieben werden
+ - bei Erstanwendung müssen manuell erstellte Klassen in die korrekten Verzeichnisse kopiert werden
+ - bei weiterer Anwendung sollten die Klassen in der ignore geführt sein
+ - bei fehlerhaften Importen müssen die Dependecies in der „pom.xml“ geprüft und ggf. aktualisiert werden
+ - bei gewünschter Gruppierung der API-Befehle/-Endpunkte in der Swagger UI muss die Annotation „@Tag“ in „ApiApi.java“ entfernt/auskommentiert werden
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator/src/main/resources/JavaSpring

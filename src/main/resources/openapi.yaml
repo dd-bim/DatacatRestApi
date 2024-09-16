@@ -1,0 +1,295 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: lennart.hildebrandt@htw-dresden.de
+    name: Support/Contact
+    url: https://github.com/dd-bim
+  description: |-
+    <p>Web facade to access the Datacat catalogue system.</br></p> <h3>Latest changes:</h3> <ul><li>v1.0 "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
+        <li>including URI usage (missing business logic)</li>
+        <li>schema rework (renaming, parameter changes, etc.)</li>
+        <li>removed porxy settings</li></ul></li></ul>
+  license:
+    name: Lizenzname
+  title: Datacat REST API v1.0
+  version: "1.0"
+servers:
+- description: DATACAT
+  url: https://datacat.org
+- description: IBPDI
+  url: https://ibpdi.datcat.org
+- description: CAFM
+  url: https://cafm.datacat.org
+paths:
+  /api/Class/v1:
+    get:
+      description: "Following features of this endpoint are not implemented yet: \n\
+        - get by URI\n- include properties"
+      operationId: getClassDetails
+      parameters:
+      - description: "URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg"
+        explode: true
+        in: query
+        name: URI
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: Use this option to include properties of the class. By default
+          it is set to false.
+        explode: true
+        in: query
+        name: IncludeClassProperties
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassDetailsResponse.v1'
+          description: Success
+      summary: Get class detailes
+      tags:
+      - Class
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Class
+  /api/Dictiorany/v1:
+    get:
+      description: "Following features of this endpoint are not implemented yet: \n\
+        - filtering by URI"
+      operationId: getDictionary
+      parameters:
+      - description: "URI of the class, e.g. https://datacat.org/model"
+        explode: true
+        in: query
+        name: URI
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DictionaryResponse.v1'
+          description: Success
+      summary: "Get list of available Dictionaries, i.e. XtdBag"
+      tags:
+      - Dictionary
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Dictionary
+  /api/Dictionary/v1/Classes:
+    get:
+      description: "Following features of this endpoint are not implemented yet: \n\
+        - get by URI"
+      operationId: getClasses
+      parameters:
+      - description: "URI of the class, e.g. https://datacat.org/class required: true"
+        explode: true
+        in: query
+        name: URI
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassesResponse.v1'
+          description: Success
+      summary: Get Dictionary with tree of classes from Datacat.
+      tags:
+      - Dictionary
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Dictionary
+  /api/Dictionary/v1/Properties:
+    get:
+      description: "Following features of this endpoint are not implemented yet: \n\
+        - get by URI"
+      operationId: getProperties
+      parameters:
+      - description: "URI of the class, e.g. https://datacat.org/property required:\
+          \ true"
+        explode: true
+        in: query
+        name: URI
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertiesResponse.v1'
+          description: Success
+      summary: Get Dictionary with its properties from Datacat.
+      tags:
+      - Dictionary
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Dictionary
+  /api/Statistics:
+    get:
+      description: "With this endpoint the statistics, i.e. the items name and its\
+        \ content count, can be requested with GET."
+      operationId: getStatistics
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsResponse.v1'
+          description: Success
+      summary: Get statistics about Datacat entries here.
+      tags:
+      - Lookup Data
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Lookup Data
+components:
+  schemas:
+    ClassDetailsResponse.v1:
+      example:
+        uid: uid
+        classProperties:
+        - propertySet: propertySet
+          name: name
+          description: description
+          propertyUri: propertyUri
+          uri: uri
+        - propertySet: propertySet
+          name: name
+          description: description
+          propertyUri: propertyUri
+          uri: uri
+        name: name
+        definition: definition
+        dictionaryUri: dictionaryUri
+        uri: uri
+        versionDateUtc: 2000-01-23T04:56:07.000+00:00
+      properties:
+        classProperties:
+          description: List of the properties of this class
+          items:
+            $ref: '#/components/schemas/ClassPropertyResponse.v1'
+          type: array
+        dictionaryUri:
+          description: URI of the dictionary
+          type: string
+        definition:
+          description: Formal definition
+          type: string
+        name:
+          description: Name
+          minLength: 1
+          type: string
+        uri:
+          description: Unique identification
+          minLength: 1
+          type: string
+        uid:
+          description: Alternative unique global identification
+          type: string
+        versionDateUtc:
+          description: Date of the version
+          format: date-time
+          type: string
+      type: object
+    ClassPropertyResponse.v1:
+      example:
+        propertySet: propertySet
+        name: name
+        description: description
+        propertyUri: propertyUri
+        uri: uri
+      properties:
+        name:
+          description: Name of the property
+          minLength: 1
+          type: string
+        uri:
+          type: string
+        description:
+          description: "Plain language description of the property.\r\nIf at Property\
+            \ level no description has been given but a \"Definition\" is available,\
+            \ then \"Definition\" is returned as description"
+          type: string
+        propertyUri:
+          description: Unique identification of the property
+          type: string
+        propertySet:
+          description: Name of the Property Set
+          type: string
+      type: object
+    DictionaryResponse.v1:
+      example:
+        name: name
+        uri: uri
+        version: version
+      properties:
+        uri:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        version:
+          minLength: 1
+          type: string
+      type: object
+    ClassesResponse.v1:
+      example:
+        name: name
+        uri: uri
+        version: ""
+      properties:
+        uri:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        version:
+          minLength: 1
+      type: object
+    PropertiesResponse.v1:
+      example:
+        name: name
+        uri: uri
+        version: ""
+      properties:
+        uri:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        version:
+          minLength: 1
+      type: object
+    StatisticsResponse.v1:
+      example:
+        catalogueItemId: catalogueItemId
+        itemsCount: itemsCount
+      properties:
+        catalogueItemId:
+          type: string
+        itemsCount:
+          type: string
+      type: object

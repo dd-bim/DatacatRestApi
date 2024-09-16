@@ -1,0 +1,231 @@
+openapi: 3.0.1
+info:
+  title: Datacat REST API v1.0
+  description: >-
+    <p>Web facade to access the Datacat catalogue system.</br></p>
+    <h3>Latest changes:</h3>
+    <ul><li>v1.0 "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
+        <li>including URI usage (missing business logic)</li>
+        <li>schema rework (renaming, parameter changes, etc.)</li>
+        <li>removed porxy settings</li></ul></li></ul>
+  contact:
+    name: Support/Contact
+    url: https://github.com/dd-bim
+    email: lennart.hildebrandt@htw-dresden.de
+  license:
+    name: 'Lizenzname'
+  version: '1.0'
+servers:
+  - url: https://datacat.org
+    description: DATACAT
+  - url: https://ibpdi.datcat.org
+    description: IBPDI
+  - url: https://cafm.datacat.org
+    description: CAFM
+paths:
+  /api/Class/v1:
+    get:
+      tags:
+        - Class
+      summary: "Get class detailes"
+      description: "Following features of this endpoint are not implemented yet: \n- get by URI\n- include properties"
+      operationId: getClassDetails
+      parameters:
+        - name: URI
+          in: query
+          description: >-
+            URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg
+          required: true
+          schema:
+            type: string
+        - name: IncludeClassProperties
+          in: query
+          description: >-
+            Use this option to include properties of the class. By default it is set to false.
+          schema:
+            type: boolean
+      responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ClassDetailsResponse.v1'
+  /api/Dictiorany/v1:
+    get:
+      tags:
+        - Dictionary
+      summary: Get list of available Dictionaries, i.e. XtdBag
+      description: "Following features of this endpoint are not implemented yet: \n- filtering by URI"
+      operationId: getDictionary
+      parameters:
+        - name: URI
+          in: query
+          description: >-
+            URI of the class, e.g. https://datacat.org/model
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DictionaryResponse.v1'
+  /api/Dictionary/v1/Classes:
+    get:
+      tags:
+        - Dictionary
+      summary: Get Dictionary with tree of classes from Datacat.
+      description: "Following features of this endpoint are not implemented yet: \n- get by URI"
+      operationId: getClasses
+      parameters:
+        - name: URI
+          in: query
+          description: >-
+            URI of the class, e.g. https://datacat.org/class
+            required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassesResponse.v1'
+  /api/Dictionary/v1/Properties:
+    get:
+      tags:
+        - Dictionary
+      summary: Get Dictionary with its properties from Datacat.
+      description: "Following features of this endpoint are not implemented yet: \n- get by URI"
+      operationId: getProperties
+      parameters:
+        - name: URI
+          in: query
+          description: >-
+            URI of the class, e.g. https://datacat.org/property
+            required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertiesResponse.v1'  
+  /api/Statistics:
+    get:
+      tags:
+        - Lookup Data
+      summary: Get statistics about Datacat entries here.
+      description: With this endpoint the statistics, i.e. the items name and its content count, can be requested with GET.
+      operationId: getStatistics
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsResponse.v1'
+components:
+  schemas:
+    ClassDetailsResponse.v1:
+      type: object
+      properties:
+        classProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassPropertyResponse.v1'
+          description: List of the properties of this class
+          # nullable: true
+        dictionaryUri:
+          type: string
+          description: URI of the dictionary
+          # nullable: true
+        definition:
+          type: string
+          description: Formal definition
+          # nullable: true
+        name:
+          minLength: 1
+          type: string
+          description: Name
+        uri:
+          minLength: 1
+          type: string
+          description: Unique identification
+        uid:
+          type: string
+          description: Alternative unique global identification
+          # nullable: true
+        versionDateUtc:
+          type: string
+          description: Date of the version
+          format: date-time
+    ClassPropertyResponse.v1:
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+          description: Name of the property
+        uri:
+          type: string
+          # nullable: true
+        description:
+          type: string
+          description: "Plain language description of the property.\r\nIf at Property level no description has been given but a \"Definition\" is available, then \"Definition\" is returned as description"
+          # nullable: true
+        propertyUri:
+          type: string
+          description: Unique identification of the property
+          # nullable: true
+        propertySet:
+          type: string
+          description: Name of the Property Set
+          # nullable: true
+    DictionaryResponse.v1:
+      type: object
+      properties:
+        uri:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        version:
+          minLength: 1
+          type: string
+    ClassesResponse.v1:
+      type: object
+      properties:
+        uri:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        version:
+          minLength: 1
+    PropertiesResponse.v1:
+      type: object
+      properties:
+        uri:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        version:
+          minLength: 1
+    StatisticsResponse.v1:
+      type: object
+      properties:
+        catalogueItemId:
+          type: string
+        itemsCount:
+          type: string

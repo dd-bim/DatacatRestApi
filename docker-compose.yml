@@ -1,0 +1,6 @@
+services:
+  datacatapi:
+    container_name: datacatapi
+    build: .
+    ports:
+      - "3001:3001"
