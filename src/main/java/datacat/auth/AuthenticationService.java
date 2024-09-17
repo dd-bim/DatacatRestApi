@@ -64,6 +64,7 @@ public class AuthenticationService {
                 bearerToken = extractTokenFromResponse(response.getBody());
                 tokenIssueTime = Instant.now();
                 logger.info("Authentication successful. Token obtained.");
+                logger.info("Token expires in {} minutes", TOKEN_LIFETIME.toMinutes());
                 return bearerToken;
             } else {
                 throw new RuntimeException("Failed to authenticate: " + response.getStatusCode());
@@ -84,11 +85,11 @@ public class AuthenticationService {
     }
 
     // =====================================================================================================================
-    // sceduled authentication methods 
+    // scheduled authentication methods 
     @PostConstruct
     public void authenticateOnStartup() {
         authenticate();  // authenticates at application startup
-        logger.info("Token expires in {} minutes", TOKEN_LIFETIME.toMinutes());
+        // logger.info("Token expires in {} minutes", TOKEN_LIFETIME.toMinutes());
     }
 
     public boolean isTokenExpired() {
