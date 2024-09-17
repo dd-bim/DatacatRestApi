@@ -3,27 +3,24 @@ package org.openapitools;
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
-// Jackson
-import com.fasterxml.jackson.databind.Module;
-
-import datacat.service.CustomProperties;
-
-// OpenAPI
-import org.openapitools.jackson.nullable.JsonNullableModule;
-
 // Spring Boot
+import org.springframework.context.annotation.*;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.scheduling.annotation.EnableScheduling;
+
+// Jackson
+import com.fasterxml.jackson.databind.Module;
+import org.openapitools.jackson.nullable.JsonNullableModule;
 
 // Logging
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+// Internal
+import datacat.service.CustomProperties;
 
 // =====================================================================================================================
 // A N N O T A T I O N   S E C T I O N

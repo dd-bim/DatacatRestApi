@@ -5,11 +5,11 @@ package datacat.auth;
 // =====================================================================================================================
 // Spring Boot
 import org.springframework.http.client.*;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpHeaders;
 
 // Logging
 import org.slf4j.*;
@@ -34,23 +34,15 @@ public class TokenInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         logger.debug("Intercepting request to: {}", request.getURI());
-        
-       
+
         if (authenticationService.isTokenExpired()) { // checks if the token is expired and refreshes if necessary
             logger.info("Token is expired. Refreshing token...");
             authenticationService.authenticate();
         }
 
-
         HttpHeaders headers = request.getHeaders();
         headers.set("Authorization", "Bearer " + authenticationService.getBearerToken()); // injects token into the header
 
         return execution.execute(request, body);
-
-        // String token = authenticationService.getBearerToken(); // retrieves the token from AuthenticationService
-        // HttpHeaders headers = request.getHeaders();
-        // headers.setBearerAuth(token);  // injects token into the header
-        // return execution.execute(request, body);
     }
-
 }

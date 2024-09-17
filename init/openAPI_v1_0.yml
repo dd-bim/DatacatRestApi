@@ -1,47 +1,49 @@
 openapi: 3.0.1
 info:
-  title: Datacat REST API v1.0
+  title: Datacat REST API v1.0.1
   description: >-
     <p>Web facade to access the Datacat catalogue system.</br></p>
     <h3>Latest changes:</h3>
-    <ul><li>v1.0 "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
-        <li>including URI usage (missing business logic)</li>
+    <ul><li>v1.0.0 "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
+        <li>including URI usage (partly missing business logic)</li>
         <li>schema rework (renaming, parameter changes, etc.)</li>
-        <li>removed porxy settings</li></ul></li></ul>
+        <li>removed porxy settings</li>
+        <li>published under CAFM and IBPDI demain</li>
+    </ul></li></ul>
   contact:
     name: Support/Contact
     url: https://github.com/dd-bim
     email: lennart.hildebrandt@htw-dresden.de
   license:
-    name: 'Lizenzname'
-  version: '1.0'
-servers:
-  - url: https://datacat.org
-    description: DATACAT
-  - url: https://ibpdi.datcat.org
-    description: IBPDI
-  - url: https://cafm.datacat.org
-    description: CAFM
+    name: '* licence name placeholder *'
+  version: '1.0.1'
+#servers:
+#  - url: https://datacat.org
+#    description: DATACAT
+#  - url: https://ibpdi.datcat.org
+#    description: IBPDI
+#  - url: https://cafm.datacat.org
+#    description: CAFM
 paths:
   /api/Class/v1:
     get:
       tags:
         - Class
-      summary: "Get class detailes"
-      description: "Following features of this endpoint are not implemented yet: \n- get by URI\n- include properties"
+      summary: "Get class detailes (i.e. XtdSubject) from a specific class"
+      description: "Following features of this endpoint are not implemented yet: \n\r- include properties\n\r- various response contents"
       operationId: getClassDetails
       parameters:
         - name: URI
           in: query
           description: >-
-            URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg
+            URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/Class/442.90 | IBPDI: https://ibpdi.datacat.org/Class/c102a240-c3f2-11ec-ac20-5d24a21d559a
           required: true
           schema:
             type: string
         - name: IncludeClassProperties
           in: query
           description: >-
-            Use this option to include properties of the class. By default it is set to false.
+            Use this option to include properties of the class. By default it is set to false. ! This option is not yet implemented.
           schema:
             type: boolean
       responses:
@@ -51,12 +53,12 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/ClassDetailsResponse.v1'
-  /api/Dictiorany/v1:
+  /api/Dictionary/v1:
     get:
       tags:
         - Dictionary
-      summary: Get list of available Dictionaries, i.e. XtdBag
-      description: "Following features of this endpoint are not implemented yet: \n- filtering by URI"
+      summary: Get list of available dictionaries (i.e. XtdBag) with optional filtering.
+      description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
       operationId: getDictionary
       parameters:
         - name: URI
@@ -77,15 +79,15 @@ paths:
     get:
       tags:
         - Dictionary
-      summary: Get Dictionary with tree of classes from Datacat.
-      description: "Following features of this endpoint are not implemented yet: \n- get by URI"
+      summary: Get dictionary with tree of classes from Datacat (i.e. XtdSubject)
+      description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
       operationId: getClasses
       parameters:
         - name: URI
           in: query
           description: >-
             URI of the class, e.g. https://datacat.org/class
-            required: true
+          required: true
           schema:
             type: string
       responses:
@@ -99,15 +101,15 @@ paths:
     get:
       tags:
         - Dictionary
-      summary: Get Dictionary with its properties from Datacat.
-      description: "Following features of this endpoint are not implemented yet: \n- get by URI"
+      summary: Get dictionary with its properties from Datacat (i.e. XtdProperty)
+      description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
       operationId: getProperties
       parameters:
         - name: URI
           in: query
           description: >-
             URI of the class, e.g. https://datacat.org/property
-            required: true
+          required: true
           schema:
             type: string
       responses:
