@@ -91,6 +91,11 @@ public class GraphQLService {
         try {
             JsonNode rootNode = objectMapper.readTree(response); // parses response into generic map
 
+            JsonNode errorsNode = rootNode.get("errors"); // extracts 'errors' node from the map
+            if (errorsNode != null && errorsNode.isArray() && errorsNode.size() > 0) {
+                logger.error("GraphQL errors: {}", errorsNode.toString());
+                return null;
+            }
             JsonNode dataNode = rootNode.get("data"); // extracts 'data' node from the map
             if (dataNode == null) {
                 logger.error("No 'data' node in response");
@@ -103,7 +108,7 @@ public class GraphQLService {
                 return null;
             }
 
-            T parsedResponse = objectMapper.readValue(response, valueType);
+            T parsedResponse = objectMapper.treeToValue(unwrappedNode, valueType); // converts the unwrapped node to the desired type
             logger.debug("Parsed response to {}: {}", valueType.getSimpleName(), parsedResponse);
             return parsedResponse;
         } catch (IOException e) {
@@ -115,7 +120,8 @@ public class GraphQLService {
     // =====================================================================================================================
     // specified endpoint logic for each query
     public ClassDetailsResponseV1 getClassDetails(String id, String bearerToken) {
-        String query = "{ getSubject(id: \\\"" + id + "\\\") { classProperties:properties { name description propertyUri:comment propertySet:groups { nodes { id } } } name uri:comment uid: id versionDateUtc:created } }";
+        // String query = "{ getSubject(id: \\\"" + id + "\\\") { classProperties:properties { name description propertyUri:comment propertySet:groups { nodes { id } } } name uri:comment uid: id versionDateUtc:created } }";
+        String query = "{ getSubject(id: \\\"" + id + "\\\") { classProperties:properties { name description propertyUri:comment } name uri:comment uid: id versionDateUtc:created } }";
         String response = executeQuery(query, bearerToken);
         return deserializeResponse(response, "getSubject", ClassDetailsResponseV1.class);
     }
