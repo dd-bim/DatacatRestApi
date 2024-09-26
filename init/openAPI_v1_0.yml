@@ -1,14 +1,15 @@
 openapi: 3.0.1
 info:
-  title: Datacat REST API v1.0.1
+  title: Datacat REST API v1.0.2
   description: >-
     <p>Web facade to access the Datacat catalogue system.</br></p>
     <h3>Latest changes:</h3>
-    <ul><li>v1.0.0 "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
+    <ul><li>v1.0.X "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
         <li>including URI usage (partly missing business logic)</li>
         <li>schema rework (renaming, parameter changes, etc.)</li>
         <li>removed porxy settings</li>
         <li>published under CAFM and IBPDI demain</li>
+        <li>minor changes to the UI</li>
     </ul></li></ul>
   contact:
     name: Support/Contact
@@ -16,14 +17,14 @@ info:
     email: lennart.hildebrandt@htw-dresden.de
   license:
     name: '* licence name placeholder *'
-  version: '1.0.1'
-#servers:
-#  - url: https://datacat.org
-#    description: DATACAT
-#  - url: https://ibpdi.datcat.org
-#    description: IBPDI
-#  - url: https://cafm.datacat.org
-#    description: CAFM
+  version: '1.0.2'
+servers:
+ - url: https://datacat.org/api/e1
+   description: DATACAT
+ - url: https://ibpdi.datcat.org/api/e1
+   description: IBPDI
+ - url: https://cafm.datacat.org/api/e1
+   description: CAFM
 paths:
   /api/Class/v1:
     get:
@@ -36,7 +37,7 @@ paths:
         - name: URI
           in: query
           description: >-
-            URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/Class/442.90 | IBPDI: https://ibpdi.datacat.org/Class/c102a240-c3f2-11ec-ac20-5d24a21d559a
+            URI of the class, e.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/class/442.90 | IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a
           required: true
           schema:
             type: string
@@ -64,7 +65,7 @@ paths:
         - name: URI
           in: query
           description: >-
-            URI of the class, e.g. https://datacat.org/model
+            Optional filtering, URI of a specific dictionary, e.g. https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W
           required: false
           schema:
             type: string
