@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 // Java
 import java.net.URI;
 import java.net.URISyntaxException;
+// import org.slf4j.*;
+// import org.springframework.http.*;
+// import org.springframework.web.client.HttpServerErrorException;
+// import datacat.models.*;
+// import datacat.auth.AuthenticationService;
 
 // =====================================================================================================================
 // C O M P O N E N T   S E C T I O N
@@ -17,16 +22,14 @@ import java.net.URISyntaxException;
 @Component
 public class UriUtils {
 
+    // private static final Logger logger = LoggerFactory.getLogger(UriUtils.class);
+
     public static String extractIdFromUri(String uri, String prefix) throws URISyntaxException {
-        
-        URI parsedUri = new URI(uri); // parses the URI
-        
-        String path = parsedUri.getPath(); // gets the path from the URI
-        
-        if (!path.startsWith(prefix)) { // checks if the path starts with the expected prefix
+        URI parsedUri = new URI(uri);
+        String path = parsedUri.getPath();
+        if (!path.startsWith(prefix)) {
             throw new IllegalArgumentException("URI does not contain the expected prefix: " + prefix);
         }
-        
-        return path.substring(prefix.length()); // extracts the ID by removing the prefix
+        return path.substring(prefix.length());
     }
 }
