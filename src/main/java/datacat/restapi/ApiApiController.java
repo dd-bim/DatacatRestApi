@@ -8,17 +8,19 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 // OpenAPI
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.net.URISyntaxException;
 
 // Logging
-import java.net.URISyntaxException;
 import org.slf4j.*;
+
 
 // Jakarta
 import jakarta.validation.Valid;
@@ -39,8 +41,8 @@ public class ApiApiController implements ApiApi {
     private static final Logger logger = LoggerFactory.getLogger(ApiApiController.class);
 
     private final AuthenticationService authenticationService;
-
     private final GraphQLService graphQLService;
+
     @SuppressWarnings("unused")
     private final NativeWebRequest request; // not know why it is marked as unused - it needed for the constructor below
     @SuppressWarnings("unused")
@@ -51,146 +53,128 @@ public class ApiApiController implements ApiApi {
         this.graphQLService = graphQLService;
         this.uriUtils = uriUtils;
         this.authenticationService = authenticationService;
-    }    
-
+    }
+    
     // =====================================================================================================================
     // class details with class properties
-    // null return
+    // partly null return
     @Override
+    @Tag(name = "Class")
     public ResponseEntity<ClassDetailsResponseV1> getClassDetails(
-        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg", required = true, in = ParameterIn.QUERY) 
+        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/Class/442.90 | IBPDI: https://ibpdi.datacat.org/Class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) 
         @Valid @RequestParam(value = "URI", required = true) String URI,
-        @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default it is set to false.", in = ParameterIn.QUERY)
+        @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default it is set to false. ! This option is not yet implemented.", in = ParameterIn.QUERY) 
         @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties) {
         
-        
-        String ID;
-        try { // extract ID from the URI using UriUtils
-            ID = UriUtils.extractIdFromUri(URI, "/Class/"); // assuming the prefix for the URI is "/Class/"
-        } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", URI, e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+            String ID;
+            try {
+                ID = UriUtils.extractIdFromUri(URI, "/Class/");
+            } catch (URISyntaxException e) {
+                logger.error("Invalid URI format: {}", URI, e);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } catch (IllegalArgumentException e) {
+                logger.error("Failed to extract ID from URI", e);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+    
+            try {
+                HttpHeaders headers = authenticationService.getAuthorizationHeaders();
+                String bearerToken = headers.getFirst("Authorization").substring(7);
+                ClassDetailsResponseV1 classDetails = graphQLService.getClassDetails(ID, bearerToken);
+                return new ResponseEntity<>(classDetails, HttpStatus.OK);
+            } catch (HttpServerErrorException e) {
+                logger.error("Error executing query for getClassDetails", e);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (Exception e) {
+                logger.error("Error fetching class details", e);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
 
-        try { // Retrieve headers with the authorization token from AuthenticationService
-            HttpHeaders headers = authenticationService.getAuthorizationHeaders();
-            String bearerToken = headers.getFirst("Authorization").substring(7);
-            ClassDetailsResponseV1 classDetails = graphQLService.getClassDetails(ID, bearerToken);
-            return new ResponseEntity<>(classDetails, HttpStatus.OK);
-        } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getClassDetails", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            logger.error("Error fetching class details", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        // return UriUtils.handleRequest(URI, includeClassProperties != null && includeClassProperties, authenticationService, graphQLService, ClassDetailsResponseV1.class);
     }
 
     // =====================================================================================================================
     // dictionaries
     // malfunctional
     @Override
+    @Tag(name = "Dictionary")
     public ResponseEntity<DictionaryResponseV1> getDictionary(
-        @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/model", in = ParameterIn.QUERY) 
+        @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W", in = ParameterIn.QUERY) 
         @Valid @RequestParam(value = "URI", required = false) String URI) {
     
-        String ID;
-        try { // extract ID from the URI using UriUtils
-            ID = UriUtils.extractIdFromUri(URI, "/Dictionary/");
-        } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", URI, e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        String ID = null;
+        if (URI != null && !URI.isEmpty()) {
+            try {
+                ID = UriUtils.extractIdFromUri(URI, "/model/");
+            } catch (URISyntaxException e) {
+                logger.error("Invalid URI format: {}", URI, e);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } catch (IllegalArgumentException e) {
+                logger.error("Failed to extract ID from URI", e);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
     
-        try { // Retrieve headers with the authorization token from AuthenticationService
+        try {
             HttpHeaders headers = authenticationService.getAuthorizationHeaders();
             String bearerToken = headers.getFirst("Authorization").substring(7);
-            DictionaryResponseV1 dictionary = graphQLService.getDictionary(ID, bearerToken);
-            return new ResponseEntity<>(dictionary, HttpStatus.OK);
+    
+            if (ID != null) {
+                // Fetch specific dictionary
+                DictionaryResponseV1 dictionaryResponse = graphQLService.getDictionary(ID, bearerToken);
+                if (dictionaryResponse != null) {
+                    return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                }
+            } else {
+                // Fetch all dictionaries
+                DictionaryResponseV1 dictionariesResponse = graphQLService.getAllDictionaries(bearerToken);
+                if (dictionariesResponse != null && !dictionariesResponse.getDictionaries().isEmpty()) {
+                    // Return the DictionaryResponseV1 object containing the list of nodes
+                    return new ResponseEntity<>(dictionariesResponse, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                }
+            }
         } catch (HttpServerErrorException e) {
             logger.error("Error executing query for getDictionary", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching dictionary details", e);
+            logger.error("Error fetching dictionary", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // =====================================================================================================================
-    // classes
-    // malfunctional
-    public ResponseEntity<ClassesResponseV1> getClasses(
-        @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/class required: true", in = ParameterIn.QUERY) 
-        @Valid @RequestParam(value = "URI", required = false) String URI) {
-    
-        String ID;
-        try { // extract ID from the URI using UriUtils
-            ID = UriUtils.extractIdFromUri(URI, "/Class/");
-        } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", URI, e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    
-        try { // Retrieve headers with the authorization token from AuthenticationService
-            HttpHeaders headers = authenticationService.getAuthorizationHeaders();
-            String bearerToken = headers.getFirst("Authorization").substring(7);
-            ClassesResponseV1 classes = graphQLService.getClasses(ID, bearerToken);
-            return new ResponseEntity<>(classes, HttpStatus.OK);
-        } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getClasses", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            logger.error("Error fetching class details", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // // =====================================================================================================================
+    // // classes
+    // // malfunctional
+    // @Override
+    // @Tag(name = "Dictionary")
+    // public ResponseEntity<ClassesResponseV1> getClasses(
+    //     @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/class", required = true, in = ParameterIn.QUERY) 
+    //     @Valid @RequestParam(value = "URI", required = false) String URI) {
+        
+    // }
 
-    // =====================================================================================================================
-    // properties
-    // malfunctional
-    @Override
-    public ResponseEntity<PropertiesResponseV1> getProperties(
-        @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/property required: true", in = ParameterIn.QUERY) 
-        @Valid @RequestParam(value = "URI", required = false) String URI) {
-    
-        String ID;
-        try { // extract ID from the URI using UriUtils
-            ID = UriUtils.extractIdFromUri(URI, "/Property/");
-        } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", URI, e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    
-        try { // Retrieve headers with the authorization token from AuthenticationService
-            HttpHeaders headers = authenticationService.getAuthorizationHeaders();
-            String bearerToken = headers.getFirst("Authorization").substring(7);
-            PropertiesResponseV1 properties = graphQLService.getProperties(ID, bearerToken);
-            return new ResponseEntity<>(properties, HttpStatus.OK);
-        } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getProperties", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            logger.error("Error fetching property details", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // // =====================================================================================================================
+    // // properties
+    // // malfunctional
+    // @Override
+    // @Tag(name = "Dictionary")
+    // public ResponseEntity<PropertiesResponseV1> getProperties(
+    //     @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/property", required = true, in = ParameterIn.QUERY) 
+    //     @Valid @RequestParam(value = "URI", required = false) String URI) {
+        
+    //     return ;
+    // }
 
     // =====================================================================================================================
     // statistics
     // works fine
     @Override
+    @Tag(name = "Lookup Data")
     public ResponseEntity<StatisticsResponseV1> getStatistics() {
         try {
             StatisticsResponseV1 statistics = graphQLService.getStatistics(); // No query passed here

@@ -9,9 +9,10 @@ import org.springframework.web.client.*;
 import org.springframework.stereotype.Service;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 
+import java.util.ArrayList;
+
 // Logging
 import org.slf4j.*;
-import java.io.IOException;
 
 // Mapping
 import com.fasterxml.jackson.databind.*;
@@ -86,39 +87,38 @@ public class GraphQLService {
     // =====================================================================================================================
     // deserialization for easier handling as Java object and compile-time type checking
     // generic response parsing for all endpoints
-    // newly added endpoints should be added to the list of response parsers below 
+    // newly added endpoints should be added to the list of response parsers below
+
     private <T> T deserializeResponse(String response, String rootField, Class<T> valueType) {
         try {
             JsonNode rootNode = objectMapper.readTree(response); // parses response into generic map
-
-            JsonNode errorsNode = rootNode.get("errors"); // extracts 'errors' node from the map
-            if (errorsNode != null && errorsNode.isArray() && errorsNode.size() > 0) {
-                logger.error("GraphQL errors: {}", errorsNode.toString());
-                return null;
-            }
-            JsonNode dataNode = rootNode.get("data"); // extracts 'data' node from the map
-            if (dataNode == null) {
-                logger.error("No 'data' node in response");
-                return null;
-            }
-
-            JsonNode unwrappedNode = dataNode.get(rootField); // extracts 'rootField' node from the 'data' node
-            if (unwrappedNode == null) {
+            JsonNode dataNode = rootNode.path("data").path(rootField);
+            if (dataNode.isMissingNode()) {
                 logger.error("No '{}' field in the 'data' response", rootField);
                 return null;
             }
 
-            T parsedResponse = objectMapper.treeToValue(unwrappedNode, valueType); // converts the unwrapped node to the desired type
-            logger.debug("Parsed response to {}: {}", valueType.getSimpleName(), parsedResponse);
-            return parsedResponse;
-        } catch (IOException e) {
-            logger.error("Error parsing response to {}: {}", valueType.getSimpleName(), e.getMessage());
+            // Check if the dataNode contains a "nodes" field
+            JsonNode nodesNode = dataNode.path("nodes");
+            if (!nodesNode.isMissingNode() && nodesNode.isArray()) {
+                // Deserialize the "nodes" array into a List of valueType
+                return objectMapper.treeToValue(nodesNode, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, valueType));
+            }
+
+            // Deserialize the single object
+            return objectMapper.treeToValue(dataNode, valueType);
+        } catch (Exception e) {
+            logger.error("Error deserializing response", e);
             return null;
-        } 
+        }
     }
 
     // =====================================================================================================================
     // specified endpoint logic for each query
+    // newly added endpoints should have a t least one processing method here
+    // rootField should match the field in the response (e.g. "getSubject", "getBag", "findSubjects", "findProperties")
+    // =====================================================================================================================
+    // getClassDetails endpoint
     public ClassDetailsResponseV1 getClassDetails(String id, String bearerToken) {
         // String query = "{ getSubject(id: \\\"" + id + "\\\") { classProperties:properties { name description propertyUri:comment propertySet:groups { nodes { id } } } name uri:comment uid: id versionDateUtc:created } }";
         String query = "{ getSubject(id: \\\"" + id + "\\\") { classProperties:properties { name description propertyUri:comment } name uri:comment uid: id versionDateUtc:created } }";
@@ -126,24 +126,38 @@ public class GraphQLService {
         return deserializeResponse(response, "getSubject", ClassDetailsResponseV1.class);
     }
 
+    // getDictionary by ID
     public DictionaryResponseV1 getDictionary(String id, String bearerToken) {
-        String query = "{ findBags (input:{pageSize:10000}) { nodes { uri:id, name, version:versionId } } }";
+        final String dictId = "6f96aaa7-e08f-49bb-ac63-93061d4c5db2"; // 'dictId' is a constant value pointing only on models in XtdBag
+        // String query = "{ getBag(id: \\\"" + id + "\\\") { uri:id name version:versionId } }";
+        String query = "{ findBags(input:{pageSize:1 tagged:\\\"" + dictId + "\\\" idIn: \\\"" + id + "\\\"}) { dictionaries:nodes { uri:id name version:versionId } dictionariesTotalCount:totalElements } }";
         String response = executeQuery(query, bearerToken);
         return deserializeResponse(response, "findBags", DictionaryResponseV1.class);
     }
 
-    public ClassesResponseV1 getClasses(String id, String bearerToken) {
-        String query = "{ findSubjects (input:{pageSize:10000}) { nodes { uri:id name version:versionId } } }";
+    // getAllDictionaries
+    public DictionaryResponseV1 getAllDictionaries(String bearerToken) {
+        final String dictId = "6f96aaa7-e08f-49bb-ac63-93061d4c5db2"; // 'dictId' is a constant value pointing only on models in XtdBag
+        String query = "{ findBags(input:{pageSize:10000 tagged: \\\"" + dictId + "\\\"}) { dictionaries:nodes { uri:id name version:versionId } dictionariesTotalCount:totalElements } }";
         String response = executeQuery(query, bearerToken);
-        return deserializeResponse(response, "findSubjects", ClassesResponseV1.class);
+        return deserializeResponse(response, "findBags", DictionaryResponseV1.class);
     }
 
-    public PropertiesResponseV1 getProperties(String id, String bearerToken) {
-        String query = "{ findProperties (input:{pageSize:10000}) { nodes { uri:id name version:versionId } } }";
-        String response = executeQuery(query, bearerToken);
-        return deserializeResponse(response, "findProperties", PropertiesResponseV1.class);
-    }
+    // getClasses
+    // public ClassesResponseV1 getClasses(String id, String bearerToken) {
+    //     String query = "{ findSubjects(input:{pageSize:10000}) { classes:nodes { uri:id name version:versionId } classesTotalCount:totalElements } }";
+    //     String response = executeQuery(query, bearerToken);
+    //     return deserializeResponse(response, "findSubjects", ClassesResponseV1.class);
+    // }
 
+    // getProperties
+    // public PropertiesResponseV1 getProperties(String id, String bearerToken) {
+    //     String query = "{ findProperties(input:{pageSize:10000}) { properties:nodes { uri:id name version:versionId } propertiesTotalCount:totalElements } }";
+    //     String response = executeQuery(query, bearerToken);
+    //     return deserializeResponse(response, "findProperties", PropertiesResponseV1.class);
+    // }
+
+    // getStatistics
     public StatisticsResponseV1 getStatistics() {
         String query = "{ statistics { catalogueItem:items { id count } } }";
         String response = executeQuery(query, null);

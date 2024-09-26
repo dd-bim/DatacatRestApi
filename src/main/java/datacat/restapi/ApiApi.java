@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-16T08:48:14.277332200+02:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-26T14:46:58.960815200+02:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
 @Validated
 @Controller
 public interface ApiApi {
@@ -47,17 +47,17 @@ public interface ApiApi {
     }
 
     /**
-     * GET /api/Class/v1 : Get class detailes
-     * Following features of this endpoint are not implemented yet:  - get by URI - include properties
+     * GET /api/Class/v1 : Get class detailes (i.e. XtdSubject) from a specific class
+     * Following features of this endpoint are not implemented yet:   - include properties  - various response contents
      *
-     * @param URI URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg (required)
-     * @param includeClassProperties Use this option to include properties of the class. By default it is set to false. (optional)
+     * @param URI URI of the class, e.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/class/442.90 | IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
+     * @param includeClassProperties Use this option to include properties of the class. By default it is set to false. ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "getClassDetails",
-        summary = "Get class detailes",
-        description = "Following features of this endpoint are not implemented yet:  - get by URI - include properties",
+        summary = "Get class detailes (i.e. XtdSubject) from a specific class",
+        description = "Following features of this endpoint are not implemented yet:   - include properties  - various response contents",
         tags = { "Class" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -72,8 +72,8 @@ public interface ApiApi {
     )
     
     default ResponseEntity<ClassDetailsResponseV1> getClassDetails(
-        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI,
-        @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default it is set to false.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties
+        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/class/442.90 | IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI,
+        @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default it is set to false. ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -90,16 +90,16 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1/Classes : Get Dictionary with tree of classes from Datacat.
-     * Following features of this endpoint are not implemented yet:  - get by URI
+     * GET /api/Dictionary/v1/Classes : Get dictionary with tree of classes from Datacat (i.e. XtdSubject)
+     * Following features of this endpoint are not implemented yet:   - response contents
      *
-     * @param URI URI of the class, e.g. https://datacat.org/class required: true (optional)
+     * @param URI URI of the class, e.g. https://datacat.org/class (required)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "getClasses",
-        summary = "Get Dictionary with tree of classes from Datacat.",
-        description = "Following features of this endpoint are not implemented yet:  - get by URI",
+        summary = "Get dictionary with tree of classes from Datacat (i.e. XtdSubject)",
+        description = "Following features of this endpoint are not implemented yet:   - response contents",
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -114,7 +114,7 @@ public interface ApiApi {
     )
     
     default ResponseEntity<ClassesResponseV1> getClasses(
-        @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/class required: true", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI
+        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/class", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -131,16 +131,16 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictiorany/v1 : Get list of available Dictionaries, i.e. XtdBag
-     * Following features of this endpoint are not implemented yet:  - filtering by URI
+     * GET /api/Dictionary/v1 : Get list of available dictionaries (i.e. XtdBag) with optional filtering.
+     * Following features of this endpoint are not implemented yet:   - response contents
      *
-     * @param URI URI of the class, e.g. https://datacat.org/model (optional)
+     * @param URI Optional filtering, URI of a specific dictionary, e.g. https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "getDictionary",
-        summary = "Get list of available Dictionaries, i.e. XtdBag",
-        description = "Following features of this endpoint are not implemented yet:  - filtering by URI",
+        summary = "Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
+        description = "Following features of this endpoint are not implemented yet:   - response contents",
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -150,12 +150,12 @@ public interface ApiApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/Dictiorany/v1",
+        value = "/api/Dictionary/v1",
         produces = { "application/json" }
     )
     
     default ResponseEntity<DictionaryResponseV1> getDictionary(
-        @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/model", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI
+        @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -172,16 +172,16 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1/Properties : Get Dictionary with its properties from Datacat.
-     * Following features of this endpoint are not implemented yet:  - get by URI
+     * GET /api/Dictionary/v1/Properties : Get dictionary with its properties from Datacat (i.e. XtdProperty)
+     * Following features of this endpoint are not implemented yet:   - response contents
      *
-     * @param URI URI of the class, e.g. https://datacat.org/property required: true (optional)
+     * @param URI URI of the class, e.g. https://datacat.org/property (required)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "getProperties",
-        summary = "Get Dictionary with its properties from Datacat.",
-        description = "Following features of this endpoint are not implemented yet:  - get by URI",
+        summary = "Get dictionary with its properties from Datacat (i.e. XtdProperty)",
+        description = "Following features of this endpoint are not implemented yet:   - response contents",
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -196,7 +196,7 @@ public interface ApiApi {
     )
     
     default ResponseEntity<PropertiesResponseV1> getProperties(
-        @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/property required: true", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI
+        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/property", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
