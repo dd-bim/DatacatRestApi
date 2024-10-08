@@ -1,31 +1,23 @@
 .openapi-generator/*
 
-depot/*
-
 doc/*
 
 init/*
 
-src/main/java/datacat/models/*
-
 src/main/java/datacat/auth/*
-src/main/java/datacat/auth/AuthenticationService.java
+
+src/main/java/datacat/models/*
 
 src/main/java/datacat/restapi/ApiApiController.java
 src/main/java/datacat/restapi/ApiUtil.java
-src/main/java/datacat/restapi/OpenApiCustom.java
 
 src/main/java/datacat/service/*
-src/main/java/datacat/service/CustomRestTemplate.java
-src/main/java/datacat/service/GraphQLService.java
-src/main/java/datacat/service/ProxyService.java
 
 src/main/java/org/openapitools/OpenApiApplication.java
 src/main/java/org/openapitools/OpenApiGeneratorApplication.java
 
-src/main/java/org/openapitools/configuration/CustomProperties.java
-src/main/java/org/openapitools/configuration/CustomPropertiesConfig.java
 src/main/java/org/openapitools/configuration/HomeController.java
+src/main/java/org/openapitools/configuration/OpenApiCustom.java
 
 src/main/resources/application.properties
 
