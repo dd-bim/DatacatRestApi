@@ -46,6 +46,7 @@ public class ClassDetailsResponseV1 {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private String versionDateUtc;
 
+    // getters and setters
     public List<ClassPropertyResponseV1> getClassProperties() {
         return classProperties;
     }
@@ -102,7 +103,14 @@ public class ClassDetailsResponseV1 {
         this.versionDateUtc = versionDateUtc;
     }
 
-    // equals, hashCode, and toString methods (similar to ClassDetailsV1)
+    // business logic method
+    public void generateUriFromUid() {
+        if (this.uid != null) {
+            this.uri = "https://datacat.org/class/" + this.uid; // Construct the URI by combining the base URL with the uid (which holds the id)
+        }
+    }
+
+    // standard object methods equals, hashCode, and toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -120,13 +120,24 @@ public class GraphQLService {
     // =====================================================================================================================
     // getClassDetails endpoint
     public ClassDetailsResponseV1 getClassDetails(String id, String bearerToken) {
+
         // String query = "{ getSubject(id: \\\"" + id + "\\\") { classProperties:properties { name description propertyUri:comment propertySet:groups { nodes { id } } } name uri:comment uid: id versionDateUtc:created } }";
         String query = "{ getSubject(id: \\\"" + id + "\\\") { classProperties:properties { name description propertyUri:comment } name uri:comment uid: id versionDateUtc:created } }";
         String response = executeQuery(query, bearerToken);
-        return deserializeResponse(response, "getSubject", ClassDetailsResponseV1.class);
+        
+        ClassDetailsResponseV1 classDetails = deserializeResponse(response, "getSubject", ClassDetailsResponseV1.class);
+
+        if (classDetails != null) {
+            classDetails.generateUriFromUid();
+        }
+    
+        return classDetails;
+
+        // return deserializeResponse(response, "getSubject", ClassDetailsResponseV1.class);
     }
 
-    // getDictionary by ID
+    // =====================================================================================================================
+    // getDictionary (optionally) by ID
     public DictionaryResponseV1 getDictionary(String id, String bearerToken) {
         final String dictId = "6f96aaa7-e08f-49bb-ac63-93061d4c5db2"; // 'dictId' is a constant value pointing only on models in XtdBag
         // String query = "{ getBag(id: \\\"" + id + "\\\") { uri:id name version:versionId } }";
@@ -135,6 +146,7 @@ public class GraphQLService {
         return deserializeResponse(response, "findBags", DictionaryResponseV1.class);
     }
 
+    // =====================================================================================================================
     // getAllDictionaries
     public DictionaryResponseV1 getAllDictionaries(String bearerToken) {
         final String dictId = "6f96aaa7-e08f-49bb-ac63-93061d4c5db2"; // 'dictId' is a constant value pointing only on models in XtdBag
@@ -143,13 +155,15 @@ public class GraphQLService {
         return deserializeResponse(response, "findBags", DictionaryResponseV1.class);
     }
 
+    // =====================================================================================================================
     // getClasses
-    // public ClassesResponseV1 getClasses(String id, String bearerToken) {
-    //     String query = "{ findSubjects(input:{pageSize:10000}) { classes:nodes { uri:id name version:versionId } classesTotalCount:totalElements } }";
-    //     String response = executeQuery(query, bearerToken);
-    //     return deserializeResponse(response, "findSubjects", ClassesResponseV1.class);
-    // }
+    public ClassesResponseV1 getClasses(String id, String bearerToken) {
+        String query = "{ findSubjects(input:{pageSize:10000}) { classes:nodes { uri:id name version:versionId } classesTotalCount:totalElements } }";
+        String response = executeQuery(query, bearerToken);
+        return deserializeResponse(response, "findSubjects", ClassesResponseV1.class);
+    }
 
+    // =====================================================================================================================
     // getProperties
     // public PropertiesResponseV1 getProperties(String id, String bearerToken) {
     //     String query = "{ findProperties(input:{pageSize:10000}) { properties:nodes { uri:id name version:versionId } propertiesTotalCount:totalElements } }";
@@ -157,6 +171,7 @@ public class GraphQLService {
     //     return deserializeResponse(response, "findProperties", PropertiesResponseV1.class);
     // }
 
+    // =====================================================================================================================
     // getStatistics
     public StatisticsResponseV1 getStatistics() {
         String query = "{ statistics { catalogueItem:items { id count } } }";
