@@ -140,7 +140,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/init/openAPI_v1_0.yml</inputSpec>
+							<inputSpec>${project.basedir}/init/openAPI_v1_0_3.yml</inputSpec>
 							<generatorName>spring</generatorName>
 							<apiPackage>datacat.restapi</apiPackage>
 							<modelPackage>datacat.models</modelPackage>
