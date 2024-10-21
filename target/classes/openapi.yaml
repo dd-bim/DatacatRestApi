@@ -5,29 +5,43 @@ info:
     name: Support/Contact
     url: https://github.com/dd-bim
   description: |-
-    <p>Web facade to access the Datacat catalogue system.</br></p> <h3>Latest changes:</h3> <ul><li>v1.0 "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
-        <li>including URI usage (missing business logic)</li>
+    <p>Web facade to access the Datacat catalogue system.</br></p> <h3>Latest changes:</h3> <ul><li>v1.0.X "major endpoint overhaul"<ul>
+        <li>general rework of api/Class/v1</li>
+        <li>general rework of api/Dictionary/v1/Classes (upcoming)</li>
+        <li>including filter options (missing business logic)</li>
+        <li>schema adjustment (including non-implemented attributes)</li>
+        <li>backend logic and query rework</li>
+        <li>minor UI adjustments</li>
+        <li>improved accessibility of specification</li>
+    </ul><li>v1.0.0 "bSDD-like prototype"<ul>
+        <li>adjustment of existing endpoints to match bSDD</li>
+        <li>including URI usage (partly missing business logic)</li>
         <li>schema rework (renaming, parameter changes, etc.)</li>
-        <li>removed porxy settings</li></ul></li></ul>
+        <li>removed porxy settings</li>
+        <li>published under CAFM and IBPDI demain</li>
+        <li>minor changes to the UI</li>
+    </ul></ul></li></ul>
   license:
-    name: Lizenzname
-  title: Datacat REST API v1.0
-  version: "1.0"
+    name: '* licence name placeholder *'
+  title: Datacat REST API v1.0.5
+  version: 1.0.5
 servers:
 - description: DATACAT
-  url: https://datacat.org
+  url: https://datacat.org/api/e1
 - description: IBPDI
-  url: https://ibpdi.datcat.org
+  url: https://ibpdi.datcat.org/api/e1
 - description: CAFM
-  url: https://cafm.datacat.org
+  url: https://cafm.datacat.org/api/e1
 paths:
   /api/Class/v1:
     get:
       description: "Following features of this endpoint are not implemented yet: \n\
-        - get by URI\n- include properties"
+        \r- include properties\n\r- include language code filter\n\r- various response\
+        \ contents"
       operationId: getClassDetails
       parameters:
-      - description: "URI of the class, e.g. https://datacat.org/Class/1Cdl$F84nFRgiJwdnIHUkg"
+      - description: "URI of the class, \n\re.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg\
+          \ | \n\rCAFM: https://cafm.datacat.org/class/442.90 | \n\rIBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a"
         explode: true
         in: query
         name: URI
@@ -35,8 +49,8 @@ paths:
         schema:
           type: string
         style: form
-      - description: Use this option to include properties of the class. By default
-          it is set to false.
+      - description: "Use this option to include properties of the class. By default,\
+          \ it is set to true. ! This option is not yet implemented."
         explode: true
         in: query
         name: IncludeClassProperties
@@ -44,27 +58,106 @@ paths:
         schema:
           type: boolean
         style: form
+      - deprecated: true
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
+        explode: true
+        in: query
+        name: IncludeChildClassReferences
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - deprecated: true
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
+        explode: true
+        in: query
+        name: IncludeClassRelations
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - deprecated: true
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
+        explode: true
+        in: query
+        name: IncludeReverseRelations
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - deprecated: true
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
+        explode: true
+        in: query
+        name: ReverseRelationDictionaryUris
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: "Specify language (case sensitive). For those items the text\
+          \ is not available in the requested language, the text will be returned\
+          \ in the default language of the dictionary ! This option is not yet implemented."
+        explode: true
+        in: query
+        name: languageCode
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassDetailsResponse.v1'
+                $ref: '#/components/schemas/ClassContract.v1'
           description: Success
-      summary: Get class detailes
+      summary: "[IN REWORK]Get class detailes (i.e. XtdSubject) from a specific class"
       tags:
       - Class
       x-accepts:
       - application/json
       x-tags:
       - tag: Class
-  /api/Dictiorany/v1:
+  /api/Class/Relations/v1:
     get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      summary: "[NOT IMPLEMENTED]Get class relations or reverse relations (paginated)"
+      tags:
+      - Class
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Class
+  /api/Class/Properties/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      summary: "[NOT IMPLEMENTED]Get class properties (paginated)"
+      tags:
+      - Class
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Class
+  /api/Dictionary/v1:
+    get:
+      deprecated: true
       description: "Following features of this endpoint are not implemented yet: \n\
-        - filtering by URI"
+        \r- response contents"
       operationId: getDictionary
       parameters:
-      - description: "URI of the class, e.g. https://datacat.org/model"
+      - description: "Optional filtering, URI of a specific dictionary, e.g. https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W"
         explode: true
         in: query
         name: URI
@@ -79,7 +172,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/DictionaryResponse.v1'
           description: Success
-      summary: "Get list of available Dictionaries, i.e. XtdBag"
+      summary: "[DEPRICATED]Get list of available dictionaries (i.e. XtdBag) with\
+        \ optional filtering."
       tags:
       - Dictionary
       x-accepts:
@@ -88,15 +182,16 @@ paths:
       - tag: Dictionary
   /api/Dictionary/v1/Classes:
     get:
+      deprecated: true
       description: "Following features of this endpoint are not implemented yet: \n\
-        - get by URI"
+        \r- response contents"
       operationId: getClasses
       parameters:
-      - description: "URI of the class, e.g. https://datacat.org/class required: true"
+      - description: "URI of the dictionary, e.g. As-Built_Surveying https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_"
         explode: true
         in: query
         name: URI
-        required: false
+        required: true
         schema:
           type: string
         style: form
@@ -107,7 +202,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ClassesResponse.v1'
           description: Success
-      summary: Get Dictionary with tree of classes from Datacat.
+      summary: "[NOT IMPLEMENTED]Get dictionary with tree of classes from Datacat\
+        \ (i.e. XtdSubject)."
       tags:
       - Dictionary
       x-accepts:
@@ -116,16 +212,16 @@ paths:
       - tag: Dictionary
   /api/Dictionary/v1/Properties:
     get:
+      deprecated: true
       description: "Following features of this endpoint are not implemented yet: \n\
-        - get by URI"
+        \r- response contents"
       operationId: getProperties
       parameters:
-      - description: "URI of the class, e.g. https://datacat.org/property required:\
-          \ true"
+      - description: "URI of the class, e.g. https://datacat.org/property"
         explode: true
         in: query
         name: URI
-        required: false
+        required: true
         schema:
           type: string
         style: form
@@ -136,17 +232,180 @@ paths:
               schema:
                 $ref: '#/components/schemas/PropertiesResponse.v1'
           description: Success
-      summary: Get Dictionary with its properties from Datacat.
+      summary: "[NOT IMPLEMETED]Get dictionary with its properties from Datacat (i.e.\
+        \ XtdProperty)."
       tags:
       - Dictionary
       x-accepts:
       - application/json
       x-tags:
       - tag: Dictionary
+  /api/Dictionary/Popular/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      summary: Get list of popular Dictionaries
+      tags:
+      - Popular Dictionary
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Popular Dictionary
+  /api/Property/v4:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      summary: Get Property details
+      tags:
+      - Property
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Property
+  /api/Property/Relations/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      summary: Get property relations or reverse relations (paginated)
+      tags:
+      - Property
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Property
+  /api/Property/Classes/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      summary: Get list of classes that uses the property (paginated)
+      tags:
+      - Property
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Property
+  /api/PropertyValue/v2:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      summary: Get Property Value details
+      tags:
+      - Property
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Property
+  /api/TextSearch/v2:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Search
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Search
+  /api/TextSearch/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Search
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Search
+  /api/SearchInDictionary/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Search
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Search
+  /api/Class/Search/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Search
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Search
+  /api/Unit/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Lookup Data
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Lookup Data
+  /api/ReferenceDocument/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Lookup Data
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Lookup Data
+  /api/Language/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Lookup Data
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Lookup Data
+  /api/Country/v1:
+    get:
+      deprecated: true
+      responses:
+        "200":
+          description: Success
+      tags:
+      - Lookup Data
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Lookup Data
   /api/Statistics:
     get:
       description: "With this endpoint the statistics, i.e. the items name and its\
-        \ content count, can be requested with GET."
+        \ content count (referring to EXPRESS specification from DIN EN ISO 12006-3),\
+        \ can be requested with GET."
       operationId: getStatistics
       responses:
         "200":
@@ -157,43 +416,50 @@ paths:
           description: Success
       summary: Get statistics about Datacat entries here.
       tags:
-      - Lookup Data
+      - Datacat Specifics
       x-accepts:
       - application/json
       x-tags:
-      - tag: Lookup Data
+      - tag: Datacat Specifics
 components:
   schemas:
-    ClassDetailsResponse.v1:
+    ClassContract.v1:
+      additionalProperties: false
       example:
         uid: uid
         classProperties:
-        - propertySet: propertySet
+        - dataType: dataType
           name: name
           description: description
           propertyUri: propertyUri
           uri: uri
-        - propertySet: propertySet
+        - dataType: dataType
           name: name
           description: description
           propertyUri: propertyUri
+          uri: uri
+        synonyms:
+        - synonyms
+        - synonyms
+        parentClassReference:
+          name: name
           uri: uri
         name: name
-        definition: definition
-        dictionaryUri: dictionaryUri
+        description: description
+        activationDateUtc: 2000-01-23T04:56:07.000+00:00
+        revisionDateUtc: 2000-01-23T04:56:07.000+00:00
         uri: uri
         versionDateUtc: 2000-01-23T04:56:07.000+00:00
+        versionNumber: 0
+        classType: classType
       properties:
-        classProperties:
-          description: List of the properties of this class
-          items:
-            $ref: '#/components/schemas/ClassPropertyResponse.v1'
-          type: array
-        dictionaryUri:
-          description: URI of the dictionary
+        activationDateUtc:
+          description: Date of activation
+          format: date-time
           type: string
-        definition:
-          description: Formal definition
+        description:
+          description: Description
+          nullable: true
           type: string
         name:
           description: Name
@@ -203,17 +469,52 @@ components:
           description: Unique identification
           minLength: 1
           type: string
+        revisionDateUtc:
+          description: Date of the revision
+          format: date-time
+          nullable: true
+          type: string
         uid:
           description: Alternative unique global identification
+          nullable: true
           type: string
         versionDateUtc:
           description: Date of the version
           format: date-time
           type: string
+        versionNumber:
+          description: Version number
+          format: int32
+          nullable: true
+          type: integer
+        classType:
+          description: Type of Class
+          nullable: true
+          type: string
+        synonyms:
+          description: List of synonyms for the class
+          items:
+            type: string
+          nullable: true
+          type: array
+        parentClassReference:
+          $ref: '#/components/schemas/ClassReferenceContract.v1'
+        classProperties:
+          description: List of the properties of this class
+          items:
+            $ref: '#/components/schemas/ClassPropertyContractV1'
+          nullable: true
+          type: array
+      required:
+      - activationDateUtc
+      - name
+      - uri
+      - versionDateUtc
       type: object
-    ClassPropertyResponse.v1:
+    ClassPropertyContractV1:
+      additionalProperties: false
       example:
-        propertySet: propertySet
+        dataType: dataType
         name: name
         description: description
         propertyUri: propertyUri
@@ -224,17 +525,46 @@ components:
           minLength: 1
           type: string
         uri:
+          nullable: true
           type: string
         description:
           description: "Plain language description of the property.\r\nIf at Property\
             \ level no description has been given but a \"Definition\" is available,\
             \ then \"Definition\" is returned as description"
+          nullable: true
+          type: string
+        dataType:
+          description: Format for expressing the value of the property
+          nullable: true
           type: string
         propertyUri:
           description: Unique identification of the property
+          nullable: true
           type: string
-        propertySet:
-          description: Name of the Property Set
+      required:
+      - name
+      type: object
+    ClassReferenceContract.v1:
+      additionalProperties: false
+      example:
+        name: name
+        uri: uri
+      properties:
+        uri:
+          minLength: 1
+          type: string
+        name:
+          nullable: true
+          type: string
+      required:
+      - uri
+      type: object
+    ClassRelationsContract.v1:
+      additionalProperties: false
+      properties:
+        classUri:
+          description: Uri of the class
+          nullable: true
           type: string
       type: object
     DictionaryResponse.v1:

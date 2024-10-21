@@ -5,7 +5,7 @@
  */
 package datacat.restapi;
 
-import datacat.models.ClassDetailsResponseV1;
+import datacat.models.ClassContractV1;
 import datacat.models.ClassesResponseV1;
 import datacat.models.DictionaryResponseV1;
 import datacat.models.PropertiesResponseV1;
@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-26T14:46:58.960815200+02:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-21T13:00:04.898874600+02:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
 @Validated
 @Controller
 public interface ApiApi {
@@ -47,21 +47,453 @@ public interface ApiApi {
     }
 
     /**
-     * GET /api/Class/v1 : Get class detailes (i.e. XtdSubject) from a specific class
-     * Following features of this endpoint are not implemented yet:   - include properties  - various response contents
+     * GET /api/Class/Properties/v1 : [NOT IMPLEMENTED]Get class properties (paginated)
      *
-     * @param URI URI of the class, e.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/class/442.90 | IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
-     * @param includeClassProperties Use this option to include properties of the class. By default it is set to false. ! This option is not yet implemented. (optional)
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiClassPropertiesV1Get",
+        summary = "[NOT IMPLEMENTED]Get class properties (paginated)",
+        deprecated = true,
+        tags = { "Class" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Class/Properties/v1"
+    )
+    
+    default ResponseEntity<Void> apiClassPropertiesV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Class/Relations/v1 : [NOT IMPLEMENTED]Get class relations or reverse relations (paginated)
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiClassRelationsV1Get",
+        summary = "[NOT IMPLEMENTED]Get class relations or reverse relations (paginated)",
+        deprecated = true,
+        tags = { "Class" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Class/Relations/v1"
+    )
+    
+    default ResponseEntity<Void> apiClassRelationsV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Class/Search/v1
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiClassSearchV1Get",
+        deprecated = true,
+        tags = { "Search" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Class/Search/v1"
+    )
+    
+    default ResponseEntity<Void> apiClassSearchV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Country/v1
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiCountryV1Get",
+        deprecated = true,
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Country/v1"
+    )
+    
+    default ResponseEntity<Void> apiCountryV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Dictionary/Popular/v1 : Get list of popular Dictionaries
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiDictionaryPopularV1Get",
+        summary = "Get list of popular Dictionaries",
+        deprecated = true,
+        tags = { "Popular Dictionary" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Dictionary/Popular/v1"
+    )
+    
+    default ResponseEntity<Void> apiDictionaryPopularV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Language/v1
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiLanguageV1Get",
+        deprecated = true,
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Language/v1"
+    )
+    
+    default ResponseEntity<Void> apiLanguageV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Property/Classes/v1 : Get list of classes that uses the property (paginated)
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiPropertyClassesV1Get",
+        summary = "Get list of classes that uses the property (paginated)",
+        deprecated = true,
+        tags = { "Property" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Property/Classes/v1"
+    )
+    
+    default ResponseEntity<Void> apiPropertyClassesV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Property/Relations/v1 : Get property relations or reverse relations (paginated)
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiPropertyRelationsV1Get",
+        summary = "Get property relations or reverse relations (paginated)",
+        deprecated = true,
+        tags = { "Property" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Property/Relations/v1"
+    )
+    
+    default ResponseEntity<Void> apiPropertyRelationsV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Property/v4 : Get Property details
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiPropertyV4Get",
+        summary = "Get Property details",
+        deprecated = true,
+        tags = { "Property" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Property/v4"
+    )
+    
+    default ResponseEntity<Void> apiPropertyV4Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/PropertyValue/v2 : Get Property Value details
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiPropertyValueV2Get",
+        summary = "Get Property Value details",
+        deprecated = true,
+        tags = { "Property" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/PropertyValue/v2"
+    )
+    
+    default ResponseEntity<Void> apiPropertyValueV2Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/ReferenceDocument/v1
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiReferenceDocumentV1Get",
+        deprecated = true,
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/ReferenceDocument/v1"
+    )
+    
+    default ResponseEntity<Void> apiReferenceDocumentV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/SearchInDictionary/v1
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiSearchInDictionaryV1Get",
+        deprecated = true,
+        tags = { "Search" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/SearchInDictionary/v1"
+    )
+    
+    default ResponseEntity<Void> apiSearchInDictionaryV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/TextSearch/v1
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiTextSearchV1Get",
+        deprecated = true,
+        tags = { "Search" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/TextSearch/v1"
+    )
+    
+    default ResponseEntity<Void> apiTextSearchV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/TextSearch/v2
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiTextSearchV2Get",
+        deprecated = true,
+        tags = { "Search" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/TextSearch/v2"
+    )
+    
+    default ResponseEntity<Void> apiTextSearchV2Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Unit/v1
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "apiUnitV1Get",
+        deprecated = true,
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Unit/v1"
+    )
+    
+    default ResponseEntity<Void> apiUnitV1Get(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Class/v1 : [IN REWORK]Get class detailes (i.e. XtdSubject) from a specific class
+     * Following features of this endpoint are not implemented yet:   - include properties  - include language code filter  - various response contents
+     *
+     * @param URI URI of the class,   e.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg |   CAFM: https://cafm.datacat.org/class/442.90 |   IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
+     * @param includeClassProperties Use this option to include properties of the class. By default, it is set to true. ! This option is not yet implemented. (optional)
+     * @param includeChildClassReferences ! This option is not compatible with datacat.org or any of its instances (optional)
+     * @param includeClassRelations ! This option is not compatible with datacat.org or any of its instances (optional)
+     * @param includeReverseRelations ! This option is not compatible with datacat.org or any of its instances (optional)
+     * @param reverseRelationDictionaryUris ! This option is not compatible with datacat.org or any of its instances (optional)
+     * @param languageCode Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "getClassDetails",
-        summary = "Get class detailes (i.e. XtdSubject) from a specific class",
-        description = "Following features of this endpoint are not implemented yet:   - include properties  - various response contents",
+        summary = "[IN REWORK]Get class detailes (i.e. XtdSubject) from a specific class",
+        description = "Following features of this endpoint are not implemented yet:   - include properties  - include language code filter  - various response contents",
         tags = { "Class" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ClassDetailsResponseV1.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ClassContractV1.class))
             })
         }
     )
@@ -71,14 +503,19 @@ public interface ApiApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<ClassDetailsResponseV1> getClassDetails(
-        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg | CAFM: https://cafm.datacat.org/class/442.90 | IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI,
-        @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default it is set to false. ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties
+    default ResponseEntity<ClassContractV1> getClassDetails(
+        @NotNull @Parameter(name = "URI", description = "URI of the class,   e.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg |   CAFM: https://cafm.datacat.org/class/442.90 |   IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI,
+        @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default, it is set to true. ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties,
+        @Parameter(name = "IncludeChildClassReferences", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeChildClassReferences", required = false) @Deprecated Boolean includeChildClassReferences,
+        @Parameter(name = "IncludeClassRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassRelations", required = false) @Deprecated Boolean includeClassRelations,
+        @Parameter(name = "IncludeReverseRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeReverseRelations", required = false) @Deprecated Boolean includeReverseRelations,
+        @Parameter(name = "ReverseRelationDictionaryUris", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "ReverseRelationDictionaryUris", required = false) @Deprecated List<String> reverseRelationDictionaryUris,
+        @Parameter(name = "languageCode", description = "Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"uid\" : \"uid\", \"classProperties\" : [ { \"propertySet\" : \"propertySet\", \"name\" : \"name\", \"description\" : \"description\", \"propertyUri\" : \"propertyUri\", \"uri\" : \"uri\" }, { \"propertySet\" : \"propertySet\", \"name\" : \"name\", \"description\" : \"description\", \"propertyUri\" : \"propertyUri\", \"uri\" : \"uri\" } ], \"name\" : \"name\", \"definition\" : \"definition\", \"dictionaryUri\" : \"dictionaryUri\", \"uri\" : \"uri\", \"versionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\" }";
+                    String exampleString = "{ \"uid\" : \"uid\", \"classProperties\" : [ { \"dataType\" : \"dataType\", \"name\" : \"name\", \"description\" : \"description\", \"propertyUri\" : \"propertyUri\", \"uri\" : \"uri\" }, { \"dataType\" : \"dataType\", \"name\" : \"name\", \"description\" : \"description\", \"propertyUri\" : \"propertyUri\", \"uri\" : \"uri\" } ], \"synonyms\" : [ \"synonyms\", \"synonyms\" ], \"parentClassReference\" : { \"name\" : \"name\", \"uri\" : \"uri\" }, \"name\" : \"name\", \"description\" : \"description\", \"activationDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"revisionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"versionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"versionNumber\" : 0, \"classType\" : \"classType\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -90,16 +527,19 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1/Classes : Get dictionary with tree of classes from Datacat (i.e. XtdSubject)
+     * GET /api/Dictionary/v1/Classes : [NOT IMPLEMENTED]Get dictionary with tree of classes from Datacat (i.e. XtdSubject).
      * Following features of this endpoint are not implemented yet:   - response contents
      *
-     * @param URI URI of the class, e.g. https://datacat.org/class (required)
+     * @param URI URI of the dictionary, e.g. As-Built_Surveying https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_ (required)
      * @return Success (status code 200)
+     * @deprecated
      */
+    @Deprecated
     @Operation(
         operationId = "getClasses",
-        summary = "Get dictionary with tree of classes from Datacat (i.e. XtdSubject)",
+        summary = "[NOT IMPLEMENTED]Get dictionary with tree of classes from Datacat (i.e. XtdSubject).",
         description = "Following features of this endpoint are not implemented yet:   - response contents",
+        deprecated = true,
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -114,7 +554,7 @@ public interface ApiApi {
     )
     
     default ResponseEntity<ClassesResponseV1> getClasses(
-        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g. https://datacat.org/class", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI
+        @NotNull @Parameter(name = "URI", description = "URI of the dictionary, e.g. As-Built_Surveying https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -131,16 +571,19 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1 : Get list of available dictionaries (i.e. XtdBag) with optional filtering.
+     * GET /api/Dictionary/v1 : [DEPRICATED]Get list of available dictionaries (i.e. XtdBag) with optional filtering.
      * Following features of this endpoint are not implemented yet:   - response contents
      *
      * @param URI Optional filtering, URI of a specific dictionary, e.g. https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W (optional)
      * @return Success (status code 200)
+     * @deprecated
      */
+    @Deprecated
     @Operation(
         operationId = "getDictionary",
-        summary = "Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
+        summary = "[DEPRICATED]Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
         description = "Following features of this endpoint are not implemented yet:   - response contents",
+        deprecated = true,
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -172,16 +615,19 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1/Properties : Get dictionary with its properties from Datacat (i.e. XtdProperty)
+     * GET /api/Dictionary/v1/Properties : [NOT IMPLEMETED]Get dictionary with its properties from Datacat (i.e. XtdProperty).
      * Following features of this endpoint are not implemented yet:   - response contents
      *
      * @param URI URI of the class, e.g. https://datacat.org/property (required)
      * @return Success (status code 200)
+     * @deprecated
      */
+    @Deprecated
     @Operation(
         operationId = "getProperties",
-        summary = "Get dictionary with its properties from Datacat (i.e. XtdProperty)",
+        summary = "[NOT IMPLEMETED]Get dictionary with its properties from Datacat (i.e. XtdProperty).",
         description = "Following features of this endpoint are not implemented yet:   - response contents",
+        deprecated = true,
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -214,15 +660,15 @@ public interface ApiApi {
 
     /**
      * GET /api/Statistics : Get statistics about Datacat entries here.
-     * With this endpoint the statistics, i.e. the items name and its content count, can be requested with GET.
+     * With this endpoint the statistics, i.e. the items name and its content count (referring to EXPRESS specification from DIN EN ISO 12006-3), can be requested with GET.
      *
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "getStatistics",
         summary = "Get statistics about Datacat entries here.",
-        description = "With this endpoint the statistics, i.e. the items name and its content count, can be requested with GET.",
-        tags = { "Lookup Data" },
+        description = "With this endpoint the statistics, i.e. the items name and its content count (referring to EXPRESS specification from DIN EN ISO 12006-3), can be requested with GET.",
+        tags = { "Datacat Specifics" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = StatisticsResponseV1.class))

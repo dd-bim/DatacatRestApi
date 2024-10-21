@@ -1,12 +1,13 @@
 openapi: 3.0.1
 info:
-  title: Datacat REST API v1.0.2
+  title: Datacat REST API v1.0.4
   description: >-
     <p>Web facade to access the Datacat catalogue system.</br></p>
     <h3>Latest changes:</h3>
     <ul><li>v1.0.X "bSDD-like prototype"<ul><li>major endpoint overhaul (bSDD)</li>
         <li>including URI usage (partly missing business logic)</li>
         <li>schema rework (renaming, parameter changes, etc.)</li>
+        <li>more filter options for api/Class/v1</li>
         <li>removed porxy settings</li>
         <li>published under CAFM and IBPDI demain</li>
         <li>minor changes to the UI</li>
@@ -17,7 +18,7 @@ info:
     email: lennart.hildebrandt@htw-dresden.de
   license:
     name: '* licence name placeholder *'
-  version: '1.0.2'
+  version: '1.0.4'
 servers:
  - url: https://datacat.org/api/e1
    description: DATACAT
@@ -44,9 +45,44 @@ paths:
         - name: IncludeClassProperties
           in: query
           description: >-
-            Use this option to include properties of the class. By default it is set to false. ! This option is not yet implemented.
+            Use this option to include properties of the class. By default, it is set to true.
+            ! This option is not yet implemented.
           schema:
             type: boolean
+        - name: IncludeChildClassReferences
+          in: query
+          description: >-
+            ! This option is not compatible with datacat.org or any of its instances
+          schema:
+            type: boolean
+        - name: IncludeClassRelations
+          in: query
+          description: >-
+            Use this option to include loading relations of the class. By default, it is set to false.
+            ! This option is not yet implemented.
+          schema:
+            type: boolean
+        - name: IncludeReverseRelations
+          in: query
+          description: >-
+            Use this option to include loading reverse relations of the class, i.e. classes having a relation with this class. By default, it is set to false.
+            ! This option is not yet implemented.
+          schema:
+            type: boolean
+        - name: ReverseRelationDictionaryUris
+          in: query
+          description: >-
+            ! This option is not compatible with datacat.org or any of its instances
+          schema:
+            type: array
+            items:
+              type: string
+        - name: languageCode
+          in: query
+          description: >-
+            Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary
+          schema:
+            type: string
       responses:
           '200':
             description: Success
@@ -87,7 +123,7 @@ paths:
         - name: URI
           in: query
           description: >-
-            URI of the class, e.g. https://datacat.org/class
+            URI of the dictionary, e.g. As-Built_Surveying https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_
           required: true
           schema:
             type: string
@@ -137,6 +173,13 @@ paths:
 components:
   schemas:
     ClassDetailsResponse.v1:
+      required:
+        - activationDateUtc
+        #- code
+        - name
+        #- status
+        - uri
+        - versionDateUtc
       type: object
       properties:
         classProperties:
@@ -144,15 +187,26 @@ components:
           items:
             $ref: '#/components/schemas/ClassPropertyResponse.v1'
           description: List of the properties of this class
-          # nullable: true
+          #nullable: true
         dictionaryUri:
           type: string
           description: URI of the dictionary
-          # nullable: true
-        definition:
+          nullable: true
+        activationDateUtc:
           type: string
-          description: Formal definition
-          # nullable: true
+          description: Activation date
+          format: date-time
+        code:
+          type: string
+          nullable: true
+        #definition:
+          #type: string
+          #description: Formal definition
+          #nullable: true
+        description:
+          type: string
+          #description: "Plain language description of the class.\r\nIf at Class level no description has been given but a \"Definition\" is available, then \"Definition\" is returned as description"
+          nullable: true
         name:
           minLength: 1
           type: string
@@ -160,7 +214,12 @@ components:
         uri:
           minLength: 1
           type: string
-          description: Unique identification
+          description: Unique identification, that can be used as an URL
+        revisionDateUtc:
+          type: string
+          description: equals lastModified
+          format: date-time
+          nullable: true
         uid:
           type: string
           description: Alternative unique global identification
@@ -169,6 +228,20 @@ components:
           type: string
           description: Date of the version
           format: date-time
+          nullable: true
+        versionNumber:
+          type: string
+          nullable: true
+        classType:
+          type: string
+          description: Type of the class
+          #nullable: true
+        synonyms:
+          type: array
+          items:
+            type: string
+          description: List of synonyms of the class
+          #nullable: true
     ClassPropertyResponse.v1:
       type: object
       properties:

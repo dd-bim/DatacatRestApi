@@ -6,6 +6,8 @@ package datacat.auth;
 // Spring Boot
 import org.springframework.http.*;
 import org.springframework.context.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +69,15 @@ public class AuthenticationService {
                 logger.info("Token expires in {} minutes", TOKEN_LIFETIME.toMinutes());
                 return bearerToken;
             } else {
+                logger.error("Failed to authenticate: {}", response.getStatusCode());
                 throw new RuntimeException("Failed to authenticate: " + response.getStatusCode());
             }
+        } catch (HttpClientErrorException e) {
+            logger.error("Client error during authentication: {}", e.getStatusCode());
+            throw new RuntimeException("Client error during authentication: " + e.getMessage(), e);
+        } catch (HttpServerErrorException e) {
+            logger.error("Server error during authentication: {}", e.getStatusCode());
+            throw new RuntimeException("Server error during authentication: " + e.getMessage(), e);
         } catch (Exception e) {
             logger.error("Error during authentication", e);
             throw new RuntimeException("Error during authentication: " + e.getMessage(), e);

@@ -52,15 +52,15 @@ public class OpenApiApplication { // former and auto generated: OpenApiGenerator
     }
 
     @Bean(name = "org.openapitools.OpenApiApplication.loggingBasePackages") // used to log the scanned components as base packages
-    public CommandLineRunner logBasePackages() {
+    public CommandLineRunner loggingBasePackages() {
         return args -> {
             String[] basePackages = { 
-                "org.openapitools", 
-                "org.openapitools.configuration", 
-                "datacat.restapi", 
-                "datacat.models", 
-                "datacat.auth", 
-                "datacat.service"
+                "org.openapitools", // where the main class is located
+                "org.openapitools.configuration", // where the configuration classes are located
+                "datacat.restapi", // where the REST API classes are located
+                "datacat.models", // where the model classes are located
+                "datacat.auth",  // where the authentication classes are located
+                "datacat.service" // where the service classes are located
             };
             logger.debug("Base packages scanned: {}", (Object) basePackages); // returns the actual scanned base packages
         };

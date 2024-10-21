@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.*;
 // '@JsonProperty("")'' annotation is used to define exact name of property in JSON representation
 // private fields are being shown in the Swagger UI as a schema
 // =====================================================================================================================
-@JsonTypeName("ClassPropertyResponse.v1")
-public class ClassPropertyResponseV1 {
+@JsonTypeName("ClassPropertyContract.v1")
+public class ClassPropertyContractV1 {
 
     //===================================================================================================================
     // preparation for the field from the json response
@@ -22,8 +22,8 @@ public class ClassPropertyResponseV1 {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("uri")
-    private String uri;
+    // @JsonProperty("uri")
+    // private String uri;
 
     @JsonProperty("description")
     private String description;
@@ -31,10 +31,10 @@ public class ClassPropertyResponseV1 {
     @JsonProperty("propertyUri")
     private String propertyUri;
 
-    @JsonProperty("propertySet")
-    private String propertySet;
+    // @JsonProperty("propertySet")
+    // private String propertySet;
 
-    public ClassPropertyResponseV1() {
+    public ClassPropertyContractV1() {
     }
 
     // getter and setter for the fields
@@ -46,13 +46,13 @@ public class ClassPropertyResponseV1 {
         this.name = name;
     }
 
-    public String getUri() {
-        return uri;
-    }
+    // public String getUri() {
+    //     return uri;
+    // }
 
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
+    // public void setUri(String uri) {
+    //     this.uri = uri;
+    // }
 
     public String getDescription() {
         return description;
@@ -70,13 +70,13 @@ public class ClassPropertyResponseV1 {
         this.propertyUri = propertyUri;
     }
 
-    public String getPropertySet() {
-        return propertySet;
-    }
+    // public String getPropertySet() {
+    //     return propertySet;
+    // }
 
-    public void setPropertySet(String propertySet) {
-        this.propertySet = propertySet;
-    }
+    // public void setPropertySet(String propertySet) {
+    //     this.propertySet = propertySet;
+    // }
 
     // equals, hashCode, and toString methods are overridden
     @Override
@@ -84,27 +84,33 @@ public class ClassPropertyResponseV1 {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ClassPropertyResponseV1 that = (ClassPropertyResponseV1) o;
+        ClassPropertyContractV1 that = (ClassPropertyContractV1) o;
         return Objects.equals(name, that.name) &&
-                Objects.equals(uri, that.uri) &&
+                // Objects.equals(uri, that.uri) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(propertyUri, that.propertyUri) &&
-                Objects.equals(propertySet, that.propertySet);
+                Objects.equals(propertyUri, that.propertyUri);
+                // Objects.equals(propertySet, that.propertySet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, uri, description, propertyUri, propertySet);
+        return Objects.hash(
+            name, 
+            // uri, 
+            description, 
+            propertyUri 
+            // propertySet
+        );
     }
 
     @Override
     public String toString() {
         return "{" +
                 "name='" + name + '\'' +
-                ", uri='" + uri + '\'' +
+                // ", uri='" + uri + '\'' +
                 ", description='" + description + '\'' +
                 ", propertyUri='" + propertyUri + '\'' +
-                ", propertySet='" + propertySet + '\'' +
+                // ", propertySet='" + propertySet + '\'' +
                 '}';
     }
 }

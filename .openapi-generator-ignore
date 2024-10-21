@@ -6,7 +6,12 @@ init/*
 
 src/main/java/datacat/auth/*
 
-src/main/java/datacat/models/*
+src/main/java/datacat/models/ClassContractV1.java
+src/main/java/datacat/models/ClassesResponseV1.java
+src/main/java/datacat/models/ClassPropertyContractV1.java
+src/main/java/datacat/models/DictionaryResponseV1.java
+src/main/java/datacat/models/PropertiesResponseV1.java
+src/main/java/datacat/models/StatisticsResponseV1.java
 
 src/main/java/datacat/restapi/ApiApiController.java
 src/main/java/datacat/restapi/ApiUtil.java
@@ -18,6 +23,7 @@ src/main/java/org/openapitools/OpenApiGeneratorApplication.java
 
 src/main/java/org/openapitools/configuration/HomeController.java
 src/main/java/org/openapitools/configuration/OpenApiCustom.java
+src/main/java/org/openapitools/configuration/SpringDocConfiguration.java
 
 src/main/resources/application.properties
 
