@@ -22,8 +22,7 @@ import org.slf4j.*;
 // GSON
 import com.google.gson.*;
 
-// Internal
-import datacat.service.CustomProperties;
+import datacat.customization.CustomProperties;
 
 // =====================================================================================================================
 // S E R V I C E   S E C T I O N
