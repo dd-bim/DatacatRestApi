@@ -20,7 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // Internal
-import datacat.service.CustomProperties;
+import datacat.customization.CustomProperties;
+
 
 // =====================================================================================================================
 // A N N O T A T I O N   S E C T I O N
@@ -29,7 +30,7 @@ import datacat.service.CustomProperties;
     nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
 @ComponentScan( // component scan gathers all the components in the specified packages, not declared packages won't be seen as part of the application
-    basePackages = {"org.openapitools", "org.openapitools.configuration", "datacat.restapi", "datacat.models", "datacat.auth", "datacat.service"},
+    basePackages = {"org.openapitools", "org.openapitools.configuration", "datacat.restapi", "datacat.models", "datacat.auth", "datacat.customization", "datacat.graphql"},
     nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
 @EnableConfigurationProperties(CustomProperties.class) // enables the use of custom properties
@@ -60,7 +61,8 @@ public class OpenApiApplication { // former and auto generated: OpenApiGenerator
                 "datacat.restapi", // where the REST API classes are located
                 "datacat.models", // where the model classes are located
                 "datacat.auth",  // where the authentication classes are located
-                "datacat.service" // where the service classes are located
+                "datacat.customization", // where the service classes are located
+                "datacat.graphql" // where the GraphQL classes are located
             };
             logger.debug("Base packages scanned: {}", (Object) basePackages); // returns the actual scanned base packages
         };

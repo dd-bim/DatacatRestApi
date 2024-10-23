@@ -124,6 +124,14 @@
 			<version>1.18.11.97</version>
 		</dependency>		 -->
 
+		<!-- M U S T A C H E -->
+		<dependency>
+			<groupId>com.github.spullara.mustache.java</groupId>
+			<artifactId>compiler</artifactId>
+			<version>0.9.14</version>
+		</dependency>
+		
+
 	</dependencies>
 
 	<!-- ==================================================================================================== -->

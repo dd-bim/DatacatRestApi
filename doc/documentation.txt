@@ -1,4 +1,54 @@
+***********************************************************************************************************************************************
+ * * * * D O C U M E N T A T I O N * * * *
+This document provides all information to work out the business logic of the datacat REST API
+The used framework is Spring Boot v3
 
+
+
+
+
+***********************************************************************************************************************************************
+Packages:
+The .. consists of two main directories and a few more service components.
+The java dictionarie holds the source code for the application.
+The resources dictionarie holds information like properties and other utility components.
+
+java/auth holds the logic for the authentication
+java/customization holds the logic for adjustments of other resources
+java/graphql holds the logic that processes the GraphQL queries and other logic components, classes are divided by the section tags
+java/models holds all model classes, aka schemas, that are responsible for the output format
+java/restapi 
+
+java/org/openapitools 
+java/org 
+
+
+
+***********************************************************************************************************************************************
+
+
+
+
+
+***********************************************************************************************************************************************
+
+
+
+
+
+***********************************************************************************************************************************************
+
+
+
+
+
+***********************************************************************************************************************************************
+
+
+
+
+
+***********************************************************************************************************************************************
 Vorbereitung:
  - Ablage der YAML Spezifikation unter „init/“
  - Angabe von Name (und Verzeichnis) der YAML in der „pom.xml“ im Projektverzeichnis ( Plugin -> <inputSpec> )
