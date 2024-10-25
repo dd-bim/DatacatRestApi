@@ -6,17 +6,25 @@ init/*
 
 src/main/java/datacat/auth/*
 
+src/main/java/datacat/customization/*
+
+src/main/java/datacat/graphql/*
+
 src/main/java/datacat/models/ClassContractV1.java
-src/main/java/datacat/models/ClassesResponseV1.java
+src/main/java/datacat/models/ClassListItemContractV1Classes.java
 src/main/java/datacat/models/ClassPropertyContractV1.java
+src/main/java/datacat/models/ClassReferenceContractV1.java
+src/main/java/datacat/models/ClassRelationsContractV1.java
+src/main/java/datacat/models/DictionaryClassesResponseContractV1Classes.java
+src/main/java/datacat/models/DictionaryContractV1.java
 src/main/java/datacat/models/DictionaryResponseV1.java
+src/main/java/datacat/models/DictionaryResponseContractV1.java
+src/main/java/datacat/models/GroupListItemContractV1Classes.java
 src/main/java/datacat/models/PropertiesResponseV1.java
-src/main/java/datacat/models/StatisticsResponseV1.java
+src/main/java/datacat/models/StatisticsResponseContractV1.java
 
 src/main/java/datacat/restapi/ApiApiController.java
 src/main/java/datacat/restapi/ApiUtil.java
-
-src/main/java/datacat/service/*
 
 src/main/java/org/openapitools/OpenApiApplication.java
 src/main/java/org/openapitools/OpenApiGeneratorApplication.java
