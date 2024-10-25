@@ -1,12 +1,12 @@
 package datacat.models;
 
-import java.util.ArrayList;
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,11 +23,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @JsonTypeName("ClassContract.v1")
 public class ClassContractV1 {
 
-
     // =====================================================================================================================
-    // 
-    // classProperties works as a list of objects, is linked to its own class
-    // NEW PROPERTIES ?? WORK HERE!
+    // variables
+    // 'classProperties' works as a list of objects, is linked to its own class
 
     @JsonProperty("classType")
     private String classType;
@@ -38,8 +36,8 @@ public class ClassContractV1 {
     @JsonProperty("relatedIfcEntityNames")
     private List<String> relatedIfcEntityNames = new ArrayList<>();
 
-    // @JsonProperty("parentClassReference")
-    // private List<ClassReferenceContractV1> parentClassReference = new ArrayList<>();
+    @JsonProperty("parentClassReference")
+    private List<ClassReferenceContractV1> parentClassReference = new ArrayList<>();
 
     @JsonProperty("classProperties")
     private List<ClassPropertyContractV1> classProperties = new ArrayList<>();
@@ -137,6 +135,11 @@ public class ClassContractV1 {
     @JsonProperty("synonyms")
     private List<String> synonyms = new ArrayList<>();
 
+    //===================================================================================================================
+    // non-argument constructor to create an instance of the class without any data
+    public ClassContractV1() {
+    }
+
     // =====================================================================================================================
     // getters and setters
     public String getClassType() {
@@ -163,13 +166,13 @@ public class ClassContractV1 {
         this.relatedIfcEntityNames = relatedIfcEntityNames;
     }
     
-    // public List<ClassReferenceContractV1> getParentClassReference() {
-    //     return parentClassReference != null ? parentClassReference : new ArrayList<>();
-    // }
+    public List<ClassReferenceContractV1> getParentClassReference() {
+        return parentClassReference != null ? parentClassReference : new ArrayList<>();
+    }
     
-    // public void setParentClassReference(List<ClassReferenceContractV1> parentClassReference) {
-    //     this.parentClassReference = parentClassReference;
-    // }
+    public void setParentClassReference(List<ClassReferenceContractV1> parentClassReference) {
+        this.parentClassReference = parentClassReference;
+    }
     
     public List<ClassPropertyContractV1> getClassProperties() {
         return classProperties != null ? classProperties : new ArrayList<>();
@@ -420,7 +423,7 @@ public class ClassContractV1 {
         return Objects.equals(classType, that.classType) &&
                 Objects.equals(referenceCode, that.referenceCode) &&
                 Objects.equals(relatedIfcEntityNames, that.relatedIfcEntityNames) &&
-                // Objects.equals(parentClassReference, that.parentClassReference) &&
+                Objects.equals(parentClassReference, that.parentClassReference) &&
                 Objects.equals(classProperties, that.classProperties) &&
                 // Objects.equals(classRelations, that.classRelations) &&
                 // Objects.equals(childClassReferences, that.childClassReferences) &&
@@ -457,7 +460,7 @@ public class ClassContractV1 {
             classType,
             referenceCode,
             relatedIfcEntityNames,
-            // parentClassReference,
+            parentClassReference,
             classProperties,
             // classRelations,
             // childClassReferences,
@@ -496,7 +499,7 @@ public class ClassContractV1 {
                 "classType='" + classType + '\'' +
                 ", referenceCode='" + referenceCode + '\'' +
                 ", relatedIfcEntityNames=" + relatedIfcEntityNames +
-                // ", parentClassReference=" + parentClassReference +
+                ", parentClassReference=" + parentClassReference +
                 ", classProperties=" + classProperties +
                 // ", classRelations=" + classRelations +
                 // ", childClassReferences=" + childClassReferences +
@@ -525,17 +528,7 @@ public class ClassContractV1 {
                 ", versionDateUtc='" + versionDateUtc + '\'' +
                 ", versionNumber='" + versionNumber + '\'' +
                 ", visualRepresentationUri='" + visualRepresentationUri + '\'' +
-                ", synonyms=" + synonyms +
-                '}';
+                ", synonyms=" + synonyms +  '\'' + 
+                "}";
     }
-
-
-    // =====================================================================================================================
-    // nested static class for 'ClassPropertyContractV1' featuring 'propertyName', getter and setter, method overrides
-    // public static class ClassPropertyContractV1 {
-
-
-
-
-
 }
