@@ -42,20 +42,27 @@ paths:
     get:
       tags:
         - Class
-      summary: "[IN REWORK]Get class detailes (i.e. XtdSubject) from a specific class"
-      description: "Following features of this endpoint are not implemented yet: \n\r- include properties\n\r- include language code filter\n\r- various response contents"
-      operationId: getClassDetails
+      summary: "[IN REWORK]Get class details (i.e. XtdSubject) from a specific class"
+      description: >-
+        Following features of this endpoint are not implemented yet: <br>
+        <ul><li>include language code filter</li>
+        <li>various response contents</li></ul>
+      operationId: ClassGet
       parameters:
         - name: URI
           in: query
-          description: "URI of the class, \n\re.g. https://datacat.org/class/1Cdl$F84nFRgiJwdnIHUkg | \n\rCAFM: https://cafm.datacat.org/class/442.90 | \n\rIBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a"
+          description: >-
+            URI of the class, e.g.<br>
+            DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br>
+            CAFM: https://cafm.datacat.org/class/442.90<br>
+            IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a
           required: true
           schema:
             type: string
         - name: IncludeClassProperties
           in: query
           description: >-
-            Use this option to include properties of the class. By default, it is set to true.
+            Use this option to include properties of the class. By default, it is set to true.<br>
             ! This option is not yet implemented.
           schema:
             type: boolean
@@ -92,7 +99,8 @@ paths:
         - name: languageCode
           in: query
           description: >-
-            Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary
+            Specify language (case sensitive).<br>
+            For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br>
             ! This option is not yet implemented.
           schema:
             type: string
@@ -102,14 +110,15 @@ paths:
             content:
               application/json:
                 schema:
-                  #$ref: '#/components/schemas/ClassContract.v1'
                   $ref: '#/components/schemas/ClassContract.v1'
+      deprecated: false
 ##############################################################################################################
   /api/Class/Relations/v1:  
     get:
       tags:
         - Class
       summary: "[NOT IMPLEMENTED]Get class relations or reverse relations (paginated)"
+      operationId: ClassRelationsGet
       # parameters:
       #   - name: ClassUri
       #     in: query
@@ -167,6 +176,7 @@ paths:
       tags:
         - Class
       summary: "[NOT IMPLEMENTED]Get class properties (paginated)"
+      operationId: ClassPropertiesGet
       responses:
         '200':
           description: Success
@@ -176,72 +186,169 @@ paths:
     get:
       tags:
         - Dictionary
-      summary: "[DEPRICATED]Get list of available dictionaries (i.e. XtdBag) with optional filtering."
-      description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
-      operationId: getDictionary
+      summary: "[IN REWORK]Get list of available dictionaries (i.e. XtdBag) with optional filtering."
+      operationId: DictionaryGet
+      description: >-
+        Following features of this endpoint are not implemented yet:
       parameters:
         - name: URI
           in: query
           description: >-
-            Optional filtering, URI of a specific dictionary, e.g. https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W
+            Optional filtering, URI of a specific dictionary, e.g. <br>
+            DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br> 
+            CAFM: <br>
+            IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a
           required: false
           schema:
             type: string
+        - name: IncludeTestDictionaries
+          in: query
+          description: "Should test dictionaries be included in the result? By default it is set to false.\r\nThis option is ignored if you specify a URI."
+          schema:
+            type: boolean
+        - name: Offset
+          in: query
+          description: Zero-based offset of the first item to be returned. Default is 0.
+          schema:
+            type: integer
+            format: int32
+        - name: Limit
+          in: query
+          description: >-
+            Limit number of items to be returned. The default and maximum number
+            of items returned is 1000. When Offset is specified, then the
+            default limit is 100.
+          schema:
+            type: integer
+            format: int32
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DictionaryResponse.v1'
-      deprecated: true
+                $ref: '#/components/schemas/DictionaryResponseContract.v1'
+      deprecated: false
 ##############################################################################################################
   /api/Dictionary/v1/Classes:
     get:
       tags:
         - Dictionary
-      summary: "[NOT IMPLEMENTED]Get dictionary with tree of classes from Datacat (i.e. XtdSubject)."
-      description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
-      operationId: getClasses
+      summary: "[IN REWORK]Get dictionary with tree of classes from Datacat (i.e. XtdSubject)."
+      description: >-
+        Following features of this endpoint are not implemented yet:<br>
+        <ul><li>usage of nested classes</li>
+        <li>filter for class type</li>
+        <li>filter for text</li>
+        <li>filter for IFC entity</li>
+        <li>consideration of limit and offset</li>
+        <li>filter for language code</li></ul>
+      operationId: DictionaryClassesGetWithClasses
       parameters:
         - name: URI
           in: query
           description: >-
-            URI of the dictionary, e.g. As-Built_Surveying https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_
+            URI of the dictionary, e.g.<br>
+            DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_<br>
+            CAFM: https://cafm.datacat.org/model/0bf5d7c3-5397-4255-ba9f-9607480f1ee1<br>
+            IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a
           required: true
           schema:
             type: string
+        - name: UseNestedClasses
+          in: query
+          description: >-
+            Set to true to get classes in a nested structure.<br>You can't use this option if you are using pagination.<br>
+            ! This option is not yet implemented.
+          schema:
+            type: boolean
+          deprecated: true
+        - name: ClassType
+          in: query
+          description: >-
+            Optional filter on class type. Possible values are *not specified yet*.<br>
+            ! This option is not yet implemented.
+          schema:
+            type: string
+          deprecated: true
+        - name: SearchText
+          in: query
+          description: >-
+            Optional filter text.<br>Ignored when UseNestedClasses = true<br>
+            ! This option is not yet implemented.
+          schema:
+            type: string
+          deprecated: true
+        - name: RelatedIfcEntity
+          in: query
+          description: >-
+            Optional filter on related IFC entity. It accepts an IFC entity code (e.g. IfcWall) or uri (e.g. *URI placeholder*).<br>
+            When a code is supplied, finding matching classes ignores the IFC version.<br>
+            Ignored when UseNestedClasses = true<br>
+            ! This option is not yet implemented.
+          schema:
+            type: string
+          deprecated: true
+        - name: Offset
+          in: query
+          description: >-
+            Zero-based offset of the first item to be returned. Default is 0.<br>
+            ! This option is not yet implemented.
+          schema:
+            type: integer
+            format: int32
+          deprecated: false
+        - name: Limit
+          in: query
+          description: >-
+            Limit number of items to be returned. The default and maximum number of items returned is 1000.<br>
+            When Offset is specified, then the default limit is 100.<br>
+            ! This option is not yet implemented.
+          schema:
+            type: integer
+            format: int32
+          deprecated: false
+        - name: languageCode
+          in: query
+          description: >-
+            Specify language (case sensitive).<br>
+            For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br>
+            ! This option is not yet implemented.
+          schema:
+            type: string
+          deprecated: false
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassesResponse.v1'
-      deprecated: true
+                $ref: '#/components/schemas/DictionaryClassesResponseContract.v1.Classes'
+      deprecated: false
 ##############################################################################################################
   /api/Dictionary/v1/Properties:
     get:
       tags:
         - Dictionary
       summary: "[NOT IMPLEMETED]Get dictionary with its properties from Datacat (i.e. XtdProperty)."
-      description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
-      operationId: getProperties
-      parameters:
-        - name: URI
-          in: query
-          description: >-
-            URI of the class, e.g. https://datacat.org/property
-          required: true
-          schema:
-            type: string
+      # description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
+      # operationId: getProperties
+      # # operationId: DictionaryGetWithProperties
+      # parameters:
+      #   - name: URI
+      #     in: query
+      #     description: >-
+      #       URI of the class, e.g. https://datacat.org/property
+      #     required: true
+      #     schema:
+      #       type: string
       responses:
         '200':
           description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PropertiesResponse.v1'
+          # content:
+            # application/json:
+            #   schema:
+            #     $ref: '#/components/schemas/PropertiesResponse.v1'
       deprecated: true
 ##############################################################################################################
   /api/Dictionary/Popular/v1:
@@ -379,13 +486,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatisticsResponse.v1'
+                $ref: '#/components/schemas/StatisticsResponseContract.v1'
 
 ##############################################################################################################
 components:
   schemas:
 ##############################################################################################################
-    #ClassContract.v1:
+
     ClassContract.v1:
       required:
         - activationDateUtc
@@ -396,53 +503,53 @@ components:
         - versionDateUtc
       type: object
       properties:
-        # dictionaryUri:
-        #   type: string
-        #   description: URI of the dictionary
-        #   nullable: true
+        dictionaryUri:
+          type: string
+          description: URI of the dictionary
+          nullable: true
         activationDateUtc:
           type: string
           description: Date of activation
           format: date-time
-        # code:
-        #   minLength: 1
-        #   type: string
-        #   description: Code used originally by the dictionary
-        # creatorLanguageCode:
-        #   type: string
-        #   description: Language code of the creator
-        #   nullable: true
-        # countriesOfUse:
-        #   type: array
-        #   items:
-        #     type: string
-        #   description: List of countries where used
-        #   nullable: true
-        # countryOfOrigin:
-        #   type: string
-        #   description: Country of origin
-        #   nullable: true
-        # deActivationDateUtc:
-        #   type: string
-        #   description: Date of deactivation
-        #   format: date-time
-        #   nullable: true
-        # definition:
-        #   type: string
-        #   description: Formal definition
-        #   nullable: true
-        # deprecationExplanation:
-        #   type: string
-        #   description: Explanation of the deprecation
-        #   nullable: true
+        code:
+          minLength: 1
+          type: string
+          description: Code used originally by the dictionary
+        creatorLanguageCode:
+          type: string
+          description: Language code of the creator
+          nullable: true
+        countriesOfUse:
+          type: array
+          items:
+            type: string
+          description: List of countries where used
+          nullable: true
+        countryOfOrigin:
+          type: string
+          description: Country of origin
+          nullable: true
+        deActivationDateUtc:
+          type: string
+          description: Date of deactivation
+          format: date-time
+          nullable: true
+        definition:
+          type: string
+          description: Formal definition
+          nullable: true
+        deprecationExplanation:
+          type: string
+          description: Explanation of the deprecation
+          nullable: true
         description:
           type: string
           description: Description
           nullable: true
-        # documentReference:
-        #   type: string
-        #   description: Reference to a(n official) document
-        #   nullable: true
+        documentReference:
+          type: string
+          description: Reference to a(n official) document
+          nullable: true
         name:
           minLength: 1
           type: string
@@ -451,38 +558,38 @@ components:
           minLength: 1
           type: string
           description: Unique identification
-        # replacedObjectCodes:
-        #   type: array
-        #   items:
-        #     type: string
-        #   description: List of codes of the replaced items
-        #   nullable: true
-        # replacingObjectCodes:
-        #   type: array
-        #   items:
-        #     type: string
-        #   description: List of codes of the replacing items
-        #   nullable: true
+        replacedObjectCodes:
+          type: array
+          items:
+            type: string
+          description: List of codes of the replaced items
+          nullable: true
+        replacingObjectCodes:
+          type: array
+          items:
+            type: string
+          description: List of codes of the replacing items
+          nullable: true
         revisionDateUtc:
           type: string
           description: Date of the revision
           format: date-time
           nullable: true
-        # revisionNumber:
-        #   type: integer
-        #   description: Revision number
-        #   format: int32
-        #   nullable: true
-        # status:
-        #   minLength: 1
-        #   type: string
-        #   description: 'Status, can be: Preview, Active or Inactive'
-        # subdivisionsOfUse:
-        #   type: array
-        #   items:
-        #     type: string
-        #   description: List of subdivisions (e.g. states) where used
-        #   nullable: true
+        revisionNumber:
+          type: integer
+          description: Revision number
+          format: int32
+          nullable: true
+        status:
+          minLength: 1
+          type: string
+          description: 'Status, can be: Preview, Active or Inactive'
+        subdivisionsOfUse:
+          type: array
+          items:
+            type: string
+          description: List of subdivisions (e.g. states) where used
+          nullable: true
         uid:
           type: string
           description: Alternative unique global identification
@@ -496,37 +603,36 @@ components:
           description: Version number
           format: int32
           nullable: true
-        # visualRepresentationUri:
-        #   type: string
-        #   description: URI of a visual representation
-        #   nullable: true
+        visualRepresentationUri:
+          type: string
+          description: URI of a visual representation
+          nullable: true
         classType:
           type: string
           description: Type of Class
           nullable: true
-        # referenceCode:
-        #   type: string
-        #   description: Code that can be used for dictionary specific purposes
-        #   nullable: true
+        referenceCode:
+          type: string
+          description: Code that can be used for dictionary specific purposes
+          nullable: true
         synonyms:
           type: array
           items:
             type: string
           description: List of synonyms for the class
           nullable: true
-        # relatedIfcEntityNames:
-        #   type: array
-        #   items:
-        #     type: string
-        #   description: List of related IFC entity names (version independent)
-        #   nullable: true
+        relatedIfcEntityNames:
+          type: array
+          items:
+            type: string
+          description: List of related IFC entity names (version independent)
+          nullable: true
         parentClassReference:
           $ref: '#/components/schemas/ClassReferenceContract.v1'
         classProperties:
           type: array
           items:
-            #$ref: '#/components/schemas/ClassPropertyContract.v1'
-            $ref: '#/components/schemas/ClassPropertyContractV1'
+            $ref: '#/components/schemas/ClassPropertyContract.v1'
           description: List of the properties of this class
           nullable: true
         # classRelations:
@@ -560,8 +666,41 @@ components:
       additionalProperties: false
 
 ##############################################################################################################
-    #ClassPropertyContract.v1:
-    ClassPropertyContractV1:
+    ClassListItemContract.v1.Classes:
+      type: object
+      properties:
+        uri:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        classType:
+          type: string
+          nullable: true
+        referenceCode:
+          type: string
+          nullable: true
+        parentClassCode:
+          type: string
+          nullable: true
+        descriptionPart:
+          type: string
+          # description: Description of the class, max 101 characters long
+          nullable: true
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassListItemContract.v1.Classes'
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+    
+    ClassPropertyContract.v1:
       required:
         - name
       type: object
@@ -787,24 +926,43 @@ components:
 
 ##############################################################################################################
 
-    DictionaryResponse.v1: # DEPRICATED
+    DictionaryResponseContract.v1:
       type: object
       properties:
-        uri:
-          minLength: 1
-          type: string
-        name:
-          minLength: 1
-          type: string
-        version:
-          minLength: 1
-          type: string
+        totalCount:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        dictionaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DictionaryContract.v1'
+          nullable: true
+      additionalProperties: false
 
 ##############################################################################################################
 
-    ClassesResponse.v1: # DEPRICATED
+    DictionaryContract.v1:
+      required:
+        # - code
+        # - defaultLanguageCode
+        # - isLatestVersion
+        # - isVerified
+        - name
+        # - organizationCodeOwner
+        # - organizationNameOwner
+        # - uri
+        # - version
       type: object
       properties:
+        # code:
+        #   minLength: 1
+        #   type: string
         uri:
           minLength: 1
           type: string
@@ -813,6 +971,180 @@ components:
           type: string
         version:
           minLength: 1
+          type: string
+        # organizationCodeOwner:
+        #   minLength: 1
+        #   type: string
+        # organizationNameOwner:
+        #   minLength: 1
+        #   type: string
+        # changeRequestEmail:
+        #   type: string
+        #   nullable: true
+        # defaultLanguageCode:
+        #   minLength: 1
+        #   type: string
+        #   description: The default language for this domain
+        # isLatestVersion:
+        #   type: boolean
+        # isVerified:
+        #   type: boolean
+        # license:
+        #   type: string
+        #   description: >-
+        #     Name or short description of the license under which you can use
+        #     this data
+        #   nullable: true
+        # licenseUrl:
+        #   type: string
+        #   description: >-
+        #     URL where you can find more details about the license or default
+        #     link to info about licensing
+        #   nullable: true
+        # qualityAssuranceProcedure:
+        #   type: string
+        #   description: >-
+        #     Name or short description of the quality assurance procedure used
+        #     while creating and maintaining the domain data
+        #   nullable: true
+        # qualityAssuranceProcedureUrl:
+        #   type: string
+        #   description: >-
+        #     URL where you can find more details about the quality assurance
+        #     procedure
+        #   nullable: true
+        # status:
+        #   type: string
+        #   description: >-
+        #     For state indication, like "Preview", "Active", "InActive",
+        #     "Released
+        #   nullable: true
+        # moreInfoUrl:
+        #   type: string
+        #   description: Url to site with more info on domain
+        #   nullable: true
+        # releaseDate:
+        #   type: string
+        #   description: Date of the release of this version
+        #   format: date-time
+        #   nullable: true
+        # lastUpdatedUtc:
+        #   type: string
+        #   description: Date and time the data of the domain has been last updated in bSDD
+        #   format: date-time
+        # availableLanguages:
+        #   type: array
+        #   items:
+        #     $ref: '#/components/schemas/CodeNameDto'
+        #   description: List of (partly) available languages for this dictionary
+        #   nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
+    # ClassesResponse.v1: # DEPRICATED
+    DictionaryClassesResponseContract.v1.Classes:
+      required:
+        # - code
+        # - defaultLanguageCode
+        # - isLatestVersion
+        # - isVerified
+        # - name
+        # - organizationCodeOwner
+        # - organizationNameOwner
+        - uri
+        # - version
+      type: object
+      properties:
+        code:
+          minLength: 1
+          type: string
+        uri:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+        version:
+          minLength: 1
+          type: string
+        organizationCodeOwner:
+          minLength: 1
+          type: string
+        organizationNameOwner:
+          minLength: 1
+          type: string
+        defaultLanguageCode:
+          minLength: 1
+          type: string
+          description: The default language for this domain
+        isLatestVersion:
+          type: boolean
+        isVerified:
+          type: boolean
+        license:
+          type: string
+          description: >-
+            Name or short description of the license under which you can use
+            this data
+          nullable: true
+        licenseUrl:
+          type: string
+          description: >-
+            URL where you can find more details about the license or default
+            link to info about licensing
+          nullable: true
+        qualityAssuranceProcedure:
+          type: string
+          description: >-
+            Name or short description of the quality assurance procedure used
+            while creating and maintaining the domain data
+          nullable: true
+        qualityAssuranceProcedureUrl:
+          type: string
+          description: >-
+            URL where you can find more details about the quality assurance
+            procedure
+          nullable: true
+        status:
+          type: string
+          description: >-
+            For state indication, like "Preview", "Active", "InActive",
+            "Released
+          nullable: true
+        moreInfoUrl:
+          type: string
+          description: Url to site with more info on domain
+          nullable: true
+        releaseDate:
+          type: string
+          description: Date of the release of this version
+          format: date-time
+          nullable: true
+        lastUpdatedUtc:
+          type: string
+          description: Date and time the data of the domain has been last updated in bSDD
+          format: date-time
+        classes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassListItemContract.v1.Classes'
+          nullable: true
+        classesTotalCount:
+          type: integer
+          description: Total number of classes within the dictionary.
+          format: int32
+          nullable: true
+        classesOffset:
+          type: integer
+          format: int32
+          nullable: true
+        classesCount:
+          type: integer
+          description: The returned number of classes.
+          format: int32
+          nullable: true
+      additionalProperties: false
 
 ##############################################################################################################
 
@@ -830,7 +1162,7 @@ components:
 
 ##############################################################################################################
 
-    StatisticsResponse.v1: # DONE
+    StatisticsResponseContract.v1: # DONE
       type: object
       properties:
         catalogueItemId:
