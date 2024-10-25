@@ -99,3 +99,24 @@ Nachbereitung:
 
 
  src/main/java/org/openapitools/OpenApiGeneratorApplication.java sollte in generator-ignore stehen bleiben, sonst wird die main class unter dem namen erzeugt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Inclusion of a new endpoint:
+Adjustment of the YAML specification, editing the filter options in the top, editing the output variables in schema section at the bottom
+Usage of 'mvn generate-sources' to generate new model classes
+Adjustment of model classes (camel case for getters and setters, cleaning hashCode and equals)
+Copiying parameters from ApiApi.java to ApiApiController.java
+Building GraphQL query in certain class, linking query with logic in GraphQLService.java
