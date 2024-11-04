@@ -5,7 +5,7 @@ info:
     name: Support/Contact
     url: https://github.com/dd-bim
   description: |-
-    <p>Web facade to access the Datacat catalogue system.</br></p> <h3>Latest changes:</h3> <ul><li>v1.0.X "major endpoint overhaul"<ul>
+    <p>Web facade to access the Datacat catalogue system.</br></p> <h3>Latest changes:</h3> <ul><li>v1.1.0 "ekkodale minimal requirements"<ul>
         <li>general rework of api/Class/v1</li>
         <li>general rework of api/Dictionary/v1/Classes (upcoming)</li>
         <li>including filter options (missing business logic)</li>
@@ -13,7 +13,7 @@ info:
         <li>backend logic and query rework</li>
         <li>minor UI adjustments</li>
         <li>improved accessibility of specification</li>
-    </ul><li>v1.0.0 "bSDD-like prototype"<ul>
+    </ul><li>v1.0.X "bSDD-like prototype"<ul>
         <li>adjustment of existing endpoints to match bSDD</li>
         <li>including URI usage (partly missing business logic)</li>
         <li>schema rework (renaming, parameter changes, etc.)</li>
@@ -23,8 +23,8 @@ info:
     </ul></ul></li></ul>
   license:
     name: '* licence name placeholder *'
-  title: Datacat REST API v1.0.5
-  version: 1.0.5
+  title: Datacat REST API v1.1.0
+  version: 1.1.0
 servers:
 - description: DATACAT
   url: https://datacat.org/api/e1

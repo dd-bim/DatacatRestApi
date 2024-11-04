@@ -13,8 +13,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.License;
-// import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.tags.Tag;
+// import io.swagger.v3.oas.models.servers.Server;
 
 // Java
 import java.util.List;
@@ -39,8 +39,8 @@ public class OpenApiCustom {
         return new OpenAPI()
             .info( 
                 new Info()
-                    .title("Datacat REST API v1.0.5")
-                    .description("<p>Web facade to access the Datacat catalogue system.</br></p> <h3>Latest changes:</h3> <ul><li>v1.0.X \"major endpoint overhaul\"<ul>     <li>general rework of api/Class/v1</li>     <li>general rework of api/Dictionary/v1/Classes (upcoming)</li>     <li>including filter options (missing business logic)</li>     <li>schema adjustment (including non-implemented attributes)</li>     <li>backend logic and query rework</li>     <li>minor UI adjustments</li>     <li>improved accessibility of specification</li> </ul><li>v1.0.0 \"bSDD-like prototype\"<ul>     <li>adjustment of existing endpoints to match bSDD</li>     <li>including URI usage (partly missing business logic)</li>     <li>schema rework (renaming, parameter changes, etc.)</li>     <li>removed porxy settings</li>     <li>published under CAFM and IBPDI demain</li>     <li>minor changes to the UI</li> </ul></ul></li></ul>")
+                    .title("Datacat REST API v1.1.1")
+                    .description("<p>OpenAPI-based API to access the Datacat catalogue system.</br></p><h3>Upcoming changes:</h3><ul><li>v1.1.X \"ekkodale minimal requirements\"<ul><li>adding more filter functionalities to the endpoints</li><li>adding more response content</li></ul><li>v1.2.X \"major endpoint overhaul\"<ul><li>step-by-step inclusion of missing endpoints</li></ul></li></ul><h3>Latest changes:</h3><ul><li>v1.1.0 \"ekkodale minimal requirements\"<ul><li>general rework of api/Class/v1</li><li>general rework of api/Dictionary/v1/Classes</li><li>including filter options (missing business logic)</li><li>schema adjustment (including non-implemented attributes)</li><li>backend logic and query rework</li><li>minor UI adjustments</li><li>improved accessibility of specification</li></ul><li>v1.0.X \"bSDD-like prototype\"<ul><li>adjustment of existing endpoints to match bSDD</li><li>including URI usage (partly missing business logic)</li><li>schema rework (renaming, parameter changes, etc.)</li><li>removed porxy settings</li><li>published under CAFM and IBPDI demain</li><li>minor changes to the UI</li></ul></li></ul>")
                     .contact(
                         new Contact()
                             .name("Support/Contact")
@@ -52,13 +52,13 @@ public class OpenApiCustom {
                             .name("* licence name placeholder *")
                             .url("http://unlicense.org")
                     )
-                    .version("1.0.5")
+                    .version("1.1.1")
             )
             // .servers(List.of(
             //     new Server().url("https://localhost:3001").description("Localhost"),
             //     new Server().url("https://datacat.org/api/e1").description("DATACAT"),
-            //     new Server().url("https://ibpdi.datcat.org/api/e1").description("IBPDI"),
-            //     new Server().url("https://cafm.datacat.org/api/e1").description("CAFM")
+            //     new Server().url("https://ibpdi.datacat.org/api/e1").description("IBPDI"),
+            //     new Server().url("https://cafm.datacat.org/api/v1").description("CAFM")
             // ))
             .tags(List.of(
                 new Tag().name("Class").description("Operations about classes"),

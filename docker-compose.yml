@@ -9,4 +9,4 @@ services:
       - custom.base-path=/graphql
       - custom.username=Lennart
       - custom.password=yM25!?afGN
-    image: lh420/datacatrestapi:1.0.5
+    image: lh420/datacatrestapi:1.1.1
