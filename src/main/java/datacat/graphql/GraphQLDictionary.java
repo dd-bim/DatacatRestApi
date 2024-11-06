@@ -50,6 +50,8 @@ public class GraphQLDictionary {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{getBag(id:\\\"" + id + "\\\") { ")
                     .append("name ")
+                    .append("uri:id ")
+                    .append("code:name ")
                     .append("version:versionId ")
                     .append("releaseDate:created ")
                     .append("lastUpdatedUtc:versionDate ")
@@ -67,6 +69,8 @@ public class GraphQLDictionary {
                     .append("nodes { ")
                     .append("relatedThings { ")
                     .append("name ")
+                    .append("code:name ")
+                    .append("uri:id ")
                     .append("descriptionPart:description ")
                     .append("collectedBy { nodes { parentClassCode:name } } ")
                     .append("} } } } }");

@@ -55,6 +55,9 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 {{/additionalPropertiesType}}
 
+// internal
+import datacat.customization.DefaultValuesHandler;
+
 {{^isEnum}} 
 {{#vendorExtensions.x-is-one-of-interface}}{{>oneof_interface}}{{/vendorExtensions.x-is-one-of-interface}}{{^vendorExtensions.x-is-one-of-interface}}
 
@@ -73,7 +76,9 @@ public class {{classname}} {
 
     // =====================================================================================================================
     // non-argument constructor
-    public {{classname}}() {}
+    public {{classname}}() {
+        DefaultValuesHandler.ensureDefaults(this);
+    }
 
     
     // =====================================================================================================================
@@ -90,6 +95,17 @@ public class {{classname}} {
 
     // =====================================================================================================================
     // business logic method
+    public void generateUri(String serverUrl) {
+        if(this.uri != null) {
+            this.uri = serverUrl + "/BASEPATH/" + this.uri;
+        }
+    }
+
+    //public void transformToLowerCase() {
+    //    if(this.code != null) {
+    //        this.code = this.code.toLowerCase();
+    //    }
+    //}
 
 
     // standard object methods equals, hashCode, and toString

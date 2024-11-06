@@ -105,7 +105,7 @@ public class ApiApiController implements ApiApi {
 
     @Override
     @Tag(name = "Dictionary")
-    public  ResponseEntity<DictionaryResponseContractV1> dictionaryGet(
+    public  ResponseEntity<Object> dictionaryGet(
         @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI,
         @Parameter(name = "IncludeTestDictionaries", description = "Should test dictionaries be included in the result? By default it is set to false.  This option is ignored if you specify a URI.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) Boolean includeTestDictionaries,
         @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
@@ -202,10 +202,8 @@ public class ApiApiController implements ApiApi {
     //     }
     // }
 
-    // // =====================================================================================================================
-    // // ENDPOINT: /api/Dictionary/v1/Classes
-    // // malfunctional
-
+    // =====================================================================================================================
+    // ENDPOINT: /api/Dictionary/v1/Classes
     @Override
     @Tag(name = "Dictionary")
     public ResponseEntity<DictionaryClassesResponseContractV1Classes> dictionaryClassesGetWithClasses(

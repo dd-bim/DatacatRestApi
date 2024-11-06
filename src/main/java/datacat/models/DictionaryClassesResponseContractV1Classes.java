@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import datacat.customization.DefaultValuesHandler;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 // =====================================================================================================================
@@ -95,7 +97,9 @@ public class DictionaryClassesResponseContractV1Classes {
 
     // =====================================================================================================================
     // non-argument constructor
-    public DictionaryClassesResponseContractV1Classes() {}
+    public DictionaryClassesResponseContractV1Classes() {
+        DefaultValuesHandler.ensureDefaults(this);
+    }
 
     // =====================================================================================================================
     // getters and setters
@@ -269,11 +273,17 @@ public class DictionaryClassesResponseContractV1Classes {
 
     // =====================================================================================================================
     // business logic method
-    // public void generateUriFromUid() {
-    //     if (this.uid != null) {
-    //         this.uri = "https://datacat.org/class/" + this.uid; // Construct the URI by combining the base URL with the uid (which holds the id)
-    //     }
-    // }
+    public void generateUri(String serverUrl) {
+        if (this.uri != null) {
+            this.uri = serverUrl + "/model/" + this.uri; // Construct the URI by combining the base URL with the uid (which holds the id)
+        }
+    }
+
+    public void transformToLowerCase() {
+        if (this.code != null) {
+            this.code = this.code.toLowerCase();
+        }
+    }
 
     // standard object methods equals, hashCode, and toString
     @Override

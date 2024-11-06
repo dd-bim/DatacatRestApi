@@ -5,39 +5,32 @@ info:
     name: Support/Contact
     url: https://github.com/dd-bim
   description: |-
-    <p>Web facade to access the Datacat catalogue system.</br></p> <h3>Latest changes:</h3> <ul><li>v1.1.0 "ekkodale minimal requirements"<ul>
+    <p>OpenAPI-based API to access the Datacat catalogue system.</br></p> <h3>Upcoming changes:</h3> <ul><li>v1.2.X "major endpoint overhaul"<ul>
+        <li>step-by-step inclusion of missing endpoints</li>
+    </ul><li></ul> <h3>Latest changes:</h3> <ul><li>v1.2.0 "major endpoint overhaul"<ul>
+        <li>minor improvements for v1.1</li>
+    </ul><li>v1.1.1 "ekkodale minimal requirements"<ul>
         <li>general rework of api/Class/v1</li>
-        <li>general rework of api/Dictionary/v1/Classes (upcoming)</li>
-        <li>including filter options (missing business logic)</li>
+        <li>general rework of api/Dictionary/v1/Classes</li>
         <li>schema adjustment (including non-implemented attributes)</li>
         <li>backend logic and query rework</li>
         <li>minor UI adjustments</li>
         <li>improved accessibility of specification</li>
-    </ul><li>v1.0.X "bSDD-like prototype"<ul>
-        <li>adjustment of existing endpoints to match bSDD</li>
-        <li>including URI usage (partly missing business logic)</li>
-        <li>schema rework (renaming, parameter changes, etc.)</li>
-        <li>removed porxy settings</li>
-        <li>published under CAFM and IBPDI demain</li>
-        <li>minor changes to the UI</li>
-    </ul></ul></li></ul>
+    </ul></li></ul>
   license:
     name: '* licence name placeholder *'
-  title: Datacat REST API v1.1.0
-  version: 1.1.0
+  title: Datacat REST API v1.2.0
+  version: 1.2.0
 servers:
-- description: DATACAT
-  url: https://datacat.org/api/e1
-- description: IBPDI
-  url: https://ibpdi.datcat.org/api/e1
-- description: CAFM
-  url: https://cafm.datacat.org/api/e1
+- url: /
 paths:
   /api/Class/v1:
     get:
       deprecated: false
-      description: "Following features of this endpoint are not implemented yet: <br>\
-        \ <ul><li>include language code filter</li> <li>various response contents</li></ul>"
+      description: "Due to incompatibility the following features of this endpoint\
+        \ are not implemented (yet): <br> <ul><li>include language code filter (to\
+        \ be implemented)</li> <li>various filter options</li> <li>various response\
+        \ contents</li></ul>"
       operationId: ClassGet
       parameters:
       - description: "URI of the class, e.g.<br> DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br>\
@@ -50,7 +43,7 @@ paths:
           type: string
         style: form
       - description: "Use this option to include properties of the class. By default,\
-          \ it is set to true.<br> ! This option is not yet implemented."
+          \ it is set to true.<br>"
         explode: true
         in: query
         name: IncludeClassProperties
@@ -118,7 +111,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ClassContract.v1'
           description: Success
-      summary: "[IN REWORK]Get class details (i.e. XtdSubject) from a specific class"
+      summary: Get class details (i.e. XtdSubject) from a specific class
       tags:
       - Class
       x-accepts:
@@ -155,7 +148,7 @@ paths:
       - tag: Class
   /api/Dictionary/v1:
     get:
-      deprecated: false
+      deprecated: true
       description: 'Following features of this endpoint are not implemented yet:'
       operationId: DictionaryGet
       parameters:
@@ -206,8 +199,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/DictionaryResponseContract.v1'
           description: Success
-      summary: "[IN REWORK]Get list of available dictionaries (i.e. XtdBag) with optional\
-        \ filtering."
+      summary: "[NOT IMPLEMENTED]Get list of available dictionaries (i.e. XtdBag)\
+        \ with optional filtering."
       tags:
       - Dictionary
       x-accepts:
@@ -217,10 +210,11 @@ paths:
   /api/Dictionary/v1/Classes:
     get:
       deprecated: false
-      description: Following features of this endpoint are not implemented yet:<br>
-        <ul><li>usage of nested classes</li> <li>filter for class type</li> <li>filter
-        for text</li> <li>filter for IFC entity</li> <li>consideration of limit and
-        offset</li> <li>filter for language code</li></ul>
+      description: "Due to incompatibility the following features of this endpoint\
+        \ are not implemented (yet): <br> <ul><li>filter for text</li> <li>consideration\
+        \ of limit and offset (to be implemented)</li> <li>include language code filter\
+        \ (to be implemented)</li> <li>various filter options</li></ul> <li>various\
+        \ response contents</li></ul>"
       operationId: DictionaryClassesGetWithClasses
       parameters:
       - description: "URI of the dictionary, e.g.<br> DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_<br>\
@@ -234,9 +228,8 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: Set to true to get classes in a nested structure.<br>You can't
-          use this option if you are using pagination.<br> ! This option is not yet
-          implemented.
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
         explode: true
         in: query
         name: UseNestedClasses
@@ -245,8 +238,8 @@ paths:
           type: boolean
         style: form
       - deprecated: true
-        description: Optional filter on class type. Possible values are *not specified
-          yet*.<br> ! This option is not yet implemented.
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
         explode: true
         in: query
         name: ClassType
@@ -255,8 +248,8 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: Optional filter text.<br>Ignored when UseNestedClasses = true<br>
-          ! This option is not yet implemented.
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
         explode: true
         in: query
         name: SearchText
@@ -265,10 +258,8 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: "Optional filter on related IFC entity. It accepts an IFC entity\
-          \ code (e.g. IfcWall) or uri (e.g. *URI placeholder*).<br> When a code is\
-          \ supplied, finding matching classes ignores the IFC version.<br> Ignored\
-          \ when UseNestedClasses = true<br> ! This option is not yet implemented."
+        description: '! This option is not compatible with datacat.org or any of its
+          instances'
         explode: true
         in: query
         name: RelatedIfcEntity
@@ -318,8 +309,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DictionaryClassesResponseContract.v1.Classes'
           description: Success
-      summary: "[IN REWORK]Get dictionary with tree of classes from Datacat (i.e.\
-        \ XtdSubject)."
+      summary: Get dictionary with tree of classes from Datacat (i.e. XtdSubject).
       tags:
       - Dictionary
       x-accepts:
@@ -533,6 +523,17 @@ components:
         - subdivisionsOfUse
         description: description
         deprecationExplanation: deprecationExplanation
+        classRelations:
+        - relationType: relationType
+          relatedClassName: relatedClassName
+          uri: uri
+          relatedClassUri: relatedClassUri
+          fraction: 1.4894159098541704
+        - relationType: relationType
+          relatedClassName: relatedClassName
+          uri: uri
+          relatedClassUri: relatedClassUri
+          fraction: 1.4894159098541704
         versionDateUtc: 2000-01-23T04:56:07.000+00:00
         uid: uid
         replacedObjectCodes:
@@ -552,22 +553,113 @@ components:
         - synonyms
         - synonyms
         parentClassReference:
+          code: code
           name: name
           uri: uri
         activationDateUtc: 2000-01-23T04:56:07.000+00:00
         uri: uri
         versionNumber: 6
         classProperties:
-        - dataType: dataType
-          name: name
+        - symbol: symbol
+          dimensionMass: 5
+          minInclusive: 1.2315135367772556
+          predefinedValue: predefinedValue
+          dimensionLength: 1
+          pattern: pattern
           description: description
-          propertyUri: propertyUri
+          units:
+          - units
+          - units
+          isWritable: true
+          example: example
+          maxInclusive: 4.145608029883936
+          dimensionTime: 5
+          propertyStatus: propertyStatus
+          propertyCode: propertyCode
+          minExclusive: 7.386281948385884
+          dynamicParameterPropertyCodes:
+          - dynamicParameterPropertyCodes
+          - dynamicParameterPropertyCodes
+          definition: definition
+          dimension: dimension
+          dimensionLuminousIntensity: 3
+          dimensionThermodynamicTemperature: 7
+          allowedValues:
+          - code: code
+            sortNumber: 1
+            description: description
+            uri: uri
+            value: value
+          - code: code
+            sortNumber: 1
+            description: description
+            uri: uri
+            value: value
+          isRequired: true
+          dimensionElectricCurrent: 2
+          isDynamic: true
+          physicalQuantity: physicalQuantity
+          propertySet: propertySet
+          dataType: dataType
+          maxExclusive: 2.027123023002322
           uri: uri
-        - dataType: dataType
+          dimensionAmountOfSubstance: 9
+          propertyValueKind: propertyValueKind
+          qudtCodes:
+          - qudtCodes
+          - qudtCodes
           name: name
-          description: description
           propertyUri: propertyUri
+        - symbol: symbol
+          dimensionMass: 5
+          minInclusive: 1.2315135367772556
+          predefinedValue: predefinedValue
+          dimensionLength: 1
+          pattern: pattern
+          description: description
+          units:
+          - units
+          - units
+          isWritable: true
+          example: example
+          maxInclusive: 4.145608029883936
+          dimensionTime: 5
+          propertyStatus: propertyStatus
+          propertyCode: propertyCode
+          minExclusive: 7.386281948385884
+          dynamicParameterPropertyCodes:
+          - dynamicParameterPropertyCodes
+          - dynamicParameterPropertyCodes
+          definition: definition
+          dimension: dimension
+          dimensionLuminousIntensity: 3
+          dimensionThermodynamicTemperature: 7
+          allowedValues:
+          - code: code
+            sortNumber: 1
+            description: description
+            uri: uri
+            value: value
+          - code: code
+            sortNumber: 1
+            description: description
+            uri: uri
+            value: value
+          isRequired: true
+          dimensionElectricCurrent: 2
+          isDynamic: true
+          physicalQuantity: physicalQuantity
+          propertySet: propertySet
+          dataType: dataType
+          maxExclusive: 2.027123023002322
           uri: uri
+          dimensionAmountOfSubstance: 9
+          propertyValueKind: propertyValueKind
+          qudtCodes:
+          - qudtCodes
+          - qudtCodes
+          name: name
+          propertyUri: propertyUri
         deActivationDateUtc: 2000-01-23T04:56:07.000+00:00
         name: name
         documentReference: documentReference
@@ -712,6 +804,13 @@ components:
             $ref: '#/components/schemas/ClassPropertyContract.v1'
           nullable: true
           type: array
+        classRelations:
+          description: "List of relations to other classes, can be reference to classes\
+            \ of other dictionaries"
+          items:
+            $ref: '#/components/schemas/ClassRelationContract.v1'
+          nullable: true
+          type: array
       required:
       - activationDateUtc
       - name
@@ -762,11 +861,56 @@ components:
     ClassPropertyContract.v1:
       additionalProperties: false
       example:
-        dataType: dataType
-        name: name
+        symbol: symbol
+        dimensionMass: 5
+        minInclusive: 1.2315135367772556
+        predefinedValue: predefinedValue
+        dimensionLength: 1
+        pattern: pattern
         description: description
-        propertyUri: propertyUri
+        units:
+        - units
+        - units
+        isWritable: true
+        example: example
+        maxInclusive: 4.145608029883936
+        dimensionTime: 5
+        propertyStatus: propertyStatus
+        propertyCode: propertyCode
+        minExclusive: 7.386281948385884
+        dynamicParameterPropertyCodes:
+        - dynamicParameterPropertyCodes
+        - dynamicParameterPropertyCodes
+        definition: definition
+        dimension: dimension
+        dimensionLuminousIntensity: 3
+        dimensionThermodynamicTemperature: 7
+        allowedValues:
+        - code: code
+          sortNumber: 1
+          description: description
+          uri: uri
+          value: value
+        - code: code
+          sortNumber: 1
+          description: description
+          uri: uri
+          value: value
+        isRequired: true
+        dimensionElectricCurrent: 2
+        isDynamic: true
+        physicalQuantity: physicalQuantity
+        propertySet: propertySet
+        dataType: dataType
+        maxExclusive: 2.027123023002322
         uri: uri
+        dimensionAmountOfSubstance: 9
+        propertyValueKind: propertyValueKind
+        qudtCodes:
+        - qudtCodes
+        - qudtCodes
+        name: name
+        propertyUri: propertyUri
       properties:
         name:
           description: Name of the property
@@ -781,20 +925,220 @@ components:
             \ then \"Definition\" is returned as description"
           nullable: true
           type: string
+        definition:
+          description: "Definition of the property.\r\nDescription is same as definition\
+            \ if at Property level no description has been given."
+          nullable: true
+          type: string
         dataType:
           description: Format for expressing the value of the property
+          nullable: true
+          type: string
+        dimension:
+          description: "Dimension of the physical quantity in format \"L M T I Θ N\
+            \ J\", for example \"-2 1 0 0 0 0 0\".\r\nWith\r\n  L   Length\r\n  M\
+            \   Mass\r\n  T   Time\r\n  I   Electric current\r\n  Θ   Thermodynamic\
+            \ Temperature\r\n  N   Amount of substance\r\n  J   Luminous intensity"
+          nullable: true
+          type: string
+        dimensionLength:
+          description: The Length value of the dimension
+          format: int32
+          nullable: true
+          type: integer
+        dimensionMass:
+          description: The Mass value of the dimension
+          format: int32
+          nullable: true
+          type: integer
+        dimensionTime:
+          description: The Time value of the dimension
+          format: int32
+          nullable: true
+          type: integer
+        dimensionElectricCurrent:
+          description: The Electric current value of the dimension
+          format: int32
+          nullable: true
+          type: integer
+        dimensionThermodynamicTemperature:
+          description: The Thermodynamic temperature value of the dimension
+          format: int32
+          nullable: true
+          type: integer
+        dimensionAmountOfSubstance:
+          description: The Amount of substance value of the dimension
+          format: int32
+          nullable: true
+          type: integer
+        dimensionLuminousIntensity:
+          description: The Luminous intensity value of the dimension
+          format: int32
+          nullable: true
+          type: integer
+        dynamicParameterPropertyCodes:
+          description: "List of codes of the properties which are parameters of the\
+            \ function for a dynamic property.\r\nOnly applicable for dynamic properties\
+            \ (IsDynamic)"
+          items:
+            type: string
+          nullable: true
+          type: array
+        example:
+          description: Illustrate possible use or values of the Property
+          nullable: true
+          type: string
+        isDynamic:
+          description: True if the value of this property is dependent on other properties
+            (as provided in DynamicParameterPropertyCodes)
+          nullable: true
+          type: boolean
+        isRequired:
+          description: Indicates if this property is required for the class
+          nullable: true
+          type: boolean
+        isWritable:
+          description: Indicates if the value of the property can be changed by the
+            user
+          nullable: true
+          type: boolean
+        maxExclusive:
+          description: "Maximum value of the property, exclusive\r\nThis value does\
+            \ not need to be the same as the MaxExclusive in the Property contract\r\
+            \nbecause this value can be overruled at Class-Property level to define\
+            \ a more strict value."
+          format: double
+          nullable: true
+          type: number
+        maxInclusive:
+          description: "Maximum value of the property, inclusive\r\nThis value does\
+            \ not need to be the same as the MaxInclusive in the Property contract\r\
+            \nbecause this value can be overruled at Class-Property level to define\
+            \ a more strict value."
+          format: double
+          nullable: true
+          type: number
+        minExclusive:
+          description: "Minimum value of the property, exclusive\r\nThis value does\
+            \ not need to be the same as the MinExclusive in the Property contract\r\
+            \nbecause this value can be overruled at Class-Property level to define\
+            \ a more strict value."
+          format: double
+          nullable: true
+          type: number
+        minInclusive:
+          description: "Minimum value of the property, inclusive\r\nThis value does\
+            \ not need to be the same as the MinInclusive in the Property contract\r\
+            \nbecause this value can be overruled at Class-Property level to define\
+            \ a more strict value."
+          format: double
+          nullable: true
+          type: number
+        pattern:
+          description: "An XML Schema Regular expression for the property value.\r\
+            \nSee for explanation: https://www.regular-expressions.info/xml.html.\r\
+            \nThis value does not need to be the same as the Pattern in the Property\
+            \ contract\r\nbecause this value can be overruled at Class-Property level\
+            \ to define a more strict value."
+          nullable: true
+          type: string
+        physicalQuantity:
+          description: The quantity in plain text
+          nullable: true
+          type: string
+        allowedValues:
+          description: "List of allowed values\r\nThis list does not need to be the\
+            \ same as the list of AllowedValues in the Property contract\r\nbecause\
+            \ this list can be overruled at Class-Property level to define a more\
+            \ strict list."
+          items:
+            $ref: '#/components/schemas/ClassPropertyValueContract.v1'
+          nullable: true
+          type: array
+        predefinedValue:
+          description: "Predefined value: if the class can have only one value for\
+            \ this property, this is it"
+          nullable: true
+          type: string
+        propertyCode:
+          description: "Code of the property, only applicable if property is of the\
+            \ same dictionary as the class."
           nullable: true
           type: string
         propertyUri:
           description: Unique identification of the property
           nullable: true
           type: string
+        propertySet:
+          description: Name of the Property Set
+          nullable: true
+          type: string
+        propertyStatus:
+          description: "Status of the property: Preview, Active or Inactive"
+          nullable: true
+          type: string
+        propertyValueKind:
+          description: "Indicates kind of value: Single, Range (2 values expected),\
+            \ List (multiple values expected), Complex (use in combination with \"\
+            ConnectedProperties\"), ComplexList"
+          nullable: true
+          type: string
+        symbol:
+          description: Symbol of the property
+          nullable: true
+          type: string
+        units:
+          description: List of units to select from
+          items:
+            type: string
+          nullable: true
+          type: array
+        qudtCodes:
+          description: List of QUDT unit codes to select from
+          items:
+            type: string
+          nullable: true
+          type: array
       required:
       - name
+      type: object
+    ClassPropertyValueContract.v1:
+      additionalProperties: false
+      example:
+        code: code
+        sortNumber: 1
+        description: description
+        uri: uri
+        value: value
+      properties:
+        uri:
+          description: Globally unique identification of the value
+          nullable: true
+          type: string
+        code:
+          description: Identification of the value
+          nullable: true
+          type: string
+        value:
+          description: Allowed value of the property
+          minLength: 1
+          type: string
+        description:
+          description: Description of the value
+          nullable: true
+          type: string
+        sortNumber:
+          description: Sort number of value within the list of values for the Property
+          format: int32
+          nullable: true
+          type: integer
+      required:
+      - value
       type: object
     ClassReferenceContract.v1:
       additionalProperties: false
       example:
+        code: code
         name: name
         uri: uri
       properties:
@@ -804,53 +1148,54 @@ components:
         name:
           nullable: true
           type: string
+        code:
+          nullable: true
+          type: string
       required:
       - uri
       type: object
-    ClassRelationsContract.v1:
+    ClassRelationContract.v1:
       additionalProperties: false
+      example:
+        relationType: relationType
+        relatedClassName: relatedClassName
+        uri: uri
+        relatedClassUri: relatedClassUri
+        fraction: 1.4894159098541704
       properties:
-        classUri:
-          description: Uri of the class
+        uri:
           nullable: true
           type: string
+        relationType:
+          description: "Can be one of: HasReference, IsEqualTo, IsSynonymOf, IsParentOf,\
+            \ IsChildOf, HasPart"
+          minLength: 1
+          type: string
+        relatedClassUri:
+          description: Namespace URI of the related class
+          minLength: 1
+          type: string
+        relatedClassName:
+          description: Name of the related class
+          nullable: true
+          type: string
+        fraction:
+          description: Optional provision of a fraction of the total amount (e.g.
+            volume or weight) that applies to the class relations of one relation
+            type
+          format: double
+          nullable: true
+          type: number
       type: object
     DictionaryResponseContract.v1:
       additionalProperties: false
-      example:
-        offset: 6
-        count: 1
-        totalCount: 0
-        dictionaries:
-        - name: name
-          uri: uri
-          version: version
-        - name: name
-          uri: uri
-          version: version
-      properties:
-        totalCount:
-          format: int32
-          type: integer
-        offset:
-          format: int32
-          type: integer
-        count:
-          format: int32
-          type: integer
-        dictionaries:
-          items:
-            $ref: '#/components/schemas/DictionaryContract.v1'
-          nullable: true
-          type: array
       type: object
     DictionaryContract.v1:
       additionalProperties: false
-      example:
-        name: name
-        uri: uri
-        version: version
       properties:
+        code:
+          minLength: 1
+          type: string
         uri:
           minLength: 1
           type: string
@@ -860,8 +1205,51 @@ components:
         version:
           minLength: 1
           type: string
+        defaultLanguageCode:
+          description: The default language for this domain
+          minLength: 1
+          type: string
+        isLatestVersion:
+          type: boolean
+        isVerified:
+          type: boolean
+        license:
+          description: Name or short description of the license under which you can
+            use this data
+          nullable: true
+          type: string
+        licenseUrl:
+          description: URL where you can find more details about the license or default
+            link to info about licensing
+          nullable: true
+          type: string
+        status:
+          description: "For state indication, like \"Preview\", \"Active\", \"InActive\"\
+            , \"Released"
+          nullable: true
+          type: string
+        moreInfoUrl:
+          description: Url to site with more info on domain
+          nullable: true
+          type: string
+        releaseDate:
+          description: Date of the release of this version
+          format: date-time
+          nullable: true
+          type: string
+        lastUpdatedUtc:
+          description: Date and time the data of the domain has been last updated
+            in bSDD
+          format: date-time
+          type: string
       required:
+      - code
+      - defaultLanguageCode
+      - isLatestVersion
+      - isVerified
       - name
+      - uri
+      - version
       type: object
     DictionaryClassesResponseContract.v1.Classes:
       additionalProperties: false

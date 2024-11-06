@@ -30,7 +30,7 @@ public class GraphQLClass {
                     .append("documentedBy { nodes { relatingDocument { dictionaryUri:id } } } ") // missing logic to transform id into uri
                     .append("activationDateUtc:created ")
                     .append("description ")
-                    .append("documentedBy { nodes { relatingDocument { documentReference:name } } } ");
+                    .append("documentedBy { nodes { relatingDocument { documentReference:name dictionaryUri:id } } } ");
         
         if (languageCode != null && !languageCode.isEmpty()) {
             queryBuilder.append("name(input:{languageTags:\\\"").append(languageCode).append("\\\"}) ");
@@ -40,10 +40,12 @@ public class GraphQLClass {
         
         queryBuilder.append("revisionDateUtc:lastModified ")
                     .append("uid:id ")
+                    .append("uri:id ")
+                    .append("code:name ")
                     .append("versionDateUtc:versionDate ")
                     .append("versionNumber:versionId ")
                     .append("classType:recordType ")
-                    // .append(s"synonyms:names { value } ") // wrong approach
+                    // .append("synonyms:names { value } ") // somehow leads to error while deserialization
                     .append("assignedCollections { nodes { parentClassReference:relatedCollections { uri:id name } } } ");
 
         if (includeProperties == true) {
@@ -61,7 +63,9 @@ public class GraphQLClass {
                     .append("name ")
                     .append("description ")
                     .append("uid:id ")
-                    .append("assignedMeasures { nodes { relatedMeasures { assignedValues { nodes { allowedValues:relatedValues { uri:id value:name description } } } } } } ")
+                    .append("uri:id ")
+                    .append("propertyCode:name ")
+                    .append("assignedMeasures { nodes { relatedMeasures { assignedUnits { nodes { allowedValues:relatedUnits { uri:id value:name description } } } } } } ")
                     // .append("documentedBy { nodes { relatingDocument { propertyDictionaryName:name propertyDictionaryUri:id } } } ")
                     .append("composedBy { nodes { propertySet:name } } ")
                     .append("assignedMeasures { nodes { relatedMeasures { assignedUnits { nodes { units:relatedUnits { name } } } } } } ")

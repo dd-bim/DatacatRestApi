@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import datacat.customization.DefaultValuesHandler;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 // =====================================================================================================================
@@ -42,8 +45,8 @@ public class ClassContractV1 {
     @JsonProperty("classProperties")
     private List<ClassPropertyContractV1> classProperties = new ArrayList<>();
 
-    // @JsonProperty("classRelations")
-    // private List<ClassRelationsContractV1> classRelations = new ArrayList<>();
+    @JsonProperty("classRelations")
+    private List<ClassRelationContractV1> classRelations = new ArrayList<>();
 
     // @JsonProperty("childClassReferences") // not compatible with datacat
     // private List<> childClassReferences = new ArrayList<>();
@@ -52,7 +55,7 @@ public class ClassContractV1 {
     // private List<> reverseClassRelations = new ArrayList<>();
 
     // @JsonProperty("hierarchy") // not testet/implemented yet
-    // private List<> hierarchy = new ArrayList<>();
+    // private List<String> hierarchy = new ArrayList<>();
 
     @JsonProperty("dictionaryUri")
     private String dictionaryUri;
@@ -136,8 +139,9 @@ public class ClassContractV1 {
     private List<String> synonyms = new ArrayList<>();
 
     //===================================================================================================================
-    // non-argument constructor to create an instance of the class without any data
+    // non-argument constructor to create an instance of the class with null or specific default values
     public ClassContractV1() {
+        DefaultValuesHandler.ensureDefaults(this); // Set default values using the utility class
     }
 
     // =====================================================================================================================
@@ -182,13 +186,13 @@ public class ClassContractV1 {
         this.classProperties = classProperties;
     }
     
-    // public List<ClassRelationsContractV1> getClassRelations() {
-    //     return classRelations != null ? classRelations : new ArrayList<>();
-    // }
+    public List<ClassRelationContractV1> getClassRelations() {
+        return classRelations != null ? classRelations : new ArrayList<>();
+    }
     
-    // public void setClassRelations(List<ClassRelationsContractV1> classRelations) {
-    //     this.classRelations = classRelations;
-    // }
+    public void setClassRelations(List<ClassRelationContractV1> classRelations) {
+        this.classRelations = classRelations;
+    }
     
     // public List<?> getChildClassReferences() {
     //     return childClassReferences != null ? childClassReferences : new ArrayList<>();
@@ -210,7 +214,7 @@ public class ClassContractV1 {
     //     return hierarchy != null ? hierarchy : new ArrayList<>();
     // }
     
-    // public void setHierarchy(List<?> hierarchy) {
+    // public void setHierarchy(List<String> hierarchy) {
     //     this.hierarchy = hierarchy;
     // }
     
@@ -408,9 +412,16 @@ public class ClassContractV1 {
 
     // =====================================================================================================================
     // business logic method
-    public void generateUriFromUid() {
-        if (this.uid != null) {
-            this.uri = "https://datacat.org/class/" + this.uid; // Construct the URI by combining the base URL with the uid (which holds the id)
+    public void generateUri(String serverUrl) {
+        if (this.uri != null) {
+            this.uri = serverUrl + "/class/" + this.uri; // Construct the URI by combining the base URL with the uid (which holds the id)
+            this.dictionaryUri = serverUrl + "/model/" + this.dictionaryUri; // Construct the URI by combining the base URL with the uid (which holds the id)
+        }
+    }
+
+    public void transformToLowerCase() {
+        if (this.code != null) {
+            this.code = this.code.toLowerCase();
         }
     }
 
@@ -425,7 +436,7 @@ public class ClassContractV1 {
                 Objects.equals(relatedIfcEntityNames, that.relatedIfcEntityNames) &&
                 Objects.equals(parentClassReference, that.parentClassReference) &&
                 Objects.equals(classProperties, that.classProperties) &&
-                // Objects.equals(classRelations, that.classRelations) &&
+                Objects.equals(classRelations, that.classRelations) &&
                 // Objects.equals(childClassReferences, that.childClassReferences) &&
                 // Objects.equals(reverseClassRelations, that.reverseClassRelations) &&
                 // Objects.equals(hierarchy, that.hierarchy) &&
@@ -462,7 +473,7 @@ public class ClassContractV1 {
             relatedIfcEntityNames,
             parentClassReference,
             classProperties,
-            // classRelations,
+            classRelations,
             // childClassReferences,
             // reverseClassRelations,
             // hierarchy,
@@ -501,7 +512,7 @@ public class ClassContractV1 {
                 ", relatedIfcEntityNames=" + relatedIfcEntityNames +
                 ", parentClassReference=" + parentClassReference +
                 ", classProperties=" + classProperties +
-                // ", classRelations=" + classRelations +
+                ", classRelations=" + classRelations +
                 // ", childClassReferences=" + childClassReferences +
                 // ", reverseClassRelations=" + reverseClassRelations +
                 // ", hierarchy=" + hierarchy +

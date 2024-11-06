@@ -14,7 +14,7 @@ src/main/java/datacat/models/ClassContractV1.java
 src/main/java/datacat/models/ClassListItemContractV1Classes.java
 src/main/java/datacat/models/ClassPropertyContractV1.java
 src/main/java/datacat/models/ClassReferenceContractV1.java
-src/main/java/datacat/models/ClassRelationsContractV1.java
+src/main/java/datacat/models/ClassRelationContractV1.java
 src/main/java/datacat/models/DictionaryClassesResponseContractV1Classes.java
 src/main/java/datacat/models/DictionaryContractV1.java
 src/main/java/datacat/models/DictionaryResponseContractV1.java

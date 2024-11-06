@@ -199,9 +199,15 @@ public class GraphQLService {
         logger.debug("Deserialized Dictionary Response: {}", classDetails);
 
         if (classDetails != null) {
-            classDetails.generateUriFromUid();
+            String serverUrl = customProperties.getServerUrl(); 
+            classDetails.generateUri(serverUrl);
+            classDetails.transformToLowerCase();
+            for (ClassPropertyContractV1 property : classDetails.getClassProperties()) {
+                property.generateUri(serverUrl);
+                property.transformToLowerCase();
+            }
         }
-    
+
         return classDetails;
     }
 
@@ -251,12 +257,26 @@ public class GraphQLService {
             String classesResponse = executeQuery(classesQuery, bearerToken);
 
             List<ClassListItemContractV1Classes> classes = deserializeResponseAsList(classesResponse, "getBag", ClassListItemContractV1Classes.class);
+            
+            if (classes != null) {
+                String serverUrl = customProperties.getServerUrl();
+                for (ClassListItemContractV1Classes classItem : classes) {
+                    classItem.generateUri(serverUrl);
+                    classItem.transformToLowerCase();
+                }
+            }
             allClasses.addAll(classes);
         }
 
         DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeResponse(dictGroupResponse, "getBag", DictionaryClassesResponseContractV1Classes.class); 
         logger.debug("Deserialized Dictionary Response: {}", dictionaryResponse);
 
+        if (dictionaryResponse != null) {
+            String serverUrl = customProperties.getServerUrl();
+            dictionaryResponse.generateUri(serverUrl);
+            dictionaryResponse.transformToLowerCase();
+        }
+        
         // STEP 4: Set the classes in the dictionary response object and return the final object
         dictionaryResponse.setClasses(allClasses);
 
