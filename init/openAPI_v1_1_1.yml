@@ -906,29 +906,35 @@ components:
 ##############################################################################################################
 
     ClassRelationsContract.v1:
+      # required:
+        # - relatedClassUri
+        # - relationType
       type: object
       properties:
-        # totalCount:
-        #   type: integer
-        #   format: int32
-        # offset:
-        #   type: integer
-        #   format: int32
-        # count:
-        #   type: integer
-        #   format: int32
-        classUri:
+        uri:
           type: string
-          description: Uri of the class
           nullable: true
-        # areReversedRelations:
-        #   type: boolean
-        # classRelations:
-        #   type: array
-        #   items:
-        #     $ref: '#/components/schemas/ClassRelationItemContract.v1'
-        #   description: List of the relations of this class
-        #   nullable: true
+        relationType:
+          minLength: 1
+          type: string
+          description: >-
+            Can be one of: HasReference, IsEqualTo, IsSynonymOf, IsParentOf,
+            IsChildOf, HasPart
+        relatedClassUri:
+          minLength: 1
+          type: string
+          description: Namespace URI of the related class
+        relatedClassName:
+          type: string
+          description: Name of the related class
+          nullable: true
+        fraction:
+          type: number
+          description: >-
+            Optional provision of a fraction of the total amount (e.g. volume or
+            weight) that applies to the class relations of one relation type
+          format: double
+          nullable: true
       additionalProperties: false
 
 ##############################################################################################################
