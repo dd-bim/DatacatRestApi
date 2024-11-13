@@ -14,7 +14,9 @@ public class GraphQLClass {
     private static final Logger logger = LoggerFactory.getLogger(GraphQLClass.class);
 
     // =====================================================================================================================
-    // api/Class/v1
+    // SECTION: CLASS
+    // =====================================================================================================================
+    // ENDPOINT: /api/Class/v1
     // class
     // features that are not implemented yet are commented out
     // lesser effort: 
@@ -49,15 +51,16 @@ public class GraphQLClass {
                     .append("assignedCollections { nodes { parentClassReference:relatedCollections { uri:id name } } } ");
 
         if (includeProperties == true) {
-            queryBuilder.append(getClassPropertiesQuery());
+            queryBuilder.append(getClassPropertyQuery());
             logger.debug("Query includes properties");
         }
         queryBuilder.append("} }");
+
         return queryBuilder.toString();
     }
 
     // properties
-    public static String getClassPropertiesQuery() {
+    public static String getClassPropertyQuery() {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("classProperties:properties { ")
                     .append("name ")
@@ -70,6 +73,42 @@ public class GraphQLClass {
                     .append("composedBy { nodes { propertySet:name } } ")
                     .append("assignedMeasures { nodes { relatedMeasures { assignedUnits { nodes { units:relatedUnits { name } } } } } } ")
                     .append("}");
+
+        return queryBuilder.toString();
+    }
+
+    // =====================================================================================================================
+    // ENDPOINT: /api/Class/Relations/v1
+
+
+    // =====================================================================================================================
+    // ENDPOINT: /api/Class/Properties/v1
+    public static String getClassPropertiesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
+        StringBuilder queryBuilder = new StringBuilder();
+        // queryBuilder.append("{ findSubjects(input:{pageSize: \\\"").append(queryLimit).append("\\\" idIn: \\\"").append(id).append("\\\"} ) { ")
+        queryBuilder.append("{ findSubjects(input:{pageSize: ").append(queryLimit).append(" idIn: \\\"").append(id).append("\\\"} ) { ")
+                    .append("pageInfo { count:pageElements } ")
+                    .append("totalCount:totalElements ")
+
+                    .append("nodes { ")
+                    .append("classUri:id ")
+
+                    .append("classProperties:properties { ")
+                    .append("name ")
+                    .append("description ")
+                    .append("uid:id ")
+                    .append("uri:id ")
+                    .append("propertyCode:name ")
+                    .append("assignedMeasures { nodes { relatedMeasures { assignedUnits { nodes { allowedValues:relatedUnits { uri:id value:name description } } } } } } ")
+                    // .append("documentedBy { nodes { relatingDocument { propertyDictionaryName:name propertyDictionaryUri:id } } } ")
+                    .append("composedBy { nodes { propertySet:name } } ")
+                    .append("assignedMeasures { nodes { relatedMeasures { assignedUnits { nodes { units:relatedUnits { name } } } } } } ")
+                    .append("}")
+
+                    .append("}")
+
+                    .append("} }");
+
         return queryBuilder.toString();
     }
 }
