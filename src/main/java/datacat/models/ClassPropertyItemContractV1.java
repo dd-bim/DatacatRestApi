@@ -3,27 +3,22 @@ package datacat.models;
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
-import java.util.Objects;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import datacat.customization.DefaultValuesHandler;
 
 // =====================================================================================================================
 // M O D E L   C L A S S   S E C T I O N
-// model class holds several nested classes, that are used to represent the structure of the JSON response
-// new properties are added to the 'Node' class
-// '@JsonProperty("")'' annotation is used to define exact name of property in JSON representation
-// private fields are being shown in the Swagger UI as a schema
+// 
 // =====================================================================================================================
-@JsonTypeName("ClassPropertyContract.v1")
-public class ClassPropertyContractV1 {
+@JsonTypeName("ClassPropertyItemContract.v1")
+public class ClassPropertyItemContractV1 {
 
-    //===================================================================================================================
-    // preparation for the field from the json response
-    // class has no nested classes, thus starts without 'data'
     @JsonProperty("name")
     private String name;
 
@@ -133,15 +128,15 @@ public class ClassPropertyContractV1 {
     private List<String> qudtCodes;
 
 
-    //===================================================================================================================
-    // non-argument constructor to create an instance of the class without any data
-    public ClassPropertyContractV1() {
-        DefaultValuesHandler.ensureDefaults(this); // Set default values using the utility class
+    // =====================================================================================================================
+    // non-argument constructor
+    public ClassPropertyItemContractV1() {
+        DefaultValuesHandler.ensureDefaults(this);
     }
 
-
-    //===================================================================================================================
-    // getters and setters for the fields
+    
+    // =====================================================================================================================
+    // getters and setters
     public String getName() {
         return name;
     }
@@ -452,7 +447,7 @@ public class ClassPropertyContractV1 {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ClassPropertyContractV1 that = (ClassPropertyContractV1) o;
+        ClassPropertyItemContractV1 that = (ClassPropertyItemContractV1) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(uri, that.uri) &&
                 Objects.equals(description, that.description) &&
@@ -494,48 +489,48 @@ public class ClassPropertyContractV1 {
     @Override
     public int hashCode() {
         return Objects.hash(
-            name, 
+            name,
             uri,
             description,
-            definition, 
-            dataType, 
-            dimension, 
-            dimensionLength, 
-            dimensionMass, 
-            dimensionTime, 
-            dimensionElectricCurrent, 
-            dimensionThermodynamicTemperature, 
-            dimensionAmountOfSubstance, 
-            dimensionLuminousIntensity, 
-            dynamicParameterPropertyCodes, 
-            example, 
-            isDynamic, 
-            isRequired, 
-            isWritable, 
-            maxExclusive, 
-            maxInclusive, 
-            minExclusive, 
-            minInclusive, 
-            pattern, 
-            physicalQuantity, 
-            allowedValues, 
-            predefinedValue, 
-            propertyCode, 
-            // propertyDictionaryName, 
-            // propertyDictionaryUri, 
+            definition,
+            dataType,
+            dimension,
+            dimensionLength,
+            dimensionMass,
+            dimensionTime,
+            dimensionElectricCurrent,
+            dimensionThermodynamicTemperature,
+            dimensionAmountOfSubstance,
+            dimensionLuminousIntensity,
+            dynamicParameterPropertyCodes,
+            example,
+            isDynamic,
+            isRequired,
+            isWritable,
+            maxExclusive,
+            maxInclusive,
+            minExclusive,
+            minInclusive,
+            pattern,
+            physicalQuantity,
+            allowedValues,
+            predefinedValue,
+            propertyCode,
+            // propertyDictionaryName,
+            // propertyDictionaryUri,
             propertyUri,
-            propertySet, 
-            propertyStatus, 
-            propertyValueKind, 
-            symbol, 
-            units, 
+            propertySet,
+            propertyStatus,
+            propertyValueKind,
+            symbol,
+            units,
             qudtCodes
         );
     }
 
     @Override
     public String toString() {
-        return "{" +
+        return "ClassPropertyItemContractV1{" +
                 "name='" + name + '\'' +
                 ", uri='" + uri + '\'' +
                 ", description='" + description + '\'' +
@@ -549,7 +544,7 @@ public class ClassPropertyContractV1 {
                 ", dimensionThermodynamicTemperature='" + dimensionThermodynamicTemperature + '\'' +
                 ", dimensionAmountOfSubstance='" + dimensionAmountOfSubstance + '\'' +
                 ", dimensionLuminousIntensity='" + dimensionLuminousIntensity + '\'' +
-                ", dynamicParameterPropertyCodes=" + dynamicParameterPropertyCodes + + '\'' +
+                ", dynamicParameterPropertyCodes=" + dynamicParameterPropertyCodes +
                 ", example='" + example + '\'' +
                 ", isDynamic='" + isDynamic + '\'' +
                 ", isRequired='" + isRequired + '\'' +
@@ -570,8 +565,9 @@ public class ClassPropertyContractV1 {
                 ", propertyStatus='" + propertyStatus + '\'' +
                 ", propertyValueKind='" + propertyValueKind + '\'' +
                 ", symbol='" + symbol + '\'' +
-                ", units=" + units + + '\'' +
-                ", qudtCodes=" + qudtCodes + + '\'' +
+                ", units=" + units +
+                ", qudtCodes=" + qudtCodes +
                 '}';
     }
 }
+

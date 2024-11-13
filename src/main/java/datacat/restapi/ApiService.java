@@ -1,4 +1,4 @@
-package datacat.graphql;
+package datacat.restapi;
 
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
@@ -18,11 +18,16 @@ import org.slf4j.*;
 
 // Mapping
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
+// import com.fasterxml.jackson.core.JsonProcessingException;
 
 // Internal
 import datacat.models.*;
 import datacat.customization.CustomProperties;
+import datacat.graphql.GraphQLClass;
+import datacat.graphql.GraphQLDatacatSpecifics;
+import datacat.graphql.GraphQLDictionary;
+import datacat.graphql.IdExtractor;
+import datacat.graphql.ResponseDeserializer;
 
 // =====================================================================================================================
 // S E R V I C E   S E C T I O N
@@ -31,17 +36,19 @@ import datacat.customization.CustomProperties;
 // perspectively the service will include further parsing and processing of the response
 // =====================================================================================================================
 @Service
-public class GraphQLService {
-    private static final Logger logger = LoggerFactory.getLogger(GraphQLService.class);
+public class ApiService {
+    private static final Logger logger = LoggerFactory.getLogger(ApiService.class);
 
-    private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
     private final CustomProperties customProperties;
+    private final ResponseDeserializer responseDeserializer;
+    private final IdExtractor idExtractor;
 
-    public GraphQLService(CustomProperties customProperties, RestTemplateBuilder restTemplateBuilder, ObjectMapper objectMapper) {
+    public ApiService(CustomProperties customProperties, RestTemplateBuilder restTemplateBuilder, ObjectMapper objectMapper, IdExtractor idExtractor) {
         this.restTemplate = restTemplateBuilder.build();
-        this.objectMapper = objectMapper;
         this.customProperties = customProperties;
+        this.responseDeserializer = new ResponseDeserializer(objectMapper);
+        this.idExtractor = idExtractor;
     }
 
     // =====================================================================================================================
@@ -94,94 +101,21 @@ public class GraphQLService {
     }
 
     // =====================================================================================================================
-    // deserialization for easier handling as Java object and compile-time type checking
-    // generic response parsing for all endpoints
+    private <T> T deserializeGetResponse(String response, String rootField, Class<T> valueType) {
+        return responseDeserializer.deserializeGetResponse(response, rootField, valueType);
+    }
+
+    private <T> T deserializeFindResponse(String response, String rootField, Class<T> valueType) {
+        return responseDeserializer.deserializeFindResponse(response, rootField, valueType);
+    }
+
     private <T> List<T> deserializeResponseAsList(String response, String rootField, Class<T> valueType) {
-        try {
-            JsonNode rootNode = objectMapper.readTree(response);
-            JsonNode dataNode = rootNode.path("data").path(rootField);
-    
-            if (dataNode.isMissingNode()) {
-                logger.error("No '{}' field in the 'data' response", rootField);
-                return new ArrayList<>();
-            }
-    
-            JsonNode collectsNode = dataNode.path("collects").path("nodes"); // navigates to collects.nodes[].relatedThings based on the provided JSON structure
-            List<T> resultList = new ArrayList<>();
-    
-            if (collectsNode.isArray()) { // loops through each node in collects.nodes and access relatedThings array within each node
-                for (JsonNode node : collectsNode) {
-                    JsonNode relatedThingsNode = node.path("relatedThings");
-                    
-                    if (relatedThingsNode.isArray()) { // deserialize each relatedThings entry into instances of valueType and add them to the resultList
-                        List<T> relatedThings = objectMapper.treeToValue(
-                            relatedThingsNode,
-                            objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, valueType)
-                        );
-                        resultList.addAll(relatedThings);
-                    }
-                }
-            }
-    
-            return resultList;
-        } catch (Exception e) {
-            logger.error("Error deserializing response", e);
-            return new ArrayList<>();
-        }
+        return responseDeserializer.deserializeResponseAsList(response, rootField, valueType);
     }
 
-    private <T> T deserializeResponse(String response, String rootField, Class<T> valueType) {
-        try {
-            JsonNode rootNode = objectMapper.readTree(response); // parses response into generic map to skip root node
-            JsonNode dataNode = rootNode.path("data").path(rootField);
-            if (dataNode.isMissingNode()) { // checks if the data node is missing (e.g. when the query is invalid)
-                logger.error("No '{}' field in the 'data' response", rootField);
-                return null;
-            }
-    
-            JsonNode nodesNode = dataNode.path("nodes"); // checks if the dataNode contains a "nodes" field
-            if (!nodesNode.isMissingNode() && nodesNode.isArray()) {
-                return objectMapper.treeToValue(nodesNode, objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, valueType)); // deserializes the "nodes" array into a List of valueType
-            }
-    
-            T result = objectMapper.treeToValue(dataNode, valueType); // deserializes the single object
-        
-            return result;
-        } catch (Exception e) {
-            logger.error("Error deserializing response", e);
-            return null;
-        }
-    }
-
-    // =====================================================================================================================
-    // extracting ids from responses into lists
-    // this method should be generalized, so it is also accessible to other endpoints
     private List<String> extractGroupIdsFromResponse(String groupsResponse) {
-        List<String> groupIds = new ArrayList<>();
-        try {
-            ObjectMapper objectMapper = new ObjectMapper(); // initializes the ObjectMapper
-            JsonNode rootNode = objectMapper.readTree(groupsResponse); // parses the response into a JsonNode
-    
-            // the following should be transformed into an if-else statement according to the rootField (get or find)
-            // currently only working for 'getBag'
-            JsonNode relatedThingsNode = rootNode.at("/data/getBag/collects/nodes/0/relatedThings"); // navigates through the response to find the "relatedThings" node
-            // JsonNode relatedThingsNode = rootNode.at("/data/findBags/nodes/0/collects/nodes/0/relatedThings"); 
-
-            if (relatedThingsNode.isArray()) { // checks if the node is an array and extract all "internalGroupId" values
-                for (JsonNode thingNode : relatedThingsNode) {
-                    JsonNode groupIdNode = thingNode.get("internalGroupId"); // extracts and add the internalGroupId to the list
-                    if (groupIdNode != null) {
-                        groupIds.add(groupIdNode.asText());
-                    }
-                }
-            }
-        } catch (JsonProcessingException e) {
-            logger.error("Error parsing JSON response for group IDs", e);
-        }
-        logger.debug("Extracted Group IDs: {}", groupIds);
-        return groupIds;
+        return idExtractor.extractGroupIdsFromResponse(groupsResponse);
     }
-
 
     // =====================================================================================================================
     // E N D P O I N T   L O G I C
@@ -189,14 +123,17 @@ public class GraphQLService {
     // newly added endpoints should have a t least one processing method here
     // rootField should match the field in the response (e.g. "getSubject", "getBag", "findSubjects", "findProperties")
     // =====================================================================================================================
+    // SECTION: CLASS
+    // =====================================================================================================================
     // ENDPOINT: /api/Class/v1
     public ClassContractV1 getClassDetails(String bearerToken, String id, boolean includeProperties, String languageCode) {
 
         String query = GraphQLClass.getClassDetailsQuery(id, includeProperties, languageCode);
         String response = executeQuery(query, bearerToken);
+        String rootField = "getSubject";
         
-        ClassContractV1 classDetails = deserializeResponse(response, "getSubject", ClassContractV1.class);
-        logger.debug("Deserialized Dictionary Response: {}", classDetails);
+        ClassContractV1 classDetails = deserializeGetResponse(response, rootField, ClassContractV1.class);
+        logger.debug("Deserialized Class Details Response: {}", classDetails);
 
         if (classDetails != null) {
             String serverUrl = customProperties.getServerUrl(); 
@@ -207,20 +144,49 @@ public class GraphQLService {
                 property.transformToLowerCase();
             }
         }
-
         return classDetails;
     }
 
+
+    // =====================================================================================================================
+    // ENDPOINT: /api/Class/Relations/v1
+
+
+    // =====================================================================================================================
+    // ENDPOINT: /api/Class/Properties/v1
+    public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit, String languageCode) {
+        String query = GraphQLClass.getClassPropertiesQuery(id, queryOffset, queryLimit, languageCode);
+        logger.debug("GraphQL Query: {}", query);
+        String response = executeQuery(query, bearerToken);
+        String rootField = "findSubjects";
+    
+        logger.debug("Response from GraphQL: {}", response);
+    
+        ClassPropertiesContractV1 classProperties = deserializeFindResponse(response, rootField, ClassPropertiesContractV1.class);
+        logger.debug("Deserialized Class Properties Response: {}", classProperties);
+    
+        if (classProperties != null) {
+            for (ClassPropertyItemContractV1 property : classProperties.getClassProperties()) {
+                String serverUrl = customProperties.getServerUrl();
+                property.generateUri(serverUrl);
+                property.transformToLowerCase();
+            }
+            return classProperties;
+        }
+        return null;
+    }
+
+
     // =====================================================================================================================
     // ENDPOINT: /api/Dictionary/v1
-    // NOT FUNCTIONAL
     // OPTION 1: query to fetch all dictionaries
-    public DictionaryResponseContractV1 getDictionary(String bearerToken, String id, boolean includeTestDict, int offset, int limit) {
+    public DictionaryResponseContractV1 getOneDictionary(String bearerToken, String id, boolean includeTestDict, int offset, int limit) {
         
-        String query = GraphQLDictionary.getDictionary(id, bearerToken);
+        String query = GraphQLDictionary.getOneDictionary(id, bearerToken);
         String response = executeQuery(query, bearerToken);
+        String rootField = "findBags";
         
-        DictionaryResponseContractV1 dictionaryResponse = deserializeResponse(response, "getBag", DictionaryResponseContractV1.class);
+        DictionaryResponseContractV1 dictionaryResponse = deserializeFindResponse(response, rootField, DictionaryResponseContractV1.class);
         logger.debug("Deserialized Dictionary Response: {}", dictionaryResponse);
 
         return dictionaryResponse;
@@ -230,12 +196,14 @@ public class GraphQLService {
         
         String query = GraphQLDictionary.getAllDictionaries(bearerToken);
         String response = executeQuery(query, bearerToken);
+        String rootField = "findBags";
         
-        DictionaryResponseContractV1 dictionaryResponse = deserializeResponse(response, "findBags", DictionaryResponseContractV1.class);
-        logger.debug("Deserialized Dictionary Response: {}", dictionaryResponse);
+        DictionaryResponseContractV1 dictionaryResponse = deserializeFindResponse(response, rootField, DictionaryResponseContractV1.class);
+        logger.debug("Deserialized Dictionaries Response: {}", dictionaryResponse);
 
         return dictionaryResponse;
     }
+
 
     // =====================================================================================================================
     // ENDPOINT: /api/Dictionary/v1/Classes
@@ -255,8 +223,9 @@ public class GraphQLService {
         for (String groupId : internalGroupIds) {
             String classesQuery = GraphQLDictionary.getGroupClassesQuery(groupId, limit, languageCode);
             String classesResponse = executeQuery(classesQuery, bearerToken);
+            String rootField = "getBag";
 
-            List<ClassListItemContractV1Classes> classes = deserializeResponseAsList(classesResponse, "getBag", ClassListItemContractV1Classes.class);
+            List<ClassListItemContractV1Classes> classes = deserializeResponseAsList(classesResponse, rootField, ClassListItemContractV1Classes.class);
             
             if (classes != null) {
                 String serverUrl = customProperties.getServerUrl();
@@ -267,8 +236,9 @@ public class GraphQLService {
             }
             allClasses.addAll(classes);
         }
+        String rootField = "getBag";
 
-        DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeResponse(dictGroupResponse, "getBag", DictionaryClassesResponseContractV1Classes.class); 
+        DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeGetResponse(dictGroupResponse, rootField, DictionaryClassesResponseContractV1Classes.class); 
         logger.debug("Deserialized Dictionary Response: {}", dictionaryResponse);
 
         if (dictionaryResponse != null) {
@@ -284,20 +254,16 @@ public class GraphQLService {
     }
   
     // =====================================================================================================================
-    // getProperties
-    // public PropertiesResponseV1 getProperties(String id, String bearerToken) {
-    //     String query = "{ findProperties(input:{pageSize:10000}) { properties:nodes { uri:id name version:versionId } propertiesTotalCount:totalElements } }";
-    //     String response = executeQuery(query, bearerToken);
-    //     return deserializeResponse(response, "findProperties", PropertiesResponseV1.class);
-    // }
+
 
     // =====================================================================================================================
     // ENDPOINT: /api/Statistics
     public StatisticsResponseContractV1 getStatistics() {
         String query = GraphQLDatacatSpecifics.getStatisticsQuery();
         String response = executeQuery(query, null);
+        String rootField = "statistics";
 
-        StatisticsResponseContractV1 statistics = deserializeResponse(response, "statistics", StatisticsResponseContractV1.class);
+        StatisticsResponseContractV1 statistics = deserializeGetResponse(response, rootField, StatisticsResponseContractV1.class);
         return statistics;
     }   
 

@@ -509,13 +509,13 @@ public class ClassContractV1 {
         return "ClassDetailsResponseV1{" +
                 "classType='" + classType + '\'' +
                 ", referenceCode='" + referenceCode + '\'' +
-                ", relatedIfcEntityNames=" + relatedIfcEntityNames +
-                ", parentClassReference=" + parentClassReference +
-                ", classProperties=" + classProperties +
-                ", classRelations=" + classRelations +
-                // ", childClassReferences=" + childClassReferences +
-                // ", reverseClassRelations=" + reverseClassRelations +
-                // ", hierarchy=" + hierarchy +
+                ", relatedIfcEntityNames=" + relatedIfcEntityNames + '\'' +
+                ", parentClassReference=" + parentClassReference + '\'' +
+                ", classProperties=" + classProperties + '\'' +
+                ", classRelations=" + classRelations + '\'' +
+                // ", childClassReferences=" + childClassReferences + '\'' +
+                // ", reverseClassRelations=" + reverseClassRelations + '\'' +
+                // ", hierarchy=" + hierarchy + '\'' +
                 ", dictionaryUri='" + dictionaryUri + '\'' +
                 ", activationDateUtc='" + activationDateUtc + '\'' +
                 ", code='" + code + '\'' +
@@ -529,12 +529,12 @@ public class ClassContractV1 {
                 ", documentReference='" + documentReference + '\'' +
                 ", name='" + name + '\'' +
                 ", uri='" + uri + '\'' +
-                ", replacedObjectCodes=" + replacedObjectCodes +
-                ", replacingObjectCodes=" + replacingObjectCodes +
+                ", replacedObjectCodes=" + replacedObjectCodes + '\'' +
+                ", replacingObjectCodes=" + replacingObjectCodes + '\'' +
                 ", revisionDateUtc='" + revisionDateUtc + '\'' +
                 ", revisionNumber='" + revisionNumber + '\'' +
                 ", status='" + status + '\'' +
-                ", subdivisionOfUse=" + subdivisionOfUse +
+                ", subdivisionOfUse=" + subdivisionOfUse + '\'' +
                 ", uid='" + uid + '\'' +
                 ", versionDateUtc='" + versionDateUtc + '\'' +
                 ", versionNumber='" + versionNumber + '\'' +

@@ -10,16 +10,20 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-// internal
 import datacat.customization.DefaultValuesHandler;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 // =====================================================================================================================
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("DictionaryResponseContract.v1")
-public class DictionaryResponseContractV1 {
+@JsonTypeName("ClassPropertiesContract.v1")
+public class ClassPropertiesContractV1 {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClassPropertiesContractV1.class);
 
     @JsonProperty("totalCount")
     private Integer totalCount;
@@ -30,13 +34,16 @@ public class DictionaryResponseContractV1 {
     @JsonProperty("count")
     private Integer count;
 
-    @JsonProperty("dictionaries")
-    private List<DictionaryContractV1> dictionaries = new ArrayList<>();
+    @JsonProperty("classUri")
+    private String classUri;
+
+    @JsonProperty("classProperties")
+    private List<ClassPropertyItemContractV1> classProperties = new ArrayList<>();
 
 
     // =====================================================================================================================
     // non-argument constructor
-    public DictionaryResponseContractV1() {
+    public ClassPropertiesContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
@@ -46,47 +53,64 @@ public class DictionaryResponseContractV1 {
     public Integer getTotalCount() {
         return totalCount;
     }
-    
+
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
+        logger.debug("Set totalCount: {}", totalCount);
     }
-    
+
     public Integer getOffset() {
         return offset;
     }
-    
+
     public void setOffset(Integer offset) {
         this.offset = offset;
+        logger.debug("Set offset: {}", offset);
     }
-    
+
     public Integer getCount() {
         return count;
     }
-    
+
     public void setCount(Integer count) {
         this.count = count;
+        logger.debug("Set count: {}", count);
     }
-    
-    public List<DictionaryContractV1> getDictionaries() {
-        return dictionaries;
+
+    public String getClassUri() {
+        return classUri;
     }
-    
-    public void setDictionaries(List<DictionaryContractV1> dictionaries) {
-        this.dictionaries = dictionaries;
+
+    public void setClassUri(String classUri) {
+        this.classUri = classUri;
+    }
+
+    public List<ClassPropertyItemContractV1> getClassProperties() {
+        return classProperties != null ? classProperties : new ArrayList<>();
+    }
+
+    public void setClassProperties(List<ClassPropertyItemContractV1> classProperties) {
+        this.classProperties = classProperties;
     }
 
     // =====================================================================================================================
-    // standard object methods equals, hashCode, and toString
+    // business logic method
+    public void generateUri(String serverUrl) {
+        if (this.classUri != null) {
+            this.classUri = serverUrl + "/class/" + this.classUri;
+        }
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DictionaryResponseContractV1 that = (DictionaryResponseContractV1) o;
-        return 
-            Objects.equals(totalCount, that.totalCount) &&
-            Objects.equals(offset, that.offset) &&
-            Objects.equals(count, that.count) &&
-            Objects.equals(dictionaries, that.dictionaries);
+        ClassPropertiesContractV1 that = (ClassPropertiesContractV1) o;
+        return Objects.equals(totalCount, that.totalCount) &&
+                Objects.equals(offset, that.offset) &&
+                Objects.equals(count, that.count) &&
+                Objects.equals(classUri, that.classUri) &&
+                Objects.equals(classProperties, that.classProperties);
     }
 
 
@@ -96,18 +120,19 @@ public class DictionaryResponseContractV1 {
             totalCount,
             offset,
             count,
-            dictionaries
+            classUri,
+            classProperties
         );
     }
 
     @Override
     public String toString() {
-        return "DictionaryResponseContractV1{" +
-                "totalCount=" + totalCount + 
-                "offset=" + offset + 
-                "count=" + count + 
-                "dictionaries=" + dictionaries + 
-                "}";
+        return "ClassPropertiesContractV1{" +
+                "totalCount=" + totalCount + '\'' +
+                ", offset=" + offset + '\'' +
+                ", count=" + count + '\'' +
+                ", classUri='" + classUri + '\'' +
+                ", classProperties=" + classProperties + '\'' +
+                '}';
     }
 }
-

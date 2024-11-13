@@ -6,7 +6,9 @@
 package datacat.restapi;
 
 import datacat.models.ClassContractV1;
+import datacat.models.ClassPropertiesContractV1;
 import datacat.models.DictionaryClassesResponseContractV1Classes;
+import datacat.models.DictionaryResponseContractV1;
 import datacat.models.StatisticsResponseContractV1;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +37,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-06T06:39:10.122181700+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-13T07:05:07.151732100+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
 @Validated
 @Controller
 public interface ApiApi {
@@ -496,29 +498,51 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Class/Properties/v1 : [NOT IMPLEMENTED]Get class properties (paginated)
+     * GET /api/Class/Properties/v1 : [IN REWORK]Get class properties (paginated)
      *
+     * @param classUri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6&lt;br&gt; CAFM: https://cafm.datacat.org/class/442.90&lt;br&gt; IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
+     * @param propertySet &#39;Optional: Property set to filter the properties&#39;&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param propertyCode &#39;Optional: Property code to filter the properties&#39;&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param searchText \&quot;Optional: Search text to filter the properties.&lt;br&gt; Search is done in the property name, property description and property code.&lt;br&gt; Cannot be used together with PropertySet or PropertyCode.\&quot;&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
-     * @deprecated
      */
-    @Deprecated
     @Operation(
         operationId = "classPropertiesGet",
-        summary = "[NOT IMPLEMENTED]Get class properties (paginated)",
-        deprecated = true,
+        summary = "[IN REWORK]Get class properties (paginated)",
         tags = { "Class" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Success")
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ClassPropertiesContractV1.class))
+            })
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/Class/Properties/v1"
+        value = "/api/Class/Properties/v1",
+        produces = { "application/json" }
     )
     
-    default ResponseEntity<Void> classPropertiesGet(
-        
+    default ResponseEntity<ClassPropertiesContractV1> classPropertiesGet(
+        @NotNull @Parameter(name = "ClassUri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br> CAFM: https://cafm.datacat.org/class/442.90<br> IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClassUri", required = true) String classUri,
+        @Parameter(name = "PropertySet", deprecated = true, description = "'Optional: Property set to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertySet", required = false) @Deprecated String propertySet,
+        @Parameter(name = "PropertyCode", deprecated = true, description = "'Optional: Property code to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyCode", required = false) @Deprecated String propertyCode,
+        @Parameter(name = "SearchText", deprecated = true, description = "\"Optional: Search text to filter the properties.<br> Search is done in the property name, property description and property code.<br> Cannot be used together with PropertySet or PropertyCode.\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
+        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
+        @Parameter(name = "Limit", deprecated = true, description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"classUri\" : \"classUri\", \"classProperties\" : [ { \"symbol\" : \"symbol\", \"dimensionMass\" : 5, \"minInclusive\" : 1.0246457001441578, \"predefinedValue\" : \"predefinedValue\", \"propertyDictionaryName\" : \"propertyDictionaryName\", \"dimensionLength\" : 5, \"pattern\" : \"pattern\", \"description\" : \"description\", \"units\" : [ \"units\", \"units\" ], \"isWritable\" : true, \"example\" : \"example\", \"maxInclusive\" : 7.386281948385884, \"dimensionTime\" : 2, \"propertyStatus\" : \"propertyStatus\", \"propertyDictionaryUri\" : \"propertyDictionaryUri\", \"propertyCode\" : \"propertyCode\", \"minExclusive\" : 1.2315135367772556, \"dynamicParameterPropertyCodes\" : [ \"dynamicParameterPropertyCodes\", \"dynamicParameterPropertyCodes\" ], \"definition\" : \"definition\", \"dimension\" : \"dimension\", \"dimensionLuminousIntensity\" : 2, \"dimensionThermodynamicTemperature\" : 9, \"allowedValues\" : [ { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" }, { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" } ], \"isRequired\" : true, \"dimensionElectricCurrent\" : 7, \"isDynamic\" : true, \"physicalQuantity\" : \"physicalQuantity\", \"propertySet\" : \"propertySet\", \"dataType\" : \"dataType\", \"maxExclusive\" : 4.145608029883936, \"uri\" : \"uri\", \"dimensionAmountOfSubstance\" : 3, \"propertyValueKind\" : \"propertyValueKind\", \"qudtCodes\" : [ \"qudtCodes\", \"qudtCodes\" ], \"name\" : \"name\", \"propertyUri\" : \"propertyUri\" }, { \"symbol\" : \"symbol\", \"dimensionMass\" : 5, \"minInclusive\" : 1.0246457001441578, \"predefinedValue\" : \"predefinedValue\", \"propertyDictionaryName\" : \"propertyDictionaryName\", \"dimensionLength\" : 5, \"pattern\" : \"pattern\", \"description\" : \"description\", \"units\" : [ \"units\", \"units\" ], \"isWritable\" : true, \"example\" : \"example\", \"maxInclusive\" : 7.386281948385884, \"dimensionTime\" : 2, \"propertyStatus\" : \"propertyStatus\", \"propertyDictionaryUri\" : \"propertyDictionaryUri\", \"propertyCode\" : \"propertyCode\", \"minExclusive\" : 1.2315135367772556, \"dynamicParameterPropertyCodes\" : [ \"dynamicParameterPropertyCodes\", \"dynamicParameterPropertyCodes\" ], \"definition\" : \"definition\", \"dimension\" : \"dimension\", \"dimensionLuminousIntensity\" : 2, \"dimensionThermodynamicTemperature\" : 9, \"allowedValues\" : [ { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" }, { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" } ], \"isRequired\" : true, \"dimensionElectricCurrent\" : 7, \"isDynamic\" : true, \"physicalQuantity\" : \"physicalQuantity\", \"propertySet\" : \"propertySet\", \"dataType\" : \"dataType\", \"maxExclusive\" : 4.145608029883936, \"uri\" : \"uri\", \"dimensionAmountOfSubstance\" : 3, \"propertyValueKind\" : \"propertyValueKind\", \"qudtCodes\" : [ \"qudtCodes\", \"qudtCodes\" ], \"name\" : \"name\", \"propertyUri\" : \"propertyUri\" } ], \"offset\" : 6, \"count\" : 1, \"totalCount\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -609,7 +633,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1 : [NOT IMPLEMENTED]Get list of available dictionaries (i.e. XtdBag) with optional filtering.
+     * GET /api/Dictionary/v1 : [IN REWORK]Get list of available dictionaries (i.e. XtdBag) with optional filtering.
      * Following features of this endpoint are not implemented yet:
      *
      * @param URI Optional filtering, URI of a specific dictionary, e.g. &lt;br&gt; DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W&lt;br&gt;  CAFM: &lt;br&gt; IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a (optional)
@@ -617,18 +641,15 @@ public interface ApiApi {
      * @param offset Zero-based offset of the first item to be returned. Default is 0. (optional)
      * @param limit Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100. (optional)
      * @return Success (status code 200)
-     * @deprecated
      */
-    @Deprecated
     @Operation(
         operationId = "dictionaryGet",
-        summary = "[NOT IMPLEMENTED]Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
+        summary = "[IN REWORK]Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
         description = "Following features of this endpoint are not implemented yet:",
-        deprecated = true,
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Object.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = DictionaryResponseContractV1.class))
             })
         }
     )
@@ -638,12 +659,21 @@ public interface ApiApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<Object> dictionaryGet(
+    default ResponseEntity<DictionaryResponseContractV1> dictionaryGet(
         @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI,
         @Parameter(name = "IncludeTestDictionaries", description = "Should test dictionaries be included in the result? By default it is set to false.  This option is ignored if you specify a URI.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) Boolean includeTestDictionaries,
         @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
         @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
     ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"offset\" : 6, \"count\" : 1, \"totalCount\" : 0, \"dictionaries\" : [ { \"licenseUrl\" : \"licenseUrl\", \"code\" : \"code\", \"isLatestVersion\" : true, \"isVerified\" : true, \"releaseDate\" : \"2000-01-23T04:56:07.000+00:00\", \"lastUpdatedUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"version\" : \"version\", \"license\" : \"license\", \"name\" : \"name\", \"moreInfoUrl\" : \"moreInfoUrl\", \"defaultLanguageCode\" : \"defaultLanguageCode\", \"status\" : \"status\" }, { \"licenseUrl\" : \"licenseUrl\", \"code\" : \"code\", \"isLatestVersion\" : true, \"isVerified\" : true, \"releaseDate\" : \"2000-01-23T04:56:07.000+00:00\", \"lastUpdatedUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"version\" : \"version\", \"license\" : \"license\", \"name\" : \"name\", \"moreInfoUrl\" : \"moreInfoUrl\", \"defaultLanguageCode\" : \"defaultLanguageCode\", \"status\" : \"status\" } ] }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

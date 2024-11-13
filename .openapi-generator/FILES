@@ -1,5 +1,4 @@
 README.md
-src/main/java/datacat/models/ClassPropertyValueContractV1.java
 src/main/java/datacat/restapi/ApiApi.java
 src/main/java/org/openapitools/RFC3339DateFormat.java
 src/main/resources/openapi.yaml

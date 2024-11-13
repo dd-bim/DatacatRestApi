@@ -12,8 +12,8 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("ClassPropertyValueContract.v1")
-public class ClassPropertyValueContractV1 {
+@JsonTypeName("ClassPropertyValueItemContract.v1")
+public class ClassPropertyValueItemContractV1 {
 
     @JsonProperty("uri")
     private String uri;
@@ -33,7 +33,7 @@ public class ClassPropertyValueContractV1 {
 
     // =====================================================================================================================
     // non-argument constructor
-    public ClassPropertyValueContractV1() {
+    public ClassPropertyValueItemContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
@@ -76,6 +76,7 @@ public class ClassPropertyValueContractV1 {
         this.sortNumber = sortNumber;
     }
 
+
     // =====================================================================================================================
     // business logic method
     public void generateUri(String serverUrl) {
@@ -96,7 +97,7 @@ public class ClassPropertyValueContractV1 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassPropertyValueContractV1 that = (ClassPropertyValueContractV1) o;
+        ClassPropertyValueItemContractV1 that = (ClassPropertyValueItemContractV1) o;
         return 
             Objects.equals(uri, that.uri) &&
             Objects.equals(code, that.code) &&
@@ -119,7 +120,7 @@ public class ClassPropertyValueContractV1 {
 
     @Override
     public String toString() {
-        return "ClassPropertyValueContractV1{" +
+        return "ClassPropertyValueItemContractV1{" +
                 "uri=" + uri + 
                 "code=" + code + 
                 "value=" + value + 
