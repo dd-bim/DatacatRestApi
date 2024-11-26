@@ -1,29 +1,28 @@
 package datacat.graphql;
 
 // =====================================================================================================================
-// I M P O R T   S E C T I O N
-// =====================================================================================================================
-
-
-// =====================================================================================================================
 // C L A S S   S E C T I O N
 // this class holds different datacat specific GraphQL implementations like the authentication and statistics
 // =====================================================================================================================
-public class GraphQLDatacatSpecifics {
+public class GraphQlDatacatSpecifics {
 
     // =====================================================================================================================
     // Authentication
-    
+    // 
     
     // =====================================================================================================================
-    // Statistics
+    // Statistics // DONE
     public static String getStatisticsQuery() {
-        StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ statistics { catalogueItem:items { id count } } }");
-        return queryBuilder.toString();
 
-        // old approach without StringBuilder - functional
-        // return "{ statistics { catalogueItem:items { id count } } }";
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("{ statistics { ")
+                    .append("catalogueItems:items { ")
+                    .append("itemId:id ")
+                    .append("itemCount:count ")
+                    .append("} ")
+                    .append("} }");
+
+        return queryBuilder.toString();
     }
 
 

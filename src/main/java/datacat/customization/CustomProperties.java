@@ -25,6 +25,8 @@ public class CustomProperties {
     private String username;
     private String password;
 
+    // private String dictTag;
+
     // add new properties here
 
     // =====================================================================================================================
@@ -60,6 +62,14 @@ public class CustomProperties {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    // public String getDictTag() {
+    //     return dictTag;
+    // }
+
+    // public void setDictTag(String dictTag) {
+    //     this.dictTag = dictTag;
+    // }
 
     // add new getters and setters here
 

@@ -37,10 +37,10 @@ public class AuthenticationService {
     private final RestTemplate authRestTemplate;  // only for initial authentication
     private String bearerToken;
     private Instant tokenIssueTime;
-    private static final Duration TOKEN_LIFETIME = Duration.ofMinutes(1); // token lifespan
+    private static final Duration TOKEN_LIFETIME = Duration.ofMinutes(20); // token lifespan
 
     @Autowired
-    public AuthenticationService(CustomProperties customProperties,@Lazy RestTemplate authRestTemplate) {
+    public AuthenticationService(CustomProperties customProperties, @Lazy RestTemplate authRestTemplate) {
         this.customProperties = customProperties;
         this.authRestTemplate = authRestTemplate;
     }
@@ -97,7 +97,6 @@ public class AuthenticationService {
     @PostConstruct
     public void authenticateOnStartup() {
         authenticate();  // authenticates at application startup
-        // logger.info("Token expires in {} minutes", TOKEN_LIFETIME.toMinutes());
     }
 
     public boolean isTokenExpired() {

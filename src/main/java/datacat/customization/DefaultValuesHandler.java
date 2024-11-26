@@ -18,7 +18,7 @@ public class DefaultValuesHandler {
         defaultValues.put("status", "active");
         defaultValues.put("creatorLanguageCode", "de");
         defaultValues.put("defaultLanguageCode", "de");
-        defaultValues.put("countryOfOrigin", "DE");
+        // defaultValues.put("countryOfOrigin", "DE");
         defaultValues.put("propertyStatus", "active");
         defaultValues.put("licence", "");
         defaultValues.put("licenceUrl", "");

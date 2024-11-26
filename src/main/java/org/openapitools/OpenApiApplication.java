@@ -13,6 +13,8 @@ import org.springframework.boot.CommandLineRunner;
 
 // Jackson
 import com.fasterxml.jackson.databind.Module;
+
+// OpenAPI
 import org.openapitools.jackson.nullable.JsonNullableModule;
 
 // Logging
@@ -21,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 // Internal
 import datacat.customization.CustomProperties;
-
 
 // =====================================================================================================================
 // A N N O T A T I O N   S E C T I O N
@@ -73,5 +74,6 @@ public class OpenApiApplication { // former and auto generated: OpenApiGenerator
         return args -> {
             logger.info("**** A P P L I C A T I O N   R E A D Y   T O   S T A R T ****");
         };
+   
     }
 }

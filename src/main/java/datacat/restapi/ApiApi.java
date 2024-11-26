@@ -7,9 +7,15 @@ package datacat.restapi;
 
 import datacat.models.ClassContractV1;
 import datacat.models.ClassPropertiesContractV1;
+import datacat.models.CountryContractV1;
 import datacat.models.DictionaryClassesResponseContractV1Classes;
 import datacat.models.DictionaryResponseContractV1;
+import datacat.models.LanguageContractV1;
+import datacat.models.PropertyClassesContractV1;
+import datacat.models.PropertyContractV4;
+import datacat.models.ReferenceDocumentContractV1;
 import datacat.models.StatisticsResponseContractV1;
+import datacat.models.UnitContractV1;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,7 +43,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-13T07:05:07.151732100+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-26T11:07:04.289391100+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
 @Validated
 @Controller
 public interface ApiApi {
@@ -47,7 +53,7 @@ public interface ApiApi {
     }
 
     /**
-     * GET /api/Class/Search/v1
+     * GET /api/Class/Search/v1 : [NOT IMPLEMENTED]
      *
      * @return Success (status code 200)
      * @deprecated
@@ -55,6 +61,7 @@ public interface ApiApi {
     @Deprecated
     @Operation(
         operationId = "apiClassSearchV1Get",
+        summary = "[NOT IMPLEMENTED]",
         deprecated = true,
         tags = { "Search" },
         responses = {
@@ -75,35 +82,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Country/v1
-     *
-     * @return Success (status code 200)
-     * @deprecated
-     */
-    @Deprecated
-    @Operation(
-        operationId = "apiCountryV1Get",
-        deprecated = true,
-        tags = { "Lookup Data" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/Country/v1"
-    )
-    
-    default ResponseEntity<Void> apiCountryV1Get(
-        
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * GET /api/Dictionary/Popular/v1 : Get list of popular Dictionaries
+     * GET /api/Dictionary/Popular/v1 : [NOT IMPLEMENTED]Get list of popular Dictionaries
      *
      * @return Success (status code 200)
      * @deprecated
@@ -111,7 +90,7 @@ public interface ApiApi {
     @Deprecated
     @Operation(
         operationId = "apiDictionaryPopularV1Get",
-        summary = "Get list of popular Dictionaries",
+        summary = "[NOT IMPLEMENTED]Get list of popular Dictionaries",
         deprecated = true,
         tags = { "Popular Dictionary" },
         responses = {
@@ -161,64 +140,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Language/v1
-     *
-     * @return Success (status code 200)
-     * @deprecated
-     */
-    @Deprecated
-    @Operation(
-        operationId = "apiLanguageV1Get",
-        deprecated = true,
-        tags = { "Lookup Data" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/Language/v1"
-    )
-    
-    default ResponseEntity<Void> apiLanguageV1Get(
-        
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * GET /api/Property/Classes/v1 : Get list of classes that uses the property (paginated)
-     *
-     * @return Success (status code 200)
-     * @deprecated
-     */
-    @Deprecated
-    @Operation(
-        operationId = "apiPropertyClassesV1Get",
-        summary = "Get list of classes that uses the property (paginated)",
-        deprecated = true,
-        tags = { "Property" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/Property/Classes/v1"
-    )
-    
-    default ResponseEntity<Void> apiPropertyClassesV1Get(
-        
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * GET /api/Property/Relations/v1 : Get property relations or reverse relations (paginated)
+     * GET /api/Property/Relations/v1 : [NOT IMPLEMENTED]Get property relations or reverse relations (paginated)
      *
      * @return Success (status code 200)
      * @deprecated
@@ -226,7 +148,7 @@ public interface ApiApi {
     @Deprecated
     @Operation(
         operationId = "apiPropertyRelationsV1Get",
-        summary = "Get property relations or reverse relations (paginated)",
+        summary = "[NOT IMPLEMENTED]Get property relations or reverse relations (paginated)",
         deprecated = true,
         tags = { "Property" },
         responses = {
@@ -247,36 +169,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Property/v4 : Get Property details
-     *
-     * @return Success (status code 200)
-     * @deprecated
-     */
-    @Deprecated
-    @Operation(
-        operationId = "apiPropertyV4Get",
-        summary = "Get Property details",
-        deprecated = true,
-        tags = { "Property" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/Property/v4"
-    )
-    
-    default ResponseEntity<Void> apiPropertyV4Get(
-        
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * GET /api/PropertyValue/v2 : Get Property Value details
+     * GET /api/PropertyValue/v2 : [NOT IMPLEMENTED]Get Property Value details
      *
      * @return Success (status code 200)
      * @deprecated
@@ -284,7 +177,7 @@ public interface ApiApi {
     @Deprecated
     @Operation(
         operationId = "apiPropertyValueV2Get",
-        summary = "Get Property Value details",
+        summary = "[NOT IMPLEMENTED]Get Property Value details",
         deprecated = true,
         tags = { "Property" },
         responses = {
@@ -305,35 +198,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/ReferenceDocument/v1
-     *
-     * @return Success (status code 200)
-     * @deprecated
-     */
-    @Deprecated
-    @Operation(
-        operationId = "apiReferenceDocumentV1Get",
-        deprecated = true,
-        tags = { "Lookup Data" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/ReferenceDocument/v1"
-    )
-    
-    default ResponseEntity<Void> apiReferenceDocumentV1Get(
-        
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * GET /api/SearchInDictionary/v1
+     * GET /api/SearchInDictionary/v1 : [NOT IMPLEMENTED]
      *
      * @return Success (status code 200)
      * @deprecated
@@ -341,6 +206,7 @@ public interface ApiApi {
     @Deprecated
     @Operation(
         operationId = "apiSearchInDictionaryV1Get",
+        summary = "[NOT IMPLEMENTED]",
         deprecated = true,
         tags = { "Search" },
         responses = {
@@ -361,7 +227,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/TextSearch/v1
+     * GET /api/TextSearch/v1 : [NOT IMPLEMENTED]
      *
      * @return Success (status code 200)
      * @deprecated
@@ -369,6 +235,7 @@ public interface ApiApi {
     @Deprecated
     @Operation(
         operationId = "apiTextSearchV1Get",
+        summary = "[NOT IMPLEMENTED]",
         deprecated = true,
         tags = { "Search" },
         responses = {
@@ -389,7 +256,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/TextSearch/v2
+     * GET /api/TextSearch/v2 : [NOT IMPLEMENTED]
      *
      * @return Success (status code 200)
      * @deprecated
@@ -397,6 +264,7 @@ public interface ApiApi {
     @Deprecated
     @Operation(
         operationId = "apiTextSearchV2Get",
+        summary = "[NOT IMPLEMENTED]",
         deprecated = true,
         tags = { "Search" },
         responses = {
@@ -417,38 +285,10 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Unit/v1
-     *
-     * @return Success (status code 200)
-     * @deprecated
-     */
-    @Deprecated
-    @Operation(
-        operationId = "apiUnitV1Get",
-        deprecated = true,
-        tags = { "Lookup Data" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/api/Unit/v1"
-    )
-    
-    default ResponseEntity<Void> apiUnitV1Get(
-        
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
      * GET /api/Class/v1 : Get class details (i.e. XtdSubject) from a specific class
      * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
-     * @param URI URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6&lt;br&gt; CAFM: https://cafm.datacat.org/class/442.90&lt;br&gt; IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
+     * @param uri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6&lt;br&gt; CAFM: https://cafm.datacat.org/class/442.90&lt;br&gt; IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
      * @param includeClassProperties Use this option to include properties of the class. By default, it is set to true.&lt;br&gt; (optional)
      * @param includeChildClassReferences ! This option is not compatible with datacat.org or any of its instances (optional)
      * @param includeClassRelations ! This option is not compatible with datacat.org or any of its instances (optional)
@@ -475,7 +315,7 @@ public interface ApiApi {
     )
     
     default ResponseEntity<ClassContractV1> classGet(
-        @NotNull @Parameter(name = "URI", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br> CAFM: https://cafm.datacat.org/class/442.90<br> IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI,
+        @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br> CAFM: https://cafm.datacat.org/class/442.90<br> IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
         @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default, it is set to true.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties,
         @Parameter(name = "IncludeChildClassReferences", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeChildClassReferences", required = false) @Deprecated Boolean includeChildClassReferences,
         @Parameter(name = "IncludeClassRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassRelations", required = false) @Deprecated Boolean includeClassRelations,
@@ -486,7 +326,7 @@ public interface ApiApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"code\" : \"code\", \"revisionNumber\" : 0, \"subdivisionsOfUse\" : [ \"subdivisionsOfUse\", \"subdivisionsOfUse\" ], \"description\" : \"description\", \"deprecationExplanation\" : \"deprecationExplanation\", \"classRelations\" : [ { \"relationType\" : \"relationType\", \"relatedClassName\" : \"relatedClassName\", \"uri\" : \"uri\", \"relatedClassUri\" : \"relatedClassUri\", \"fraction\" : 1.4894159098541704 }, { \"relationType\" : \"relationType\", \"relatedClassName\" : \"relatedClassName\", \"uri\" : \"uri\", \"relatedClassUri\" : \"relatedClassUri\", \"fraction\" : 1.4894159098541704 } ], \"versionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uid\" : \"uid\", \"replacedObjectCodes\" : [ \"replacedObjectCodes\", \"replacedObjectCodes\" ], \"replacingObjectCodes\" : [ \"replacingObjectCodes\", \"replacingObjectCodes\" ], \"creatorLanguageCode\" : \"creatorLanguageCode\", \"definition\" : \"definition\", \"dictionaryUri\" : \"dictionaryUri\", \"countriesOfUse\" : [ \"countriesOfUse\", \"countriesOfUse\" ], \"visualRepresentationUri\" : \"visualRepresentationUri\", \"synonyms\" : [ \"synonyms\", \"synonyms\" ], \"parentClassReference\" : { \"code\" : \"code\", \"name\" : \"name\", \"uri\" : \"uri\" }, \"activationDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"versionNumber\" : 6, \"classProperties\" : [ { \"symbol\" : \"symbol\", \"dimensionMass\" : 5, \"minInclusive\" : 1.2315135367772556, \"predefinedValue\" : \"predefinedValue\", \"dimensionLength\" : 1, \"pattern\" : \"pattern\", \"description\" : \"description\", \"units\" : [ \"units\", \"units\" ], \"isWritable\" : true, \"example\" : \"example\", \"maxInclusive\" : 4.145608029883936, \"dimensionTime\" : 5, \"propertyStatus\" : \"propertyStatus\", \"propertyCode\" : \"propertyCode\", \"minExclusive\" : 7.386281948385884, \"dynamicParameterPropertyCodes\" : [ \"dynamicParameterPropertyCodes\", \"dynamicParameterPropertyCodes\" ], \"definition\" : \"definition\", \"dimension\" : \"dimension\", \"dimensionLuminousIntensity\" : 3, \"dimensionThermodynamicTemperature\" : 7, \"allowedValues\" : [ { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" }, { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" } ], \"isRequired\" : true, \"dimensionElectricCurrent\" : 2, \"isDynamic\" : true, \"physicalQuantity\" : \"physicalQuantity\", \"propertySet\" : \"propertySet\", \"dataType\" : \"dataType\", \"maxExclusive\" : 2.027123023002322, \"uri\" : \"uri\", \"dimensionAmountOfSubstance\" : 9, \"propertyValueKind\" : \"propertyValueKind\", \"qudtCodes\" : [ \"qudtCodes\", \"qudtCodes\" ], \"name\" : \"name\", \"propertyUri\" : \"propertyUri\" }, { \"symbol\" : \"symbol\", \"dimensionMass\" : 5, \"minInclusive\" : 1.2315135367772556, \"predefinedValue\" : \"predefinedValue\", \"dimensionLength\" : 1, \"pattern\" : \"pattern\", \"description\" : \"description\", \"units\" : [ \"units\", \"units\" ], \"isWritable\" : true, \"example\" : \"example\", \"maxInclusive\" : 4.145608029883936, \"dimensionTime\" : 5, \"propertyStatus\" : \"propertyStatus\", \"propertyCode\" : \"propertyCode\", \"minExclusive\" : 7.386281948385884, \"dynamicParameterPropertyCodes\" : [ \"dynamicParameterPropertyCodes\", \"dynamicParameterPropertyCodes\" ], \"definition\" : \"definition\", \"dimension\" : \"dimension\", \"dimensionLuminousIntensity\" : 3, \"dimensionThermodynamicTemperature\" : 7, \"allowedValues\" : [ { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" }, { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" } ], \"isRequired\" : true, \"dimensionElectricCurrent\" : 2, \"isDynamic\" : true, \"physicalQuantity\" : \"physicalQuantity\", \"propertySet\" : \"propertySet\", \"dataType\" : \"dataType\", \"maxExclusive\" : 2.027123023002322, \"uri\" : \"uri\", \"dimensionAmountOfSubstance\" : 9, \"propertyValueKind\" : \"propertyValueKind\", \"qudtCodes\" : [ \"qudtCodes\", \"qudtCodes\" ], \"name\" : \"name\", \"propertyUri\" : \"propertyUri\" } ], \"deActivationDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"name\" : \"name\", \"documentReference\" : \"documentReference\", \"countryOfOrigin\" : \"countryOfOrigin\", \"revisionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"referenceCode\" : \"referenceCode\", \"relatedIfcEntityNames\" : [ \"relatedIfcEntityNames\", \"relatedIfcEntityNames\" ], \"classType\" : \"classType\", \"status\" : \"status\" }";
+                    String exampleString = "{ \"code\" : \"code\", \"revisionNumber\" : 0, \"subdivisionsOfUse\" : [ \"subdivisionsOfUse\", \"subdivisionsOfUse\" ], \"description\" : \"description\", \"deprecationExplanation\" : \"deprecationExplanation\", \"classRelations\" : [ { \"relationType\" : \"relationType\", \"relatedClassName\" : \"relatedClassName\", \"uri\" : \"uri\", \"relatedClassUri\" : \"relatedClassUri\", \"fraction\" : 1.4894159098541704 }, { \"relationType\" : \"relationType\", \"relatedClassName\" : \"relatedClassName\", \"uri\" : \"uri\", \"relatedClassUri\" : \"relatedClassUri\", \"fraction\" : 1.4894159098541704 } ], \"versionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uid\" : \"uid\", \"replacedObjectCodes\" : [ \"replacedObjectCodes\", \"replacedObjectCodes\" ], \"replacingObjectCodes\" : [ \"replacingObjectCodes\", \"replacingObjectCodes\" ], \"creatorLanguageCode\" : \"creatorLanguageCode\", \"definition\" : \"definition\", \"dictionaryUri\" : \"dictionaryUri\", \"countriesOfUse\" : [ \"countriesOfUse\", \"countriesOfUse\" ], \"visualRepresentationUri\" : \"visualRepresentationUri\", \"synonyms\" : [ \"synonyms\", \"synonyms\" ], \"parentClassReference\" : { \"code\" : \"code\", \"name\" : \"name\", \"uri\" : \"uri\" }, \"activationDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"versionNumber\" : 6, \"classProperties\" : [ { \"symbol\" : \"symbol\", \"dimensionMass\" : 5, \"minInclusive\" : 1.2315135367772556, \"predefinedValue\" : \"predefinedValue\", \"propertyDictionaryName\" : \"propertyDictionaryName\", \"dimensionLength\" : 1, \"pattern\" : \"pattern\", \"description\" : \"description\", \"units\" : [ \"units\", \"units\" ], \"isWritable\" : true, \"example\" : \"example\", \"maxInclusive\" : 4.145608029883936, \"dimensionTime\" : 5, \"propertyStatus\" : \"propertyStatus\", \"propertyDictionaryUri\" : \"propertyDictionaryUri\", \"propertyCode\" : \"propertyCode\", \"minExclusive\" : 7.386281948385884, \"dynamicParameterPropertyCodes\" : [ \"dynamicParameterPropertyCodes\", \"dynamicParameterPropertyCodes\" ], \"definition\" : \"definition\", \"dimension\" : \"dimension\", \"dimensionLuminousIntensity\" : 3, \"dimensionThermodynamicTemperature\" : 7, \"allowedValues\" : [ { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" }, { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" } ], \"isRequired\" : true, \"dimensionElectricCurrent\" : 2, \"isDynamic\" : true, \"physicalQuantity\" : \"physicalQuantity\", \"propertySet\" : \"propertySet\", \"dataType\" : \"dataType\", \"maxExclusive\" : 2.027123023002322, \"uri\" : \"uri\", \"dimensionAmountOfSubstance\" : 9, \"propertyValueKind\" : \"propertyValueKind\", \"qudtCodes\" : [ \"qudtCodes\", \"qudtCodes\" ], \"name\" : \"name\", \"propertyUri\" : \"propertyUri\" }, { \"symbol\" : \"symbol\", \"dimensionMass\" : 5, \"minInclusive\" : 1.2315135367772556, \"predefinedValue\" : \"predefinedValue\", \"propertyDictionaryName\" : \"propertyDictionaryName\", \"dimensionLength\" : 1, \"pattern\" : \"pattern\", \"description\" : \"description\", \"units\" : [ \"units\", \"units\" ], \"isWritable\" : true, \"example\" : \"example\", \"maxInclusive\" : 4.145608029883936, \"dimensionTime\" : 5, \"propertyStatus\" : \"propertyStatus\", \"propertyDictionaryUri\" : \"propertyDictionaryUri\", \"propertyCode\" : \"propertyCode\", \"minExclusive\" : 7.386281948385884, \"dynamicParameterPropertyCodes\" : [ \"dynamicParameterPropertyCodes\", \"dynamicParameterPropertyCodes\" ], \"definition\" : \"definition\", \"dimension\" : \"dimension\", \"dimensionLuminousIntensity\" : 3, \"dimensionThermodynamicTemperature\" : 7, \"allowedValues\" : [ { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" }, { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" } ], \"isRequired\" : true, \"dimensionElectricCurrent\" : 2, \"isDynamic\" : true, \"physicalQuantity\" : \"physicalQuantity\", \"propertySet\" : \"propertySet\", \"dataType\" : \"dataType\", \"maxExclusive\" : 2.027123023002322, \"uri\" : \"uri\", \"dimensionAmountOfSubstance\" : 9, \"propertyValueKind\" : \"propertyValueKind\", \"qudtCodes\" : [ \"qudtCodes\", \"qudtCodes\" ], \"name\" : \"name\", \"propertyUri\" : \"propertyUri\" } ], \"deActivationDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"name\" : \"name\", \"documentReference\" : \"documentReference\", \"countryOfOrigin\" : \"countryOfOrigin\", \"revisionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"referenceCode\" : \"referenceCode\", \"relatedIfcEntityNames\" : [ \"relatedIfcEntityNames\", \"relatedIfcEntityNames\" ], \"classType\" : \"classType\", \"status\" : \"status\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -499,6 +339,7 @@ public interface ApiApi {
 
     /**
      * GET /api/Class/Properties/v1 : [IN REWORK]Get class properties (paginated)
+     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;include limit filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param classUri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6&lt;br&gt; CAFM: https://cafm.datacat.org/class/442.90&lt;br&gt; IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
      * @param propertySet &#39;Optional: Property set to filter the properties&#39;&lt;br&gt; ! This option is not yet implemented. (optional)
@@ -512,6 +353,7 @@ public interface ApiApi {
     @Operation(
         operationId = "classPropertiesGet",
         summary = "[IN REWORK]Get class properties (paginated)",
+        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>include language code filter (to be implemented)</li> <li>include limit filter (to be implemented)</li> <li>various filter options</li> <li>various response contents</li></ul>",
         tags = { "Class" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -578,7 +420,45 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1/Classes : Get dictionary with tree of classes from Datacat (i.e. XtdSubject).
+     * GET /api/Country/v1 : Get list of all countries
+     *
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "countryGet",
+        summary = "Get list of all countries",
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CountryContractV1.class)))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Country/v1",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<CountryContractV1>> countryGet(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"code\" : \"code\", \"name\" : \"name\" }, { \"code\" : \"code\", \"name\" : \"name\" } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Dictionary/v1/Classes : [IN REWORK]Get dictionary with tree of classes from Datacat (i.e. XtdSubject).
      * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;filter for text&lt;/li&gt; &lt;li&gt;consideration of limit and offset (to be implemented)&lt;/li&gt; &lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt;&lt;/ul&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param URI URI of the dictionary, e.g.&lt;br&gt; DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_&lt;br&gt; CAFM: https://cafm.datacat.org/model/0bf5d7c3-5397-4255-ba9f-9607480f1ee1&lt;br&gt; IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a (required)
@@ -587,13 +467,13 @@ public interface ApiApi {
      * @param searchText ! This option is not compatible with datacat.org or any of its instances (optional)
      * @param relatedIfcEntity ! This option is not compatible with datacat.org or any of its instances (optional)
      * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; ! This option is not yet implemented. (optional)
-     * @param limit Limit number of items to be returned. The default and maximum number of items returned is 1000.&lt;br&gt; When Offset is specified, then the default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
      * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "dictionaryClassesGetWithClasses",
-        summary = "Get dictionary with tree of classes from Datacat (i.e. XtdSubject).",
+        summary = "[IN REWORK]Get dictionary with tree of classes from Datacat (i.e. XtdSubject).",
         description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>filter for text</li> <li>consideration of limit and offset (to be implemented)</li> <li>include language code filter (to be implemented)</li> <li>various filter options</li></ul> <li>various response contents</li></ul>",
         tags = { "Dictionary" },
         responses = {
@@ -615,7 +495,7 @@ public interface ApiApi {
         @Parameter(name = "SearchText", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
         @Parameter(name = "RelatedIfcEntity", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "RelatedIfcEntity", required = false) @Deprecated String relatedIfcEntity,
         @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
-        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number of items returned is 1000.<br> When Offset is specified, then the default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
         @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
     ) {
         getRequest().ifPresent(request -> {
@@ -633,19 +513,19 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1 : [IN REWORK]Get list of available dictionaries (i.e. XtdBag) with optional filtering.
-     * Following features of this endpoint are not implemented yet:
+     * GET /api/Dictionary/v1 : Get list of available dictionaries (i.e. XtdBag) with optional filtering.
+     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include limit filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param URI Optional filtering, URI of a specific dictionary, e.g. &lt;br&gt; DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W&lt;br&gt;  CAFM: &lt;br&gt; IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a (optional)
-     * @param includeTestDictionaries Should test dictionaries be included in the result? By default it is set to false.  This option is ignored if you specify a URI. (optional)
-     * @param offset Zero-based offset of the first item to be returned. Default is 0. (optional)
-     * @param limit Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100. (optional)
+     * @param includeTestDictionaries ! This option is not compatible with datacat.org or any of its instances (optional)
+     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "dictionaryGet",
-        summary = "[IN REWORK]Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
-        description = "Following features of this endpoint are not implemented yet:",
+        summary = "Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
+        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>include limit filter (to be implemented)</li> <li>various filter options</li> <li>various response contents</li></ul>",
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -661,14 +541,14 @@ public interface ApiApi {
     
     default ResponseEntity<DictionaryResponseContractV1> dictionaryGet(
         @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI,
-        @Parameter(name = "IncludeTestDictionaries", description = "Should test dictionaries be included in the result? By default it is set to false.  This option is ignored if you specify a URI.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) Boolean includeTestDictionaries,
-        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
-        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
+        @Parameter(name = "IncludeTestDictionaries", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) @Deprecated Boolean includeTestDictionaries,
+        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"offset\" : 6, \"count\" : 1, \"totalCount\" : 0, \"dictionaries\" : [ { \"licenseUrl\" : \"licenseUrl\", \"code\" : \"code\", \"isLatestVersion\" : true, \"isVerified\" : true, \"releaseDate\" : \"2000-01-23T04:56:07.000+00:00\", \"lastUpdatedUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"version\" : \"version\", \"license\" : \"license\", \"name\" : \"name\", \"moreInfoUrl\" : \"moreInfoUrl\", \"defaultLanguageCode\" : \"defaultLanguageCode\", \"status\" : \"status\" }, { \"licenseUrl\" : \"licenseUrl\", \"code\" : \"code\", \"isLatestVersion\" : true, \"isVerified\" : true, \"releaseDate\" : \"2000-01-23T04:56:07.000+00:00\", \"lastUpdatedUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"version\" : \"version\", \"license\" : \"license\", \"name\" : \"name\", \"moreInfoUrl\" : \"moreInfoUrl\", \"defaultLanguageCode\" : \"defaultLanguageCode\", \"status\" : \"status\" } ] }";
+                    String exampleString = "{ \"offset\" : 6, \"count\" : 1, \"totalCount\" : 0, \"dictionaries\" : [ { \"organizationNameOwner\" : \"organizationNameOwner\", \"licenseUrl\" : \"licenseUrl\", \"code\" : \"code\", \"isLatestVersion\" : true, \"isVerified\" : true, \"releaseDate\" : \"2000-01-23T04:56:07.000+00:00\", \"lastUpdatedUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"version\" : \"version\", \"organizationCodeOwner\" : \"organizationCodeOwner\", \"license\" : \"license\", \"changeRequestEmail\" : \"changeRequestEmail\", \"qualityAssuranceProcedure\" : \"qualityAssuranceProcedure\", \"name\" : \"name\", \"moreInfoUrl\" : \"moreInfoUrl\", \"defaultLanguageCode\" : \"defaultLanguageCode\", \"qualityAssuranceProcedureUrl\" : \"qualityAssuranceProcedureUrl\", \"status\" : \"status\" }, { \"organizationNameOwner\" : \"organizationNameOwner\", \"licenseUrl\" : \"licenseUrl\", \"code\" : \"code\", \"isLatestVersion\" : true, \"isVerified\" : true, \"releaseDate\" : \"2000-01-23T04:56:07.000+00:00\", \"lastUpdatedUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"uri\" : \"uri\", \"version\" : \"version\", \"organizationCodeOwner\" : \"organizationCodeOwner\", \"license\" : \"license\", \"changeRequestEmail\" : \"changeRequestEmail\", \"qualityAssuranceProcedure\" : \"qualityAssuranceProcedure\", \"name\" : \"name\", \"moreInfoUrl\" : \"moreInfoUrl\", \"defaultLanguageCode\" : \"defaultLanguageCode\", \"qualityAssuranceProcedureUrl\" : \"qualityAssuranceProcedureUrl\", \"status\" : \"status\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -709,6 +589,215 @@ public interface ApiApi {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"catalogueItemId\" : \"catalogueItemId\", \"itemsCount\" : \"itemsCount\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Language/v1 : Get list of available languages
+     *
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "languageGet",
+        summary = "Get list of available languages",
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LanguageContractV1.class)))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Language/v1",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<LanguageContractV1>> languageGet(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"isoCode\" : \"isoCode\", \"name\" : \"name\" }, { \"isoCode\" : \"isoCode\", \"name\" : \"name\" } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Property/Classes/v1 : [IN REWORK]Get list of classes that uses the property (paginated)
+     *
+     * @param propertyUri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/property/6&lt;br&gt; CAFM: https://cafm.datacat.org/property/&lt;br&gt; IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2 (required)
+     * @param searchText Search text to filter classes&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "propertyClassesGet",
+        summary = "[IN REWORK]Get list of classes that uses the property (paginated)",
+        tags = { "Property" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = PropertyClassesContractV1.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Property/Classes/v1",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<PropertyClassesContractV1> propertyClassesGet(
+        @NotNull @Parameter(name = "PropertyUri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyUri", required = true) String propertyUri,
+        @Parameter(name = "SearchText", description = "Search text to filter classes<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) String searchText,
+        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
+        @Parameter(name = "Limit", deprecated = true, description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,
+        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"propertyClasses\" : [ { \"propertySet\" : \"propertySet\", \"name\" : \"name\", \"description\" : \"description\", \"dictionaryUri\" : \"dictionaryUri\", \"uri\" : \"uri\" }, { \"propertySet\" : \"propertySet\", \"name\" : \"name\", \"description\" : \"description\", \"dictionaryUri\" : \"dictionaryUri\", \"uri\" : \"uri\" } ], \"offset\" : 6, \"count\" : 1, \"totalCount\" : 0, \"propertyUri\" : \"propertyUri\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Property/v4 : [IN REWORK]Get Property details
+     *
+     * @param uri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/property/6&lt;br&gt; CAFM: https://cafm.datacat.org/property/&lt;br&gt; IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2 (required)
+     * @param includeClasses \&quot;Set to true to get list of classes where property is used (only classes of the same dictionary as the property).&lt;br&gt; Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.&lt;br&gt; Preferred way to get the classes is by using /api/Property/Classes/v1\&quot; ! This option is not yet implemented. (optional)
+     * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "propertyGet",
+        summary = "[IN REWORK]Get Property details",
+        tags = { "Property" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = PropertyContractV4.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Property/v4",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<PropertyContractV4> propertyGet(
+        @NotNull @Parameter(name = "uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "uri", required = true) String uri,
+        @Parameter(name = "includeClasses", description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\" ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) Boolean includeClasses,
+        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"dimensionMass\" : 5, \"revisionNumber\" : 0, \"minInclusive\" : 1.2315135367772556, \"dimensionLength\" : 1, \"versionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"maxInclusive\" : 4.145608029883936, \"minExclusive\" : 7.386281948385884, \"replacingObjectCodes\" : [ \"replacingObjectCodes\", \"replacingObjectCodes\" ], \"dynamicParameterPropertyCodes\" : [ \"dynamicParameterPropertyCodes\", \"dynamicParameterPropertyCodes\" ], \"creatorLanguageCode\" : \"creatorLanguageCode\", \"dictionaryUri\" : \"dictionaryUri\", \"countriesOfUse\" : [ \"countriesOfUse\", \"countriesOfUse\" ], \"allowedValues\" : [ { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" }, { \"code\" : \"code\", \"sortNumber\" : 1, \"description\" : \"description\", \"uri\" : \"uri\", \"value\" : \"value\" } ], \"dimensionElectricCurrent\" : 2, \"isDynamic\" : true, \"dataType\" : \"dataType\", \"maxExclusive\" : 2.027123023002322, \"methodOfMeasurement\" : \"methodOfMeasurement\", \"propertyValueKind\" : \"propertyValueKind\", \"propertyRelations\" : [ { \"relationType\" : \"relationType\", \"relatedPropertyName\" : \"relatedPropertyName\", \"uri\" : \"uri\", \"relatedPropertyUri\" : \"relatedPropertyUri\" }, { \"relationType\" : \"relationType\", \"relatedPropertyName\" : \"relatedPropertyName\", \"uri\" : \"uri\", \"relatedPropertyUri\" : \"relatedPropertyUri\" } ], \"qudtCodes\" : [ \"qudtCodes\", \"qudtCodes\" ], \"deActivationDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"name\" : \"name\", \"revisionDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"status\" : \"status\", \"code\" : \"code\", \"subdivisionsOfUse\" : [ \"subdivisionsOfUse\", \"subdivisionsOfUse\" ], \"pattern\" : \"pattern\", \"description\" : \"description\", \"deprecationExplanation\" : \"deprecationExplanation\", \"units\" : [ \"units\", \"units\" ], \"example\" : \"example\", \"uid\" : \"uid\", \"dimensionTime\" : 5, \"propertyClasses\" : [ { \"code\" : \"code\", \"propertySet\" : \"propertySet\", \"name\" : \"name\", \"description\" : \"description\", \"definition\" : \"definition\", \"uri\" : \"uri\" }, { \"code\" : \"code\", \"propertySet\" : \"propertySet\", \"name\" : \"name\", \"description\" : \"description\", \"definition\" : \"definition\", \"uri\" : \"uri\" } ], \"replacedObjectCodes\" : [ \"replacedObjectCodes\", \"replacedObjectCodes\" ], \"definition\" : \"definition\", \"dimension\" : \"dimension\", \"dimensionLuminousIntensity\" : 3, \"visualRepresentationUri\" : \"visualRepresentationUri\", \"dimensionThermodynamicTemperature\" : 7, \"physicalQuantity\" : \"physicalQuantity\", \"activationDateUtc\" : \"2000-01-23T04:56:07.000+00:00\", \"connectedPropertyCodes\" : [ \"connectedPropertyCodes\", \"connectedPropertyCodes\" ], \"uri\" : \"uri\", \"versionNumber\" : 6, \"dimensionAmountOfSubstance\" : 9, \"textFormat\" : \"textFormat\", \"documentReference\" : \"documentReference\", \"countryOfOrigin\" : \"countryOfOrigin\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/ReferenceDocument/v1 : Get list of all ReferenceDocuments
+     * \&quot;For IBPDI an error will occur, because there is no ref doc available\&quot;
+     *
+     * @return Success (status code 200)
+     */
+    @Operation(
+        operationId = "referenceDocumentGet",
+        summary = "Get list of all ReferenceDocuments",
+        description = "\"For IBPDI an error will occur, because there is no ref doc available\"",
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ReferenceDocumentContractV1.class)))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/ReferenceDocument/v1",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<ReferenceDocumentContractV1>> referenceDocumentGet(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"name\" : \"name\", \"title\" : \"title\" }, { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"name\" : \"name\", \"title\" : \"title\" } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/Unit/v1 : [NOT IMPLEMENTED]Get list of all units
+     *
+     * @return Success (status code 200)
+     * @deprecated
+     */
+    @Deprecated
+    @Operation(
+        operationId = "unitGet",
+        summary = "[NOT IMPLEMENTED]Get list of all units",
+        deprecated = true,
+        tags = { "Lookup Data" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UnitContractV1.class)))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/Unit/v1",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<UnitContractV1>> unitGet(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"symbol\" : \"symbol\", \"code\" : \"code\", \"qudtUri\" : \"qudtUri\", \"name\" : \"name\" }, { \"symbol\" : \"symbol\", \"code\" : \"code\", \"qudtUri\" : \"qudtUri\", \"name\" : \"name\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -1,6 +1,9 @@
 openapi: 3.0.1
+##############################################################################################################
 info:
-  title: Datacat REST API v1.2.1
+##############################################################################################################
+  title: Datacat REST API
+  version: '1.2.2'
   description: >-
     <p>OpenAPI-based API to access the Datacat catalogue system.</br></p>
     <h3>Upcoming changes:</h3>
@@ -27,7 +30,6 @@ info:
     email: lennart.hildebrandt@htw-dresden.de
   license:
     name: '* licence name placeholder *'
-  version: '1.2.1'
 
 ##############################################################################################################
 paths:
@@ -44,7 +46,7 @@ paths:
         <li>various response contents</li></ul>
       operationId: ClassGet
       parameters:
-        - name: URI
+        - name: Uri
           in: query
           description: >-
             URI of the class, e.g.<br>
@@ -99,19 +101,25 @@ paths:
           schema:
             type: string
       responses:
-          '200':
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ClassContract.v1'
-      deprecated: false
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassContract.v1'
+
 ##############################################################################################################
+
   /api/Class/Relations/v1:  
     get:
       tags:
         - Class
       summary: "[NOT IMPLEMENTED]Get class relations or reverse relations (paginated)"
+      # description: >-
+      #   Due to incompatibility the following features of this endpoint are not implemented (yet): <br>
+      #   <ul><li>include language code filter (to be implemented)</li>
+      #   <li>various filter options</li>
+      #   <li>various response contents</li></ul>
       operationId: ClassRelationsGet
       # parameters:
       #   - name: ClassUri
@@ -164,12 +172,20 @@ paths:
           #     schema:
           #       $ref: '#/components/schemas/ClassRelationsContract.v1'
       deprecated: true
+
 ##############################################################################################################
+
   /api/Class/Properties/v1:
     get:
       tags:
         - Class
       summary: "[IN REWORK]Get class properties (paginated)"
+      description: >-
+        Due to incompatibility the following features of this endpoint are not implemented (yet): <br>
+        <ul><li>include language code filter (to be implemented)</li>
+        <li>include limit filter (to be implemented)</li>
+        <li>various filter options</li>
+        <li>various response contents</li></ul>
       operationId: ClassPropertiesGet
       parameters:
         - name: ClassUri
@@ -245,15 +261,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/ClassPropertiesContract.v1'
       deprecated: false
+
 ##############################################################################################################
+
   /api/Dictionary/v1:
     get:
       tags:
         - Dictionary
-      summary: "[IN REWORK]Get list of available dictionaries (i.e. XtdBag) with optional filtering."
+      summary: "Get list of available dictionaries (i.e. XtdBag) with optional filtering."
       operationId: DictionaryGet
       description: >-
-        Following features of this endpoint are not implemented yet:
+        Due to incompatibility the following features of this endpoint are not implemented (yet): <br>
+        <ul><li>include limit filter (to be implemented)</li>
+        <li>various filter options</li>
+        <li>various response contents</li></ul>
       parameters:
         - name: URI
           in: query
@@ -267,21 +288,27 @@ paths:
             type: string
         - name: IncludeTestDictionaries
           in: query
-          description: "Should test dictionaries be included in the result? By default it is set to false.\r\nThis option is ignored if you specify a URI."
+          description: >-
+             ! This option is not compatible with datacat.org or any of its instances
           schema:
             type: boolean
+          deprecated: true
         - name: Offset
           in: query
-          description: Zero-based offset of the first item to be returned. Default is 0.
+          description: >-
+            Zero-based offset of the first item to be returned. Default is 0.<br>
+            ! This option is not yet implemented.
           schema:
             type: integer
             format: int32
+          deprecated: true
         - name: Limit
           in: query
           description: >-
-            Limit number of items to be returned. The default and maximum number
-            of items returned is 1000. When Offset is specified, then the
-            default limit is 100.
+            Limit number of items to be returned. The default and maximum number<br>
+            of items returned is 1000. When Offset is specified, then the<br>
+            default limit is 100.<br>
+            ! This option is not yet implemented.
           schema:
             type: integer
             format: int32
@@ -293,12 +320,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/DictionaryResponseContract.v1'
       deprecated: false
+
 ##############################################################################################################
+
   /api/Dictionary/v1/Classes:
     get:
       tags:
         - Dictionary
-      summary: "Get dictionary with tree of classes from Datacat (i.e. XtdSubject)."
+      summary: "[IN REWORK]Get dictionary with tree of classes from Datacat (i.e. XtdSubject)."
       description: >-
         Due to incompatibility the following features of this endpoint are not implemented (yet): <br>
         <ul><li>filter for text</li>
@@ -358,8 +387,9 @@ paths:
         - name: Limit
           in: query
           description: >-
-            Limit number of items to be returned. The default and maximum number of items returned is 1000.<br>
-            When Offset is specified, then the default limit is 100.<br>
+            Limit number of items to be returned. The default and maximum number<br>
+            of items returned is 1000. When Offset is specified, then the<br>
+            default limit is 100.<br>
             ! This option is not yet implemented.
           schema:
             type: integer
@@ -382,154 +412,300 @@ paths:
               schema:
                 $ref: '#/components/schemas/DictionaryClassesResponseContract.v1.Classes'
       deprecated: false
+
 ##############################################################################################################
+
   /api/Dictionary/v1/Properties:
     get:
       tags:
         - Dictionary
       summary: "[NOT IMPLEMETED]Get dictionary with its properties from Datacat (i.e. XtdProperty)."
-      # description: "Following features of this endpoint are not implemented yet: \n\r- response contents"
-      # operationId: getProperties
-      # # operationId: DictionaryGetWithProperties
-      # parameters:
-      #   - name: URI
-      #     in: query
-      #     description: >-
-      #       URI of the class, e.g. https://datacat.org/property
-      #     required: true
-      #     schema:
-      #       type: string
       responses:
         '200':
           description: Success
-          # content:
-            # application/json:
-            #   schema:
-            #     $ref: '#/components/schemas/PropertiesResponse.v1'
       deprecated: true
+
 ##############################################################################################################
+
   /api/Dictionary/Popular/v1:
     get:
       tags:
         - Popular Dictionary
-      summary: Get list of popular Dictionaries
+      summary: "[NOT IMPLEMENTED]Get list of popular Dictionaries"
       responses:
         '200':
           description: Success
       deprecated: true
+
 ##############################################################################################################
+
   /api/Property/v4:
     get:
       tags:
         - Property
-      summary: Get Property details
+      summary: "[IN REWORK]Get Property details"
+      operationId: PropertyGet
+      parameters:
+        - name: uri
+          in: query
+          description: >-
+            URI of the class, e.g.<br>
+            DATACAT: https://datacat.org/property/6<br>
+            CAFM: https://cafm.datacat.org/property/<br>
+            IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2
+          required: true
+          schema:
+            type: string
+        - name: includeClasses
+          in: query
+          description: >-
+            "Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br>
+            Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br>
+            Preferred way to get the classes is by using /api/Property/Classes/v1"
+            ! This option is not yet implemented.
+          schema:
+            type: boolean
+        - name: languageCode
+          in: query
+          description: >-
+            Specify language (case sensitive).<br>
+            For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br>
+            ! This option is not yet implemented.
+          schema:
+            type: string
       responses:
         '200':
           description: Success
-      deprecated: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyContract.v4'
+      deprecated: false
+
 ##############################################################################################################
+
   /api/Property/Relations/v1:
     get:
       tags:
         - Property
-      summary: Get property relations or reverse relations (paginated)
+      summary: "[NOT IMPLEMENTED]Get property relations or reverse relations (paginated)"
       responses:
         '200':
           description: Success
       deprecated: true
+
 ##############################################################################################################
+
   /api/Property/Classes/v1:
     get:
       tags:
         - Property
-      summary: Get list of classes that uses the property (paginated)
+      summary: "[IN REWORK]Get list of classes that uses the property (paginated)"
+      operationId: PropertyClassesGet
+      parameters:
+        - name: PropertyUri
+          in: query
+          description: >-
+            URI of the class, e.g.<br>
+            DATACAT: https://datacat.org/property/6<br>
+            CAFM: https://cafm.datacat.org/property/<br>
+            IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2
+          required: true
+          schema:
+            type: string
+        # - name: InternalExternal
+        #   in: query
+        #   description: >-
+        #     Option to get only classes of same dictionary as the property
+        #     (internal, default), only classes of other dictionaries (external)
+        #     or all classes (all)
+        #   schema:
+        #     $ref: '#/components/schemas/InternalExternalOption.v1'
+        - name: SearchText
+          in: query
+          description: >-
+            Search text to filter classes<br>
+            ! This option is not yet implemented.
+          schema:
+            type: string
+        - name: Offset
+          in: query
+          description: >-
+            Zero-based offset of the first item to be returned. Default is 0.<br>
+            ! This option is not yet implemented.
+          schema:
+            type: integer
+            format: int32
+          deprecated: true
+        - name: Limit
+          in: query
+          description: >-
+            Limit number of items to be returned. The default and maximum number<br>
+            of items returned is 1000. When Offset is specified, then the<br>
+            default limit is 100.<br>
+            ! This option is not yet implemented.
+          schema:
+            type: integer
+            format: int32
+          deprecated: true
+        - name: languageCode
+          in: query
+          description: >-
+            Specify language (case sensitive).<br>
+            For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br>
+            ! This option is not yet implemented.
+          schema:
+            type: string
       responses:
         '200':
           description: Success
-      deprecated: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyClassesContract.v1'
+      deprecated: false
+
 ##############################################################################################################
+
   /api/PropertyValue/v2:
     get:
       tags:
         - Property
-      summary: Get Property Value details
+      summary: "[NOT IMPLEMENTED]Get Property Value details"
       responses:
         '200':
           description: Success
       deprecated: true
+
 ##############################################################################################################
+
   /api/TextSearch/v2:
     get:
       tags:
         - Search
+      summary: "[NOT IMPLEMENTED]"
       responses:
         '200':
           description: Success
       deprecated: true
+
 ##############################################################################################################
+
   /api/TextSearch/v1:
     get:
       tags:
         - Search
+      summary: "[NOT IMPLEMENTED]"
       responses:
         '200':
           description: Success
       deprecated: true
+
 ##############################################################################################################
+
   /api/SearchInDictionary/v1:
     get:
       tags:
         - Search
+      summary: "[NOT IMPLEMENTED]"
       responses:
         '200':
           description: Success
       deprecated: true
+
 ##############################################################################################################
+
   /api/Class/Search/v1:
     get:
       tags:
         - Search
+      summary: "[NOT IMPLEMENTED]"
       responses:
         '200':
           description: Success
       deprecated: true
+
+
 ##############################################################################################################
+
   /api/Unit/v1:
     get:
       tags:
         - Lookup Data
+      summary: "[NOT IMPLEMENTED]Get list of all units"
+      operationId: UnitGet
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnitContract.v1'
       deprecated: true
+
 ##############################################################################################################
+
   /api/ReferenceDocument/v1:
     get:
       tags:
         - Lookup Data
+      summary: "Get list of all ReferenceDocuments"
+      description: >-
+        "For IBPDI an error will occur, because there is no ref doc available"
+      operationId: ReferenceDocumentGet
       responses:
         '200':
           description: Success
-      deprecated: true
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReferenceDocumentContract.v1'
+      deprecated: false
+
 ##############################################################################################################
+
   /api/Language/v1:
     get:
       tags:
         - Lookup Data
+      summary: "Get list of available languages"
+      operationId: LanguageGet
       responses:
         '200':
           description: Success
-      deprecated: true
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LanguageContract.v1'
+      deprecated: false
+
 ##############################################################################################################
+
   /api/Country/v1:
     get:
       tags:
         - Lookup Data
+      summary: "Get list of all countries"
+      operationId: CountryGet
       responses:
         '200':
           description: Success
-      deprecated: true
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CountryContract.v1'
+      deprecated: false
+
 ##############################################################################################################
+
   /api/Statistics:
     get:
       tags:
@@ -545,7 +721,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/StatisticsResponseContract.v1'
 
-##############################################################################################################
+#############################################################################################################
 components:
   schemas:
 ##############################################################################################################
@@ -723,6 +899,7 @@ components:
       additionalProperties: false
 
 ##############################################################################################################
+
     ClassListItemContract.v1.Classes:
       type: object
       properties:
@@ -782,7 +959,7 @@ components:
       additionalProperties: false
 
 ##############################################################################################################
-    
+
     ClassPropertyContract.v1:
       required:
         - name
@@ -916,14 +1093,14 @@ components:
             Code of the property, only applicable if property is of the same
             dictionary as the class.
           nullable: true
-        # propertyDictionaryName:
-        #   type: string
-        #   description: Name of the Dictionary this property belongs to
-        #   nullable: true
-        # propertyDictionaryUri:
-        #   type: string
-        #   description: Uri of the Dictionary this property belongs to
-        #   nullable: true
+        propertyDictionaryName:
+          type: string
+          description: Name of the Dictionary this property belongs to
+          nullable: true
+        propertyDictionaryUri:
+          type: string
+          description: Uri of the Dictionary this property belongs to
+          nullable: true
         propertyUri:
           type: string
           description: Unique identification of the property
@@ -1258,6 +1435,19 @@ components:
 
 ##############################################################################################################
 
+    CountryContract.v1:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
     DictionaryResponseContract.v1:
       type: object
       properties:
@@ -1304,15 +1494,15 @@ components:
         version:
           minLength: 1
           type: string
-        # organizationCodeOwner:
-        #   minLength: 1
-        #   type: string
-        # organizationNameOwner:
-        #   minLength: 1
-        #   type: string
-        # changeRequestEmail:
-        #   type: string
-        #   nullable: true
+        organizationCodeOwner:
+          minLength: 1
+          type: string
+        organizationNameOwner:
+          minLength: 1
+          type: string
+        changeRequestEmail:
+          type: string
+          nullable: true
         defaultLanguageCode:
           minLength: 1
           type: string
@@ -1333,18 +1523,18 @@ components:
             URL where you can find more details about the license or default
             link to info about licensing
           nullable: true
-        # qualityAssuranceProcedure:
-        #   type: string
-        #   description: >-
-        #     Name or short description of the quality assurance procedure used
-        #     while creating and maintaining the domain data
-        #   nullable: true
-        # qualityAssuranceProcedureUrl:
-        #   type: string
-        #   description: >-
-        #     URL where you can find more details about the quality assurance
-        #     procedure
-        #   nullable: true
+        qualityAssuranceProcedure:
+          type: string
+          description: >-
+            Name or short description of the quality assurance procedure used
+            while creating and maintaining the domain data
+          nullable: true
+        qualityAssuranceProcedureUrl:
+          type: string
+          description: >-
+            URL where you can find more details about the quality assurance
+            procedure
+          nullable: true
         status:
           type: string
           description: >-
@@ -1479,24 +1669,542 @@ components:
 
 ##############################################################################################################
 
-    # PropertiesResponse.v1: # DEPRICATED
-    #   type: object
-    #   properties:
-    #     uri:
-    #       minLength: 1
-    #       type: string
-    #     name:
-    #       minLength: 1
-    #       type: string
-    #     version:
-    #       minLength: 1
+# E
 
 ##############################################################################################################
 
-    StatisticsResponseContract.v1: # DONE
+# F
+
+##############################################################################################################
+
+# G
+
+##############################################################################################################
+
+# H
+
+##############################################################################################################
+
+# I
+
+##############################################################################################################
+
+# J
+
+##############################################################################################################
+
+# K
+
+##############################################################################################################
+
+    LanguageContract.v1:
+      required:
+        - isoCode
+        - name
+      type: object
+      properties:
+        isoCode:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+      additionalProperties: false
+
+##############################################################################################################
+
+# M
+
+##############################################################################################################
+
+# N
+
+##############################################################################################################
+
+# O
+
+##############################################################################################################
+
+    PropertyClassContract.v4:
+      required:
+        - name
+      type: object
+      properties:
+        uri:
+          type: string
+          description: Globally unique identification of the class
+          nullable: true
+        code:
+          type: string
+          description: Code of the class
+          nullable: true
+        name:
+          minLength: 1
+          type: string
+          description: Name of the class
+        definition:
+          type: string
+          description: Definition of the class
+          nullable: true
+        description:
+          type: string
+          description: Description of the class
+          nullable: true
+        propertySet:
+          type: string
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
+    PropertyClassItemContract.v1:
+      required:
+        - name
+        - propertySet
+        - uri
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+          description: Name of the class
+        uri:
+          minLength: 1
+          type: string
+          description: Uri of the class
+        description:
+          type: string
+          description: Description of the class
+          nullable: true
+        dictionaryUri:
+          type: string
+          description: Uri of the dictionary where the class is defined
+          nullable: true
+        propertySet:
+          minLength: 1
+          type: string
+          description: The Pset the property belongs to within the class
+      additionalProperties: false
+
+##############################################################################################################
+
+    PropertyClassesContract.v1:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        propertyUri:
+          type: string
+          description: Uri of the property
+          nullable: true
+        propertyClasses:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyClassItemContract.v1'
+          description: List of classes having this property
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
+    PropertyContract.v4:
+      required:
+        - activationDateUtc
+        - code
+        - name
+        - status
+        - uri
+        - versionDateUtc
+      type: object
+      properties:
+        dictionaryUri:
+          type: string
+          description: URI of the dictionary
+          nullable: true
+        activationDateUtc:
+          type: string
+          description: Date of activation
+          format: date-time
+        code:
+          minLength: 1
+          type: string
+          description: Code used originally by the dictionary
+        creatorLanguageCode:
+          type: string
+          description: Language code of the creator
+          nullable: true
+        countriesOfUse:
+          type: array
+          items:
+            type: string
+          description: List of countries where used
+          nullable: true
+        countryOfOrigin:
+          type: string
+          description: Country of origin
+          nullable: true
+        deActivationDateUtc:
+          type: string
+          description: Date of deactivation
+          format: date-time
+          nullable: true
+        definition:
+          type: string
+          description: Formal definition
+          nullable: true
+        deprecationExplanation:
+          type: string
+          description: Explanation of the deprecation
+          nullable: true
+        description:
+          type: string
+          description: Description
+          nullable: true
+        documentReference:
+          type: string
+          description: Reference to a(n official) document
+          nullable: true
+        name:
+          minLength: 1
+          type: string
+          description: Name
+        uri:
+          minLength: 1
+          type: string
+          description: Unique identification
+        replacedObjectCodes:
+          type: array
+          items:
+            type: string
+          description: List of codes of the replaced items
+          nullable: true
+        replacingObjectCodes:
+          type: array
+          items:
+            type: string
+          description: List of codes of the replacing items
+          nullable: true
+        revisionDateUtc:
+          type: string
+          description: Date of the revision
+          format: date-time
+          nullable: true
+        revisionNumber:
+          type: integer
+          description: Revision number
+          format: int32
+          nullable: true
+        status:
+          minLength: 1
+          type: string
+          description: 'Status, can be: Preview, Active or Inactive'
+        subdivisionsOfUse:
+          type: array
+          items:
+            type: string
+          description: List of subdivisions (e.g. states) where used
+          nullable: true
+        uid:
+          type: string
+          description: Alternative unique global identification
+          nullable: true
+        versionDateUtc:
+          type: string
+          description: Date of the version
+          format: date-time
+        versionNumber:
+          type: integer
+          description: Version number
+          format: int32
+          nullable: true
+        visualRepresentationUri:
+          type: string
+          description: URI of a visual representation
+          nullable: true
+        connectedPropertyCodes:
+          type: array
+          items:
+            type: string
+          description: List of connected property codes
+          nullable: true
+        dataType:
+          type: string
+          description: >-
+            Format for expressing the value of the property: Boolean, Character,
+            Date, Enumeration, Integer, Real, String, Time
+          nullable: true
+        dimension:
+          type: string
+          description: "Dimension of the physical quantity in format \"L M T I Θ N J\", for example \"-2 1 0 0 0 0 0\".\r\nWith\r\n  L   Length\r\n  M   Mass\r\n  T   Time\r\n  I   Electric current\r\n  Θ   Thermodynamic Temperature\r\n  N   Amount of substance\r\n  J   Luminous intensity"
+          nullable: true
+        dimensionLength:
+          type: integer
+          description: The Length value of the dimension
+          format: int32
+          nullable: true
+        dimensionMass:
+          type: integer
+          description: The Mass value of the dimension
+          format: int32
+          nullable: true
+        dimensionTime:
+          type: integer
+          description: The Time value of the dimension
+          format: int32
+          nullable: true
+        dimensionElectricCurrent:
+          type: integer
+          description: The Electric current value of the dimension
+          format: int32
+          nullable: true
+        dimensionThermodynamicTemperature:
+          type: integer
+          description: The Thermodynamic temperature value of the dimension
+          format: int32
+          nullable: true
+        dimensionAmountOfSubstance:
+          type: integer
+          description: The Amount of substance value of the dimension
+          format: int32
+          nullable: true
+        dimensionLuminousIntensity:
+          type: integer
+          description: The Luminous intensity value of the dimension
+          format: int32
+          nullable: true
+        dynamicParameterPropertyCodes:
+          type: array
+          items:
+            type: string
+          description: "List of codes of the properties which are parameters of the function for a dynamic property.\r\nOnly applicable for dynamic properties (IsDynamic)"
+          nullable: true
+        example:
+          type: string
+          description: Illustrate possible use or values of the Property
+          nullable: true
+        isDynamic:
+          type: boolean
+          description: >-
+            True if the value of this property is dependent on other properties
+            (as provided in DynamicParameterPropertyCodes)
+          nullable: true
+        maxExclusive:
+          type: number
+          description: Maximum value of the property, exclusive
+          format: double
+          nullable: true
+        maxInclusive:
+          type: number
+          description: Maximum value of the property, inclusive
+          format: double
+          nullable: true
+        methodOfMeasurement:
+          type: string
+          description: Description of the method of measurement
+          nullable: true
+        minExclusive:
+          type: number
+          description: Minimum value of the property, exclusive
+          format: double
+          nullable: true
+        minInclusive:
+          type: number
+          description: Minimum value of the property, inclusive
+          format: double
+          nullable: true
+        pattern:
+          type: string
+          description: "An XML Schema Regular expression for the property value.\r\nSee for explanation: https://www.regular-expressions.info/xml.html."
+          nullable: true
+        physicalQuantity:
+          type: string
+          description: The quantity in plain text
+          nullable: true
+        allowedValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyValueContract.v4'
+          description: List of allowed values
+          nullable: true
+        propertyValueKind:
+          type: string
+          description: >-
+            Indicates kind of value: Single, Range (2 values expected), List
+            (multiple values expected), Complex (use in combination with
+            "ConnectedProperties"), ComplexList
+          nullable: true
+        propertyRelations:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyRelationContract.v4'
+          description: List of relations with other properties
+          nullable: true
+        textFormat:
+          type: string
+          description: The text type, e.g. UTF-8
+          nullable: true
+        units:
+          type: array
+          items:
+            type: string
+          description: Multiple references to Unit
+          nullable: true
+        qudtCodes:
+          type: array
+          items:
+            type: string
+          description: List of QUDT unit codes (if QUDT code available)
+          nullable: true
+        propertyClasses:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyClassContract.v4'
+          description: >-
+            List of the classes this property is used in (only classes of same
+            dictionary as the property are listed)
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
+    PropertyRelationContract.v4:
+      type: object
+      properties:
+        uri:
+          type: string
+          description: Globally unique identification of the relation
+          nullable: true
+        relationType:
+          type: string
+          description: 'The relation with the other property: e.g. HasReference, IsEqualTo'
+          nullable: true
+        relatedPropertyUri:
+          type: string
+          description: Namespace URI of the related property
+          nullable: true
+        relatedPropertyName:
+          type: string
+          description: Name of the related property
+          nullable: true
+      additionalProperties: false
+    PropertyRelationItemContract.v1:
+      required:
+        - propertyUri
+        - relationType
+      type: object
+      properties:
+        relationType:
+          minLength: 1
+          type: string
+          description: 'Can be one of: HasReference, IsEqualTo, IsSimilarTo, IsParentOf'
+        propertyUri:
+          minLength: 1
+          type: string
+          description: URI of the related property
+        propertyName:
+          type: string
+          description: Name of the related property
+          nullable: true
+        dictionaryUri:
+          type: string
+          description: >-
+            The URI of the dictionary that contains the related property. This
+            URI can be used to retrieve the dictionary
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
+    PropertyValueContract.v4:
+      required:
+        - value
+      type: object
+      properties:
+        uri:
+          type: string
+          description: Globally unique identification of the value
+          nullable: true
+        code:
+          type: string
+          description: Identification of the value (unique within the property)
+          nullable: true
+        value:
+          minLength: 1
+          type: string
+          description: Allowed value of the property
+        description:
+          type: string
+          description: Description of the value
+          nullable: true
+        sortNumber:
+          type: integer
+          description: >-
+            (Optional) Sort number of value within the list of values for the
+            Property
+          format: int32
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
+# Q
+
+##############################################################################################################
+
+    ReferenceDocumentContract.v1:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date-time
+      additionalProperties: false
+
+##############################################################################################################
+
+    StatisticsResponseContract.v1:
       type: object
       properties:
         catalogueItemId:
           type: string
         itemsCount:
           type: string
+
+##############################################################################################################
+
+# T
+
+##############################################################################################################
+
+    UnitContract.v1:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        symbol:
+          type: string
+          nullable: true
+        qudtUri:
+          type: string
+          nullable: true
+      additionalProperties: false
+
+##############################################################################################################
+
+    # V
