@@ -19,14 +19,14 @@ public class GraphQlClass {
 
     public static String getClassDetailsQuery(String id, boolean includeProperties, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ getSubject(id: \\\"").append(id).append("\\\") { ")
+        queryBuilder.append("{ getSubject(id: \\\"" + id + "\\\") { ")
                     .append("documentedBy { nodes { relatingDocument { dictionaryUri:id } } } ") // missing logic to transform id into uri
                     .append("activationDateUtc:created ")
                     .append("description ")
                     .append("documentedBy { nodes { relatingDocument { documentReference:name dictionaryUri:id } } } ");
         
         if (languageCode != null && !languageCode.isEmpty()) {
-            queryBuilder.append("name(input:{languageTags:\\\"").append(languageCode).append("\\\"}) ");
+            queryBuilder.append("name(input:{languageTags:\\\"" + languageCode + "\\\"}) ");
         } else {
             queryBuilder.append("name ");
         }
@@ -88,7 +88,7 @@ public class GraphQlClass {
     // ENDPOINT: /api/Class/Properties/v1
     public static String getClassPropertiesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ findSubjects(input:{pageSize: ").append(queryLimit).append(" idIn: \\\"").append(id).append("\\\"} ) { ")
+        queryBuilder.append("{ findSubjects(input:{pageSize: \\\"" + queryLimit + "\\\" idIn: \\\"" + id + "\\\"} ) { ")
                     .append("pageInfo { count:pageElements } ")
                     .append("totalCount:totalElements ")
                     .append("nodes { ")
