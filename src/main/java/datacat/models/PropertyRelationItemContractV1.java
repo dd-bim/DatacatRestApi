@@ -12,41 +12,31 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("ClassRelationContract.v1")
-public class ClassRelationContractV1 {
-
-    @JsonProperty("uri")
-    private String uri;
+@JsonTypeName("PropertyRelationItemContract.v1")
+public class PropertyRelationItemContractV1 {
 
     @JsonProperty("relationType")
     private String relationType;
 
-    @JsonProperty("relatedClassUri")
-    private String relatedClassUri;
+    @JsonProperty("propertyUri")
+    private String propertyUri;
 
-    @JsonProperty("relatedClassName")
-    private String relatedClassName;
+    @JsonProperty("propertyName")
+    private String propertyName;
 
-    @JsonProperty("fraction")
-    private Double fraction;
+    @JsonProperty("dictionaryUri")
+    private String dictionaryUri;
 
 
     // =====================================================================================================================
     // setting default values
-    public ClassRelationContractV1() {
+    public PropertyRelationItemContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
     
     // =====================================================================================================================
     // getters and setters
-    public String getUri() {
-        return uri;
-    }
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
     public String getRelationType() {
         return relationType;
     }
@@ -54,34 +44,36 @@ public class ClassRelationContractV1 {
         this.relationType = relationType;
     }
 
-    public String getRelatedClassUri() {
-        return relatedClassUri;
+    public String getPropertyUri() {
+        return propertyUri;
     }
-    public void setRelatedClassUri(String relatedClassUri) {
-        this.relatedClassUri = relatedClassUri;
-    }
-
-    public String getRelatedClassName() {
-        return relatedClassName;
-    }
-    public void setRelatedClassName(String relatedClassName) {
-        this.relatedClassName = relatedClassName;
+    public void setPropertyUri(String propertyUri) {
+        this.propertyUri = propertyUri;
     }
 
-    public Double getFraction() {
-        return fraction;
+    public String getPropertyName() {
+        return propertyName;
     }
-    public void setFraction(Double fraction) {
-        this.fraction = fraction;
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
+    public String getDictionaryUri() {
+        return dictionaryUri;
+    }
+    public void setDictionaryUri(String dictionaryUri) {
+        this.dictionaryUri = dictionaryUri;
     }
 
 
     // =====================================================================================================================
     // business logic method
     public void generateUri(String serverUrl) {
-        if(this.uri != null) {
-            this.uri = serverUrl + "/relations/" + this.uri; // pretty sure, the base path is wrong
-            this.relatedClassUri = serverUrl + "/class/" + this.relatedClassUri;
+        if (this.propertyUri != null) {
+            this.propertyUri = serverUrl + "/property/" + this.propertyUri;
+        }
+        if (this.dictionaryUri != null) {
+            this.dictionaryUri = serverUrl + "/dictionary/" + this.dictionaryUri;
         }
     }
 
@@ -91,36 +83,33 @@ public class ClassRelationContractV1 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassRelationContractV1 that = (ClassRelationContractV1) o;
+        PropertyRelationItemContractV1 that = (PropertyRelationItemContractV1) o;
         return 
-            Objects.equals(uri, that.uri) &&
             Objects.equals(relationType, that.relationType) &&
-            Objects.equals(relatedClassUri, that.relatedClassUri) &&
-            Objects.equals(relatedClassName, that.relatedClassName) &&
-            Objects.equals(fraction, that.fraction);
+            Objects.equals(propertyUri, that.propertyUri) &&
+            Objects.equals(propertyName, that.propertyName) &&
+            Objects.equals(dictionaryUri, that.dictionaryUri);
     }
 
 
     @Override
     public int hashCode() {
         return Objects.hash(
-            uri,
             relationType,
-            relatedClassUri,
-            relatedClassName,
-            fraction
+            propertyUri,
+            propertyName,
+            dictionaryUri
         );
     }
 
     @Override
     public String toString() {
         return 
-            "ClassRelationContractV1{" +
-            "uri=" + uri + '\'' +
-            ", relationType=" + relationType + '\'' +
-            ", relatedClassUri=" + relatedClassUri + '\'' +
-            ", relatedClassName=" + relatedClassName + '\'' +
-            ", fraction=" + fraction + '\'' +
+            "PropertyRelationItemContractV1{" +
+            "relationType=" + relationType + '\'' +
+            ", propertyUri=" + propertyUri + '\'' +
+            ", propertyName=" + propertyName + '\'' +
+            ", dictionaryUri=" + dictionaryUri + '\'' +
             "}";
     }
 }

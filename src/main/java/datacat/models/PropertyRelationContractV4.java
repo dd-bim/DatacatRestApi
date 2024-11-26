@@ -12,28 +12,25 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("ClassPropertyValueItemContract.v1")
-public class ClassPropertyValueItemContractV1 {
+@JsonTypeName("PropertyRelationContract.v4")
+public class PropertyRelationContractV4 {
 
     @JsonProperty("uri")
     private String uri;
 
-    @JsonProperty("code")
-    private String code;
+    @JsonProperty("relationType")
+    private String relationType;
 
-    @JsonProperty("value")
-    private String value;
+    @JsonProperty("relatedPropertyUri")
+    private String relatedPropertyUri;
 
-    @JsonProperty("description")
-    private String description;
-
-    @JsonProperty("sortNumber")
-    private Integer sortNumber;
+    @JsonProperty("relatedPropertyName")
+    private String relatedPropertyName;
 
 
     // =====================================================================================================================
     // setting default values
-    public ClassPropertyValueItemContractV1() {
+    public PropertyRelationContractV4() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
@@ -47,32 +44,25 @@ public class ClassPropertyValueItemContractV1 {
         this.uri = uri;
     }
 
-    public String getCode() {
-        return code;
+    public String getRelationType() {
+        return relationType;
     }
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getValue() {
-        return value;
-    }
-    public void setValue(String value) {
-        this.value = value;
+    public void setRelationType(String relationType) {
+        this.relationType = relationType;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRelatedPropertyUri() {
+        return relatedPropertyUri;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRelatedPropertyUri(String relatedPropertyUri) {
+        this.relatedPropertyUri = relatedPropertyUri;
     }
 
-    public Integer getSortNumber() {
-        return sortNumber;
+    public String getRelatedPropertyName() {
+        return relatedPropertyName;
     }
-    public void setSortNumber(Integer sortNumber) {
-        this.sortNumber = sortNumber;
+    public void setRelatedPropertyName(String relatedPropertyName) {
+        this.relatedPropertyName = relatedPropertyName;
     }
 
 
@@ -80,29 +70,22 @@ public class ClassPropertyValueItemContractV1 {
     // business logic method
     public void generateUri(String serverUrl) {
         if(this.uri != null) {
-            this.uri = serverUrl + "/value/" + this.uri;
+            this.uri = serverUrl + "/BASEPATH/" + this.uri;
+            this.relatedPropertyUri = serverUrl + "property" + this.relatedPropertyUri;
         }
     }
-
-    public void transformToLowerCase() {
-        if(this.code != null) {
-            this.code = this.code.toLowerCase();
-        }
-    }
-
 
     // standard object methods equals, hashCode, and toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassPropertyValueItemContractV1 that = (ClassPropertyValueItemContractV1) o;
+        PropertyRelationContractV4 that = (PropertyRelationContractV4) o;
         return 
             Objects.equals(uri, that.uri) &&
-            Objects.equals(code, that.code) &&
-            Objects.equals(value, that.value) &&
-            Objects.equals(description, that.description) &&
-            Objects.equals(sortNumber, that.sortNumber);
+            Objects.equals(relationType, that.relationType) &&
+            Objects.equals(relatedPropertyUri, that.relatedPropertyUri) &&
+            Objects.equals(relatedPropertyName, that.relatedPropertyName);
     }
 
 
@@ -110,22 +93,20 @@ public class ClassPropertyValueItemContractV1 {
     public int hashCode() {
         return Objects.hash(
             uri,
-            code,
-            value,
-            description,
-            sortNumber
+            relationType,
+            relatedPropertyUri,
+            relatedPropertyName
         );
     }
 
     @Override
     public String toString() {
         return 
-            "ClassPropertyValueItemContractV1{" +
+            "PropertyRelationContractV4{" +
             "uri=" + uri + '\'' +
-            ", code=" + code + '\'' +
-            ", value=" + value + '\'' +
-            ", description=" + description + '\'' +
-            ", sortNumber=" + sortNumber + '\'' +
+            ", relationType=" + relationType + '\'' +
+            ", relatedPropertyUri=" + relatedPropertyUri + '\'' +
+            ", relatedPropertyName=" + relatedPropertyName + '\'' +
             "}";
     }
 }

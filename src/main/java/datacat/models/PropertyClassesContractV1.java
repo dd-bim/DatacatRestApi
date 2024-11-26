@@ -13,8 +13,8 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("DictionaryResponseContract.v1")
-public class DictionaryResponseContractV1 {
+@JsonTypeName("PropertyClassesContract.v1")
+public class PropertyClassesContractV1 {
 
     @JsonProperty("totalCount")
     private Integer totalCount;
@@ -25,13 +25,16 @@ public class DictionaryResponseContractV1 {
     @JsonProperty("count")
     private Integer count;
 
-    @JsonProperty("dictionaries")
-    private List<@Valid DictionaryContractV1> dictionaries;
+    @JsonProperty("propertyUri")
+    private String propertyUri;
+
+    @JsonProperty("propertyClasses")
+    private List<@Valid PropertyClassItemContractV1> propertyClasses;
 
 
     // =====================================================================================================================
     // setting default values
-    public DictionaryResponseContractV1() {
+    public PropertyClassesContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
@@ -59,27 +62,42 @@ public class DictionaryResponseContractV1 {
         this.count = count;
     }
 
-    public List<@Valid DictionaryContractV1> getDictionaries() {
-        return dictionaries;
+    public String getPropertyUri() {
+        return propertyUri;
     }
-    public void setDictionaries(List<@Valid DictionaryContractV1> dictionaries) {
-        this.dictionaries = dictionaries;
+    public void setPropertyUri(String propertyUri) {
+        this.propertyUri = propertyUri;
+    }
+
+    public List<@Valid PropertyClassItemContractV1> getPropertyClasses() {
+        return propertyClasses;
+    }
+    public void setPropertyClasses(List<@Valid PropertyClassItemContractV1> propertyClasses) {
+        this.propertyClasses = propertyClasses;
     }
 
 
     // =====================================================================================================================
-    // business logic methods
+    // business logic method
+    public void generateUri(String serverUrl) {
+        if(this.propertyUri != null) {
+            this.propertyUri = serverUrl + "/property/" + this.propertyUri;
+        }
+    }
+
+
     // standard object methods equals, hashCode, and toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DictionaryResponseContractV1 that = (DictionaryResponseContractV1) o;
+        PropertyClassesContractV1 that = (PropertyClassesContractV1) o;
         return 
             Objects.equals(totalCount, that.totalCount) &&
             Objects.equals(offset, that.offset) &&
             Objects.equals(count, that.count) &&
-            Objects.equals(dictionaries, that.dictionaries);
+            Objects.equals(propertyUri, that.propertyUri) &&
+            Objects.equals(propertyClasses, that.propertyClasses);
     }
 
 
@@ -89,18 +107,20 @@ public class DictionaryResponseContractV1 {
             totalCount,
             offset,
             count,
-            dictionaries
+            propertyUri,
+            propertyClasses
         );
     }
 
     @Override
     public String toString() {
         return 
-            "DictionaryResponseContractV1{" +
+            "PropertyClassesContractV1{" +
             "totalCount=" + totalCount + '\'' +
             ", offset=" + offset + '\'' +
             ", count=" + count + '\'' +
-            ", dictionaries=" + dictionaries + '\'' +
+            ", propertyUri=" + propertyUri + '\'' +
+            ", propertyClasses=" + propertyClasses + '\'' +
             "}";
     }
 }

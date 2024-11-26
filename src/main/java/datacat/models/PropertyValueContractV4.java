@@ -12,8 +12,8 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("ClassPropertyValueItemContract.v1")
-public class ClassPropertyValueItemContractV1 {
+@JsonTypeName("PropertyValueContract.v4")
+public class PropertyValueContractV4 {
 
     @JsonProperty("uri")
     private String uri;
@@ -33,7 +33,7 @@ public class ClassPropertyValueItemContractV1 {
 
     // =====================================================================================================================
     // setting default values
-    public ClassPropertyValueItemContractV1() {
+    public PropertyValueContractV4() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
@@ -96,7 +96,7 @@ public class ClassPropertyValueItemContractV1 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassPropertyValueItemContractV1 that = (ClassPropertyValueItemContractV1) o;
+        PropertyValueContractV4 that = (PropertyValueContractV4) o;
         return 
             Objects.equals(uri, that.uri) &&
             Objects.equals(code, that.code) &&
@@ -120,7 +120,7 @@ public class ClassPropertyValueItemContractV1 {
     @Override
     public String toString() {
         return 
-            "ClassPropertyValueItemContractV1{" +
+            "PropertyValueContractV4{" +
             "uri=" + uri + '\'' +
             ", code=" + code + '\'' +
             ", value=" + value + '\'' +

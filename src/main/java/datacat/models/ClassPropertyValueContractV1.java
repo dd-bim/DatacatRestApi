@@ -1,11 +1,11 @@
 package datacat.models;
 
+
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.*;
+import com.fasterxml.jackson.annotation.*;
 import datacat.customization.DefaultValuesHandler;
 
 // =====================================================================================================================
@@ -32,7 +32,7 @@ public class ClassPropertyValueContractV1 {
 
 
     // =====================================================================================================================
-    // non-argument constructor
+    // setting default values
     public ClassPropertyValueContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
@@ -43,38 +43,38 @@ public class ClassPropertyValueContractV1 {
     public String getUri() {
         return uri;
     }
-
     public void setUri(String uri) {
         this.uri = uri;
     }
+
     public String getCode() {
         return code;
     }
-
     public void setCode(String code) {
         this.code = code;
     }
+
     public String getValue() {
         return value;
     }
-
     public void setValue(String value) {
         this.value = value;
     }
+
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
+
     public Integer getSortNumber() {
         return sortNumber;
     }
-
     public void setSortNumber(Integer sortNumber) {
         this.sortNumber = sortNumber;
     }
+
 
     // =====================================================================================================================
     // business logic method
@@ -85,9 +85,9 @@ public class ClassPropertyValueContractV1 {
     }
 
     public void transformToLowerCase() {
-       if(this.code != null) {
-           this.code = this.code.toLowerCase();
-       }
+        if(this.code != null) {
+            this.code = this.code.toLowerCase();
+        }
     }
 
 
@@ -119,13 +119,13 @@ public class ClassPropertyValueContractV1 {
 
     @Override
     public String toString() {
-        return "ClassPropertyValueContractV1{" +
-                "uri=" + uri + 
-                "code=" + code + 
-                "value=" + value + 
-                "description=" + description + 
-                "sortNumber=" + sortNumber + 
-                "}";
+        return 
+            "ClassPropertyValueContractV1{" +
+            "uri=" + uri + '\'' +
+            ", code=" + code + '\'' +
+            ", value=" + value + '\'' +
+            ", description=" + description + '\'' +
+            ", sortNumber=" + sortNumber + '\'' +
+            "}";
     }
 }
-

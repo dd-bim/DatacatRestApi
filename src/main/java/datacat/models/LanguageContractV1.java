@@ -12,33 +12,30 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("ClassReferenceContract.v1")
-public class ClassReferenceContractV1 {
+@JsonTypeName("LanguageContract.v1")
+public class LanguageContractV1 {
 
-    @JsonProperty("uri")
-    private String uri;
+    @JsonProperty("isoCode")
+    private String isoCode;
 
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("code")
-    private String code;
-
 
     // =====================================================================================================================
     // setting default values
-    public ClassReferenceContractV1() {
+    public LanguageContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
     
     // =====================================================================================================================
     // getters and setters
-    public String getUri() {
-        return uri;
+    public String getIsoCode() {
+        return isoCode;
     }
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setIsoCode(String isoCode) {
+        this.isoCode = isoCode;
     }
 
     public String getName() {
@@ -48,58 +45,35 @@ public class ClassReferenceContractV1 {
         this.name = name;
     }
 
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
-
 
     // =====================================================================================================================
     // business logic method
-    public void generateUri(String serverUrl) {
-        if(this.uri != null) {
-            this.uri = serverUrl + "/class/" + this.uri;
-        }
-    }
-
-    public void transformToLowerCase() {
-        if(this.code != null) {
-            this.code = this.code.toLowerCase();
-        }
-    }
-
-
     // standard object methods equals, hashCode, and toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassReferenceContractV1 that = (ClassReferenceContractV1) o;
+        LanguageContractV1 that = (LanguageContractV1) o;
         return 
-            Objects.equals(uri, that.uri) &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(code, that.code);
+            Objects.equals(isoCode, that.isoCode) &&
+            Objects.equals(name, that.name);
     }
 
 
     @Override
     public int hashCode() {
         return Objects.hash(
-            uri,
-            name,
-            code
+            isoCode,
+            name
         );
     }
 
     @Override
     public String toString() {
         return 
-            "ClassReferenceContractV1{" +
-            "uri=" + uri + '\'' +
+            "LanguageContractV1{" +
+            "isoCode=" + isoCode + '\'' +
             ", name=" + name + '\'' +
-            ", code=" + code + '\'' +
             "}";
     }
 }

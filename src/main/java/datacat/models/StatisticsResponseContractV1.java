@@ -1,5 +1,6 @@
 package datacat.models;
 
+
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
@@ -8,25 +9,26 @@ import com.fasterxml.jackson.annotation.*;
 
 // =====================================================================================================================
 // M O D E L   C L A S S   S E C T I O N
-// model class holds several nested classes, that are used to represent the structure of the JSON response
+// this class was specifically modified through a nested class structure to fit the deserialization requirements
 // =====================================================================================================================
 @JsonTypeName("StatisticsResponseContract.v1")
 public class StatisticsResponseContractV1 {
 
     // =====================================================================================================================
-    //
-    //
-    @JsonProperty("catalogueItem")
-    private List<CatalogueItem> items;
+    @JsonProperty("catalogueItems")
+    private List<CatalogueItems> items;
 
-    public List<CatalogueItem> getItems() {
+    // =====================================================================================================================
+    // getter and setter
+    public List<CatalogueItems> getItems() {
         return items;
     }
-
-    public void setItems(List<CatalogueItem> items) {
+    public void setItems(List<CatalogueItems> items) {
         this.items = items;
     }
 
+    // =====================================================================================================================
+    // standard method overrides
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,60 +45,64 @@ public class StatisticsResponseContractV1 {
 
     @Override
     public String toString() {
-        return "{" +
-                "items=" + items +
-                '}';
+        return
+            "{" +
+            "catalogueItems=" + items + '\'' +
+            "}";
     }
-    
     
     // =====================================================================================================================
     // nested class 'CatalogueItem' featuring 'id', 'count', getter and setter, method overrides
-    public static class CatalogueItem {
-        @JsonProperty("id")
-        private String id;
+    public static class CatalogueItems {
+        @JsonProperty("itemId")
+        private String itemId;
+    
+        @JsonProperty("itemCount")
+        private int itemCount;
 
-        @JsonProperty("count")
-        private int count;
-
-        public String getId() {
-            return id;
+        // =====================================================================================================================
+        // getter and setter
+        public String getItemId() {
+            return itemId;
+        }
+        public void setItemId(String itemId) {
+            this.itemId = itemId;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public int getItemCount() {
+            return itemCount;
+        }
+        public void setItemCount(int itemCount) {
+            this.itemCount = itemCount;
         }
 
-        public int getCount() {
-            return count;
-        }
-
-        public void setCount(int count) {
-            this.count = count;
-        }
-
+        // =====================================================================================================================
+        // standard object methods overrides
         @Override
         public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            CatalogueItem item = (CatalogueItem) o;
-            return count == item.count && Objects.equals(id, item.id);
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CatalogueItems that = (CatalogueItems) o;
+            return
+                Objects.equals(itemId, that.itemId) &&
+                Objects.equals(itemCount, that.itemCount);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, count);
+            return Objects.hash(
+                itemId,
+                itemCount
+            );
         }
 
         @Override
         public String toString() {
-            return "{" +
-                    "id=" + id + '\'' +
-                    ", count=" + count +
-                    '}';
+            return 
+                "StatisticsResponseContractV1{" +
+                "itemId=" + itemId + '\'' +
+                ", itemCount=" + itemCount + '\'' +
+                "}";
         }
     }
 }

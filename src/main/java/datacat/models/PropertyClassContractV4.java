@@ -12,8 +12,8 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("ClassPropertyValueItemContract.v1")
-public class ClassPropertyValueItemContractV1 {
+@JsonTypeName("PropertyClassContract.v4")
+public class PropertyClassContractV4 {
 
     @JsonProperty("uri")
     private String uri;
@@ -21,19 +21,22 @@ public class ClassPropertyValueItemContractV1 {
     @JsonProperty("code")
     private String code;
 
-    @JsonProperty("value")
-    private String value;
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("definition")
+    private String definition;
 
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("sortNumber")
-    private Integer sortNumber;
+    @JsonProperty("propertySet")
+    private String propertySet;
 
 
     // =====================================================================================================================
     // setting default values
-    public ClassPropertyValueItemContractV1() {
+    public PropertyClassContractV4() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
@@ -54,11 +57,18 @@ public class ClassPropertyValueItemContractV1 {
         this.code = code;
     }
 
-    public String getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
-    public void setValue(String value) {
-        this.value = value;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDefinition() {
+        return definition;
+    }
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 
     public String getDescription() {
@@ -68,11 +78,11 @@ public class ClassPropertyValueItemContractV1 {
         this.description = description;
     }
 
-    public Integer getSortNumber() {
-        return sortNumber;
+    public String getPropertySet() {
+        return propertySet;
     }
-    public void setSortNumber(Integer sortNumber) {
-        this.sortNumber = sortNumber;
+    public void setPropertySet(String propertySet) {
+        this.propertySet = propertySet;
     }
 
 
@@ -80,7 +90,7 @@ public class ClassPropertyValueItemContractV1 {
     // business logic method
     public void generateUri(String serverUrl) {
         if(this.uri != null) {
-            this.uri = serverUrl + "/value/" + this.uri;
+            this.uri = serverUrl + "/property/" + this.uri;
         }
     }
 
@@ -96,13 +106,14 @@ public class ClassPropertyValueItemContractV1 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassPropertyValueItemContractV1 that = (ClassPropertyValueItemContractV1) o;
+        PropertyClassContractV4 that = (PropertyClassContractV4) o;
         return 
             Objects.equals(uri, that.uri) &&
             Objects.equals(code, that.code) &&
-            Objects.equals(value, that.value) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(definition, that.definition) &&
             Objects.equals(description, that.description) &&
-            Objects.equals(sortNumber, that.sortNumber);
+            Objects.equals(propertySet, that.propertySet);
     }
 
 
@@ -111,21 +122,23 @@ public class ClassPropertyValueItemContractV1 {
         return Objects.hash(
             uri,
             code,
-            value,
+            name,
+            definition,
             description,
-            sortNumber
+            propertySet
         );
     }
 
     @Override
     public String toString() {
         return 
-            "ClassPropertyValueItemContractV1{" +
+            "PropertyClassContractV4{" +
             "uri=" + uri + '\'' +
             ", code=" + code + '\'' +
-            ", value=" + value + '\'' +
+            ", name=" + name + '\'' +
+            ", definition=" + definition + '\'' +
             ", description=" + description + '\'' +
-            ", sortNumber=" + sortNumber + '\'' +
+            ", propertySet=" + propertySet + '\'' +
             "}";
     }
 }

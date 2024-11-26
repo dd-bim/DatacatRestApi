@@ -3,13 +3,9 @@ package datacat.models;
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
+import java.util.*;
+import jakarta.validation.Valid;
+import com.fasterxml.jackson.annotation.*;
 import datacat.customization.DefaultValuesHandler;
 
 // =====================================================================================================================
@@ -38,52 +34,52 @@ public class ClassPropertyItemContractV1 {
     private String dimension;
 
     @JsonProperty("dimensionLength")
-    private String dimensionLength;
+    private Integer dimensionLength;
 
     @JsonProperty("dimensionMass")
-    private String dimensionMass;
+    private Integer dimensionMass;
 
     @JsonProperty("dimensionTime")
-    private String dimensionTime;
+    private Integer dimensionTime;
 
     @JsonProperty("dimensionElectricCurrent")
-    private String dimensionElectricCurrent;
+    private Integer dimensionElectricCurrent;
 
     @JsonProperty("dimensionThermodynamicTemperature")
-    private String dimensionThermodynamicTemperature;
+    private Integer dimensionThermodynamicTemperature;
 
     @JsonProperty("dimensionAmountOfSubstance")
-    private String dimensionAmountOfSubstance;
+    private Integer dimensionAmountOfSubstance;
 
     @JsonProperty("dimensionLuminousIntensity")
-    private String dimensionLuminousIntensity;
+    private Integer dimensionLuminousIntensity;
 
     @JsonProperty("dynamicParameterPropertyCodes")
-    private List<String> dynamicParameterPropertyCodes;
+    private List<String> dynamicParameterPropertyCodes = new ArrayList<>();
 
     @JsonProperty("example")
     private String example;
 
     @JsonProperty("isDynamic")
-    private String isDynamic;
+    private Boolean isDynamic;
 
     @JsonProperty("isRequired")
-    private String isRequired;
+    private Boolean isRequired;
 
     @JsonProperty("isWritable")
-    private String isWritable;
+    private Boolean isWritable;
 
     @JsonProperty("maxExclusive")
-    private String maxExclusive;
+    private Double maxExclusive;
 
     @JsonProperty("maxInclusive")
-    private String maxInclusive;
+    private Double maxInclusive;
 
     @JsonProperty("minExclusive")
-    private String minExclusive;
+    private Double minExclusive;
 
     @JsonProperty("minInclusive")
-    private String minInclusive;
+    private Double minInclusive;
 
     @JsonProperty("pattern")
     private String pattern;
@@ -92,7 +88,7 @@ public class ClassPropertyItemContractV1 {
     private String physicalQuantity;
 
     @JsonProperty("allowedValues")
-    private List<ClassPropertyValueContractV1> allowedValues = new ArrayList<>();
+    private List<@Valid ClassPropertyValueItemContractV1> allowedValues = new ArrayList<>();
 
     @JsonProperty("predefinedValue")
     private String predefinedValue;
@@ -100,11 +96,11 @@ public class ClassPropertyItemContractV1 {
     @JsonProperty("propertyCode")
     private String propertyCode;
 
-    // @JsonProperty("propertyDictionaryName")
-    // private String propertyDictionaryName;
+    @JsonProperty("propertyDictionaryName")
+    private String propertyDictionaryName;
 
-    // @JsonProperty("propertyDictionaryUri")
-    // private String propertyDictionaryUri;
+    @JsonProperty("propertyDictionaryUri")
+    private String propertyDictionaryUri;
 
     @JsonProperty("propertyUri")
     private String propertyUri;
@@ -122,14 +118,14 @@ public class ClassPropertyItemContractV1 {
     private String symbol;
 
     @JsonProperty("units")
-    private List<String> units  = new ArrayList<>();
+    private List<String> units = new ArrayList<>();
 
     @JsonProperty("qudtCodes")
-    private List<String> qudtCodes;
+    private List<String> qudtCodes = new ArrayList<>();
 
 
     // =====================================================================================================================
-    // non-argument constructor
+    // setting default values
     public ClassPropertyItemContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
@@ -140,7 +136,6 @@ public class ClassPropertyItemContractV1 {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -148,7 +143,6 @@ public class ClassPropertyItemContractV1 {
     public String getUri() {
         return uri;
     }
-
     public void setUri(String uri) {
         this.uri = uri;
     }
@@ -156,7 +150,6 @@ public class ClassPropertyItemContractV1 {
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -164,7 +157,6 @@ public class ClassPropertyItemContractV1 {
     public String getDefinition() {
         return definition;
     }
-
     public void setDefinition(String definition) {
         this.definition = definition;
     }
@@ -172,7 +164,6 @@ public class ClassPropertyItemContractV1 {
     public String getDataType() {
         return dataType;
     }
-
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
@@ -180,71 +171,62 @@ public class ClassPropertyItemContractV1 {
     public String getDimension() {
         return dimension;
     }
-
     public void setDimension(String dimension) {
         this.dimension = dimension;
     }
 
-    public String getDimensionLength() {
+    public Integer getDimensionLength() {
         return dimensionLength;
     }
-
-    public void setDimensionLength(String dimensionLength) {
+    public void setDimensionLength(Integer dimensionLength) {
         this.dimensionLength = dimensionLength;
     }
 
-    public String getDimensionMass() {
+    public Integer getDimensionMass() {
         return dimensionMass;
     }
-
-    public void setDimensionMass(String dimensionMass) {
+    public void setDimensionMass(Integer dimensionMass) {
         this.dimensionMass = dimensionMass;
     }
 
-    public String getDimensionTime() {
+    public Integer getDimensionTime() {
         return dimensionTime;
     }
-
-    public void setDimensionTime(String dimensionTime) {
+    public void setDimensionTime(Integer dimensionTime) {
         this.dimensionTime = dimensionTime;
     }
 
-    public String getDimensionElectricCurrent() {
+    public Integer getDimensionElectricCurrent() {
         return dimensionElectricCurrent;
     }
-
-    public void setDimensionElectricCurrent(String dimensionElectricCurrent) {
+    public void setDimensionElectricCurrent(Integer dimensionElectricCurrent) {
         this.dimensionElectricCurrent = dimensionElectricCurrent;
     }
 
-    public String getDimensionThermodynamicTemperature() {
+    public Integer getDimensionThermodynamicTemperature() {
         return dimensionThermodynamicTemperature;
     }
-
-    public void setDimensionThermodynamicTemperature(String dimensionThermodynamicTemperature) {
+    public void setDimensionThermodynamicTemperature(Integer dimensionThermodynamicTemperature) {
         this.dimensionThermodynamicTemperature = dimensionThermodynamicTemperature;
     }
 
-    public String getDimensionAmountOfSubstance() {
+    public Integer getDimensionAmountOfSubstance() {
         return dimensionAmountOfSubstance;
     }
-
-    public void setDimensionAmountOfSubstance(String dimensionAmountOfSubstance) {
+    public void setDimensionAmountOfSubstance(Integer dimensionAmountOfSubstance) {
         this.dimensionAmountOfSubstance = dimensionAmountOfSubstance;
     }
 
-    public String getDimensionLuminousIntensity() {
+    public Integer getDimensionLuminousIntensity() {
         return dimensionLuminousIntensity;
     }
-
-    public void setDimensionLuminousIntensity(String dimensionLuminousIntensity) {
+    public void setDimensionLuminousIntensity(Integer dimensionLuminousIntensity) {
         this.dimensionLuminousIntensity = dimensionLuminousIntensity;
     }
 
     public List<String> getDynamicParameterPropertyCodes() {
         return dynamicParameterPropertyCodes;
     }
-
     public void setDynamicParameterPropertyCodes(List<String> dynamicParameterPropertyCodes) {
         this.dynamicParameterPropertyCodes = dynamicParameterPropertyCodes;
     }
@@ -252,71 +234,62 @@ public class ClassPropertyItemContractV1 {
     public String getExample() {
         return example;
     }
-
     public void setExample(String example) {
         this.example = example;
     }
 
-    public String getIsDynamic() {
+    public Boolean getIsDynamic() {
         return isDynamic;
     }
-
-    public void setIsDynamic(String isDynamic) {
+    public void setIsDynamic(Boolean isDynamic) {
         this.isDynamic = isDynamic;
     }
 
-    public String getIsRequired() {
+    public Boolean getIsRequired() {
         return isRequired;
     }
-
-    public void setIsRequired(String isRequired) {
+    public void setIsRequired(Boolean isRequired) {
         this.isRequired = isRequired;
     }
 
-    public String getIsWritable() {
+    public Boolean getIsWritable() {
         return isWritable;
     }
-
-    public void setIsWritable(String isWritable) {
+    public void setIsWritable(Boolean isWritable) {
         this.isWritable = isWritable;
     }
 
-    public String getMaxExclusive() {
+    public Double getMaxExclusive() {
         return maxExclusive;
     }
-
-    public void setMaxExclusive(String maxExclusive) {
+    public void setMaxExclusive(Double maxExclusive) {
         this.maxExclusive = maxExclusive;
     }
 
-    public String getMaxInclusive() {
+    public Double getMaxInclusive() {
         return maxInclusive;
     }
-
-    public void setMaxInclusive(String maxInclusive) {
+    public void setMaxInclusive(Double maxInclusive) {
         this.maxInclusive = maxInclusive;
     }
 
-    public String getMinExclusive() {
+    public Double getMinExclusive() {
         return minExclusive;
     }
-
-    public void setMinExclusive(String minExclusive) {
+    public void setMinExclusive(Double minExclusive) {
         this.minExclusive = minExclusive;
     }
 
-    public String getMinInclusive() {
+    public Double getMinInclusive() {
         return minInclusive;
     }
-
-    public void setMinInclusive(String minInclusive) {
+    public void setMinInclusive(Double minInclusive) {
         this.minInclusive = minInclusive;
     }
 
     public String getPattern() {
         return pattern;
     }
-
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }
@@ -324,23 +297,20 @@ public class ClassPropertyItemContractV1 {
     public String getPhysicalQuantity() {
         return physicalQuantity;
     }
-
     public void setPhysicalQuantity(String physicalQuantity) {
         this.physicalQuantity = physicalQuantity;
     }
 
-    public List<ClassPropertyValueContractV1> getAllowedValues() {
+    public List<@Valid ClassPropertyValueItemContractV1> getAllowedValues() {
         return allowedValues;
     }
-
-    public void setAllowedValues(List<ClassPropertyValueContractV1> allowedValues) {
+    public void setAllowedValues(List<@Valid ClassPropertyValueItemContractV1> allowedValues) {
         this.allowedValues = allowedValues;
     }
 
     public String getPredefinedValue() {
         return predefinedValue;
     }
-
     public void setPredefinedValue(String predefinedValue) {
         this.predefinedValue = predefinedValue;
     }
@@ -348,31 +318,27 @@ public class ClassPropertyItemContractV1 {
     public String getPropertyCode() {
         return propertyCode;
     }
-
     public void setPropertyCode(String propertyCode) {
         this.propertyCode = propertyCode;
     }
 
-    // public String getPropertyDictionaryName() {
-    //     return propertyDictionaryName;
-    // }
+    public String getPropertyDictionaryName() {
+        return propertyDictionaryName;
+    }
+    public void setPropertyDictionaryName(String propertyDictionaryName) {
+        this.propertyDictionaryName = propertyDictionaryName;
+    }
 
-    // public void setPropertyDictionaryName(String propertyDictionaryName) {
-    //     this.propertyDictionaryName = propertyDictionaryName;
-    // }
-
-    // public String getPropertyDictionaryUri() {
-    //     return propertyDictionaryUri;
-    // }
-
-    // public void setPropertyDictionaryUri(String propertyDictionaryUri) {
-    //     this.propertyDictionaryUri = propertyDictionaryUri;
-    // }
+    public String getPropertyDictionaryUri() {
+        return propertyDictionaryUri;
+    }
+    public void setPropertyDictionaryUri(String propertyDictionaryUri) {
+        this.propertyDictionaryUri = propertyDictionaryUri;
+    }
 
     public String getPropertyUri() {
         return propertyUri;
     }
-
     public void setPropertyUri(String propertyUri) {
         this.propertyUri = propertyUri;
     }
@@ -380,7 +346,6 @@ public class ClassPropertyItemContractV1 {
     public String getPropertySet() {
         return propertySet;
     }
-
     public void setPropertySet(String propertySet) {
         this.propertySet = propertySet;
     }
@@ -388,7 +353,6 @@ public class ClassPropertyItemContractV1 {
     public String getPropertyStatus() {
         return propertyStatus;
     }
-
     public void setPropertyStatus(String propertyStatus) {
         this.propertyStatus = propertyStatus;
     }
@@ -396,7 +360,6 @@ public class ClassPropertyItemContractV1 {
     public String getPropertyValueKind() {
         return propertyValueKind;
     }
-
     public void setPropertyValueKind(String propertyValueKind) {
         this.propertyValueKind = propertyValueKind;
     }
@@ -404,7 +367,6 @@ public class ClassPropertyItemContractV1 {
     public String getSymbol() {
         return symbol;
     }
-
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
@@ -412,7 +374,6 @@ public class ClassPropertyItemContractV1 {
     public List<String> getUnits() {
         return units;
     }
-
     public void setUnits(List<String> units) {
         this.units = units;
     }
@@ -420,71 +381,72 @@ public class ClassPropertyItemContractV1 {
     public List<String> getQudtCodes() {
         return qudtCodes;
     }
-
     public void setQudtCodes(List<String> qudtCodes) {
         this.qudtCodes = qudtCodes;
     }
 
+
     // =====================================================================================================================
     // business logic method
     public void generateUri(String serverUrl) {
-        if (this.uri != null) {
-            this.uri = serverUrl + "/property/" + this.uri; // Construct the URI by combining the base URL with the uid (which holds the id)
-            this.propertyUri = this.uri; // Construct the URI by combining the base URL with the uid (which holds the id)
+        if(this.uri != null) {
+            this.uri = serverUrl + "/property/" + this.uri;
+            // this.propertyUri = uri;
         }
     }
 
-    // Utility method to transform code to lowercase
     public void transformToLowerCase() {
-        if (this.propertyCode != null) {
+        if(this.propertyCode != null) {
             this.propertyCode = this.propertyCode.toLowerCase();
         }
     }
+
 
     // standard object methods equals, hashCode, and toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ClassPropertyItemContractV1 that = (ClassPropertyItemContractV1) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(uri, that.uri) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(definition, that.definition) &&
-                Objects.equals(dataType, that.dataType) &&
-                Objects.equals(dimension, that.dimension) &&
-                Objects.equals(dimensionLength, that.dimensionLength) &&
-                Objects.equals(dimensionMass, that.dimensionMass) &&
-                Objects.equals(dimensionTime, that.dimensionTime) &&
-                Objects.equals(dimensionElectricCurrent, that.dimensionElectricCurrent) &&
-                Objects.equals(dimensionThermodynamicTemperature, that.dimensionThermodynamicTemperature) &&
-                Objects.equals(dimensionAmountOfSubstance, that.dimensionAmountOfSubstance) &&
-                Objects.equals(dimensionLuminousIntensity, that.dimensionLuminousIntensity) &&
-                Objects.equals(dynamicParameterPropertyCodes, that.dynamicParameterPropertyCodes) &&
-                Objects.equals(example, that.example) &&
-                Objects.equals(isDynamic, that.isDynamic) &&
-                Objects.equals(isRequired, that.isRequired) &&
-                Objects.equals(isWritable, that.isWritable) &&
-                Objects.equals(maxExclusive, that.maxExclusive) &&
-                Objects.equals(maxInclusive, that.maxInclusive) &&
-                Objects.equals(minExclusive, that.minExclusive) &&
-                Objects.equals(minInclusive, that.minInclusive) &&
-                Objects.equals(pattern, that.pattern) &&
-                Objects.equals(physicalQuantity, that.physicalQuantity) &&
-                Objects.equals(allowedValues, that.allowedValues) &&
-                Objects.equals(predefinedValue, that.predefinedValue) &&
-                Objects.equals(propertyCode, that.propertyCode) &&
-                // Objects.equals(propertyDictionaryName, that.propertyDictionaryName) &&
-                // Objects.equals(propertyDictionaryUri, that.propertyDictionaryUri) &&
-                Objects.equals(propertyUri, that.propertyUri) &&
-                Objects.equals(propertySet, that.propertySet) &&
-                Objects.equals(propertyStatus, that.propertyStatus) &&
-                Objects.equals(propertyValueKind, that.propertyValueKind) &&
-                Objects.equals(symbol, that.symbol) &&
-                Objects.equals(units, that.units) &&
-                Objects.equals(qudtCodes, that.qudtCodes);
+        return 
+            Objects.equals(name, that.name) &&
+            Objects.equals(uri, that.uri) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(definition, that.definition) &&
+            Objects.equals(dataType, that.dataType) &&
+            Objects.equals(dimension, that.dimension) &&
+            Objects.equals(dimensionLength, that.dimensionLength) &&
+            Objects.equals(dimensionMass, that.dimensionMass) &&
+            Objects.equals(dimensionTime, that.dimensionTime) &&
+            Objects.equals(dimensionElectricCurrent, that.dimensionElectricCurrent) &&
+            Objects.equals(dimensionThermodynamicTemperature, that.dimensionThermodynamicTemperature) &&
+            Objects.equals(dimensionAmountOfSubstance, that.dimensionAmountOfSubstance) &&
+            Objects.equals(dimensionLuminousIntensity, that.dimensionLuminousIntensity) &&
+            Objects.equals(dynamicParameterPropertyCodes, that.dynamicParameterPropertyCodes) &&
+            Objects.equals(example, that.example) &&
+            Objects.equals(isDynamic, that.isDynamic) &&
+            Objects.equals(isRequired, that.isRequired) &&
+            Objects.equals(isWritable, that.isWritable) &&
+            Objects.equals(maxExclusive, that.maxExclusive) &&
+            Objects.equals(maxInclusive, that.maxInclusive) &&
+            Objects.equals(minExclusive, that.minExclusive) &&
+            Objects.equals(minInclusive, that.minInclusive) &&
+            Objects.equals(pattern, that.pattern) &&
+            Objects.equals(physicalQuantity, that.physicalQuantity) &&
+            Objects.equals(allowedValues, that.allowedValues) &&
+            Objects.equals(predefinedValue, that.predefinedValue) &&
+            Objects.equals(propertyCode, that.propertyCode) &&
+            Objects.equals(propertyDictionaryName, that.propertyDictionaryName) &&
+            Objects.equals(propertyDictionaryUri, that.propertyDictionaryUri) &&
+            Objects.equals(propertyUri, that.propertyUri) &&
+            Objects.equals(propertySet, that.propertySet) &&
+            Objects.equals(propertyStatus, that.propertyStatus) &&
+            Objects.equals(propertyValueKind, that.propertyValueKind) &&
+            Objects.equals(symbol, that.symbol) &&
+            Objects.equals(units, that.units) &&
+            Objects.equals(qudtCodes, that.qudtCodes);
     }
+
 
     @Override
     public int hashCode() {
@@ -516,8 +478,8 @@ public class ClassPropertyItemContractV1 {
             allowedValues,
             predefinedValue,
             propertyCode,
-            // propertyDictionaryName,
-            // propertyDictionaryUri,
+            propertyDictionaryName,
+            propertyDictionaryUri,
             propertyUri,
             propertySet,
             propertyStatus,
@@ -530,44 +492,44 @@ public class ClassPropertyItemContractV1 {
 
     @Override
     public String toString() {
-        return "ClassPropertyItemContractV1{" +
-                "name='" + name + '\'' +
-                ", uri='" + uri + '\'' +
-                ", description='" + description + '\'' +
-                ", definition='" + definition + '\'' +
-                ", dataType='" + dataType + '\'' +
-                ", dimension='" + dimension + '\'' +
-                ", dimensionLength='" + dimensionLength + '\'' +
-                ", dimensionMass='" + dimensionMass + '\'' +
-                ", dimensionTime='" + dimensionTime + '\'' +
-                ", dimensionElectricCurrent='" + dimensionElectricCurrent + '\'' +
-                ", dimensionThermodynamicTemperature='" + dimensionThermodynamicTemperature + '\'' +
-                ", dimensionAmountOfSubstance='" + dimensionAmountOfSubstance + '\'' +
-                ", dimensionLuminousIntensity='" + dimensionLuminousIntensity + '\'' +
-                ", dynamicParameterPropertyCodes=" + dynamicParameterPropertyCodes +
-                ", example='" + example + '\'' +
-                ", isDynamic='" + isDynamic + '\'' +
-                ", isRequired='" + isRequired + '\'' +
-                ", isWritable='" + isWritable + '\'' +
-                ", maxExclusive='" + maxExclusive + '\'' +
-                ", maxInclusive='" + maxInclusive + '\'' +
-                ", minExclusive='" + minExclusive + '\'' +
-                ", minInclusive='" + minInclusive + '\'' +
-                ", pattern='" + pattern + '\'' +
-                ", physicalQuantity='" + physicalQuantity + '\'' +
-                ", allowedValues='" + allowedValues + '\'' +
-                ", predefinedValue='" + predefinedValue + '\'' +
-                ", propertyCode='" + propertyCode + '\'' +
-                // ", propertyDictionaryName='" + propertyDictionaryName + '\'' +
-                // ", propertyDictionaryUri='" + propertyDictionaryUri + '\'' +
-                ", propertyUri='" + propertyUri + '\'' +
-                ", propertySet='" + propertySet + '\'' +
-                ", propertyStatus='" + propertyStatus + '\'' +
-                ", propertyValueKind='" + propertyValueKind + '\'' +
-                ", symbol='" + symbol + '\'' +
-                ", units=" + units +
-                ", qudtCodes=" + qudtCodes +
-                '}';
+        return 
+            "ClassPropertyItemContractV1{" +
+            "name=" + name + '\'' +
+            ", uri=" + uri + '\'' +
+            ", description=" + description + '\'' +
+            ", definition=" + definition + '\'' +
+            ", dataType=" + dataType + '\'' +
+            ", dimension=" + dimension + '\'' +
+            ", dimensionLength=" + dimensionLength + '\'' +
+            ", dimensionMass=" + dimensionMass + '\'' +
+            ", dimensionTime=" + dimensionTime + '\'' +
+            ", dimensionElectricCurrent=" + dimensionElectricCurrent + '\'' +
+            ", dimensionThermodynamicTemperature=" + dimensionThermodynamicTemperature + '\'' +
+            ", dimensionAmountOfSubstance=" + dimensionAmountOfSubstance + '\'' +
+            ", dimensionLuminousIntensity=" + dimensionLuminousIntensity + '\'' +
+            ", dynamicParameterPropertyCodes=" + dynamicParameterPropertyCodes + '\'' +
+            ", example=" + example + '\'' +
+            ", isDynamic=" + isDynamic + '\'' +
+            ", isRequired=" + isRequired + '\'' +
+            ", isWritable=" + isWritable + '\'' +
+            ", maxExclusive=" + maxExclusive + '\'' +
+            ", maxInclusive=" + maxInclusive + '\'' +
+            ", minExclusive=" + minExclusive + '\'' +
+            ", minInclusive=" + minInclusive + '\'' +
+            ", pattern=" + pattern + '\'' +
+            ", physicalQuantity=" + physicalQuantity + '\'' +
+            ", allowedValues=" + allowedValues + '\'' +
+            ", predefinedValue=" + predefinedValue + '\'' +
+            ", propertyCode=" + propertyCode + '\'' +
+            ", propertyDictionaryName=" + propertyDictionaryName + '\'' +
+            ", propertyDictionaryUri=" + propertyDictionaryUri + '\'' +
+            ", propertyUri=" + propertyUri + '\'' +
+            ", propertySet=" + propertySet + '\'' +
+            ", propertyStatus=" + propertyStatus + '\'' +
+            ", propertyValueKind=" + propertyValueKind + '\'' +
+            ", symbol=" + symbol + '\'' +
+            ", units=" + units + '\'' +
+            ", qudtCodes=" + qudtCodes + '\'' +
+            "}";
     }
 }
-

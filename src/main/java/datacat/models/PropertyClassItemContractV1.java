@@ -12,53 +12,46 @@ import datacat.customization.DefaultValuesHandler;
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
-@JsonTypeName("ClassPropertyValueItemContract.v1")
-public class ClassPropertyValueItemContractV1 {
+@JsonTypeName("PropertyClassItemContract.v1")
+public class PropertyClassItemContractV1 {
+
+    @JsonProperty("name")
+    private String name;
 
     @JsonProperty("uri")
     private String uri;
 
-    @JsonProperty("code")
-    private String code;
-
-    @JsonProperty("value")
-    private String value;
-
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("sortNumber")
-    private Integer sortNumber;
+    @JsonProperty("dictionaryUri")
+    private String dictionaryUri;
+
+    @JsonProperty("propertySet")
+    private String propertySet;
 
 
     // =====================================================================================================================
     // setting default values
-    public ClassPropertyValueItemContractV1() {
+    public PropertyClassItemContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
 
     
     // =====================================================================================================================
     // getters and setters
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUri() {
         return uri;
     }
     public void setUri(String uri) {
         this.uri = uri;
-    }
-
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getValue() {
-        return value;
-    }
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public String getDescription() {
@@ -68,11 +61,18 @@ public class ClassPropertyValueItemContractV1 {
         this.description = description;
     }
 
-    public Integer getSortNumber() {
-        return sortNumber;
+    public String getDictionaryUri() {
+        return dictionaryUri;
     }
-    public void setSortNumber(Integer sortNumber) {
-        this.sortNumber = sortNumber;
+    public void setDictionaryUri(String dictionaryUri) {
+        this.dictionaryUri = dictionaryUri;
+    }
+
+    public String getPropertySet() {
+        return propertySet;
+    }
+    public void setPropertySet(String propertySet) {
+        this.propertySet = propertySet;
     }
 
 
@@ -80,13 +80,7 @@ public class ClassPropertyValueItemContractV1 {
     // business logic method
     public void generateUri(String serverUrl) {
         if(this.uri != null) {
-            this.uri = serverUrl + "/value/" + this.uri;
-        }
-    }
-
-    public void transformToLowerCase() {
-        if(this.code != null) {
-            this.code = this.code.toLowerCase();
+            this.uri = serverUrl + "/class/" + this.uri;
         }
     }
 
@@ -96,36 +90,36 @@ public class ClassPropertyValueItemContractV1 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassPropertyValueItemContractV1 that = (ClassPropertyValueItemContractV1) o;
+        PropertyClassItemContractV1 that = (PropertyClassItemContractV1) o;
         return 
+            Objects.equals(name, that.name) &&
             Objects.equals(uri, that.uri) &&
-            Objects.equals(code, that.code) &&
-            Objects.equals(value, that.value) &&
             Objects.equals(description, that.description) &&
-            Objects.equals(sortNumber, that.sortNumber);
+            Objects.equals(dictionaryUri, that.dictionaryUri) &&
+            Objects.equals(propertySet, that.propertySet);
     }
 
 
     @Override
     public int hashCode() {
         return Objects.hash(
+            name,
             uri,
-            code,
-            value,
             description,
-            sortNumber
+            dictionaryUri,
+            propertySet
         );
     }
 
     @Override
     public String toString() {
         return 
-            "ClassPropertyValueItemContractV1{" +
-            "uri=" + uri + '\'' +
-            ", code=" + code + '\'' +
-            ", value=" + value + '\'' +
+            "PropertyClassItemContractV1{" +
+            "name=" + name + '\'' +
+            ", uri=" + uri + '\'' +
             ", description=" + description + '\'' +
-            ", sortNumber=" + sortNumber + '\'' +
+            ", dictionaryUri=" + dictionaryUri + '\'' +
+            ", propertySet=" + propertySet + '\'' +
             "}";
     }
 }

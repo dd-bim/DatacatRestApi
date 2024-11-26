@@ -1,20 +1,13 @@
 package datacat.models;
 
+
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
+import java.util.*;
+import jakarta.validation.Valid;
+import com.fasterxml.jackson.annotation.*;
 import datacat.customization.DefaultValuesHandler;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 // =====================================================================================================================
 // M O D E L   C L A S S   S E C T I O N
@@ -22,8 +15,6 @@ import org.slf4j.LoggerFactory;
 // =====================================================================================================================
 @JsonTypeName("ClassPropertiesContract.v1")
 public class ClassPropertiesContractV1 {
-
-    private static final Logger logger = LoggerFactory.getLogger(ClassPropertiesContractV1.class);
 
     @JsonProperty("totalCount")
     private Integer totalCount;
@@ -38,11 +29,11 @@ public class ClassPropertiesContractV1 {
     private String classUri;
 
     @JsonProperty("classProperties")
-    private List<ClassPropertyItemContractV1> classProperties = new ArrayList<>();
+    private List<@Valid ClassPropertyItemContractV1> classProperties = new ArrayList<>();
 
 
     // =====================================================================================================================
-    // non-argument constructor
+    // setting default values
     public ClassPropertiesContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
@@ -53,64 +44,60 @@ public class ClassPropertiesContractV1 {
     public Integer getTotalCount() {
         return totalCount;
     }
-
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
-        logger.debug("Set totalCount: {}", totalCount);
     }
 
     public Integer getOffset() {
         return offset;
     }
-
     public void setOffset(Integer offset) {
         this.offset = offset;
-        logger.debug("Set offset: {}", offset);
     }
 
     public Integer getCount() {
         return count;
     }
-
     public void setCount(Integer count) {
         this.count = count;
-        logger.debug("Set count: {}", count);
     }
 
     public String getClassUri() {
         return classUri;
     }
-
     public void setClassUri(String classUri) {
         this.classUri = classUri;
     }
 
-    public List<ClassPropertyItemContractV1> getClassProperties() {
-        return classProperties != null ? classProperties : new ArrayList<>();
+    public List<@Valid ClassPropertyItemContractV1> getClassProperties() {
+        return classProperties;
     }
-
-    public void setClassProperties(List<ClassPropertyItemContractV1> classProperties) {
+    public void setClassProperties(List<@Valid ClassPropertyItemContractV1> classProperties) {
         this.classProperties = classProperties;
     }
+
 
     // =====================================================================================================================
     // business logic method
     public void generateUri(String serverUrl) {
-        if (this.classUri != null) {
+        if(this.classUri != null) {
             this.classUri = serverUrl + "/class/" + this.classUri;
         }
     }
-    
+
+
+    // standard object methods equals, hashCode, and toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClassPropertiesContractV1 that = (ClassPropertiesContractV1) o;
-        return Objects.equals(totalCount, that.totalCount) &&
-                Objects.equals(offset, that.offset) &&
-                Objects.equals(count, that.count) &&
-                Objects.equals(classUri, that.classUri) &&
-                Objects.equals(classProperties, that.classProperties);
+        return 
+            Objects.equals(totalCount, that.totalCount) &&
+            Objects.equals(offset, that.offset) &&
+            Objects.equals(count, that.count) &&
+            Objects.equals(classUri, that.classUri) &&
+            Objects.equals(classProperties, that.classProperties);
     }
 
 
@@ -127,12 +114,13 @@ public class ClassPropertiesContractV1 {
 
     @Override
     public String toString() {
-        return "ClassPropertiesContractV1{" +
-                "totalCount=" + totalCount + '\'' +
-                ", offset=" + offset + '\'' +
-                ", count=" + count + '\'' +
-                ", classUri='" + classUri + '\'' +
-                ", classProperties=" + classProperties + '\'' +
-                '}';
+        return 
+            "ClassPropertiesContractV1{" +
+            "totalCount=" + totalCount + '\'' +
+            ", offset=" + offset + '\'' +
+            ", count=" + count + '\'' +
+            ", classUri=" + classUri + '\'' +
+            ", classProperties=" + classProperties + '\'' +
+            "}";
     }
 }
