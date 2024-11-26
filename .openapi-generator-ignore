@@ -1,5 +1,7 @@
 .openapi-generator/*
 
+depot/*
+
 doc/*
 
 init/*
@@ -10,7 +12,6 @@ src/main/java/datacat/customization/*
 
 src/main/java/datacat/graphql/*
 
-src/main/java/datacat/models/*
 src/main/java/datacat/models/ClassContractV1.java
 src/main/java/datacat/models/ClassListItemContractV1Classes.java
 src/main/java/datacat/models/ClassPropertiesContractV1.java
@@ -20,22 +21,35 @@ src/main/java/datacat/models/ClassPropertyValueContractV1.java
 src/main/java/datacat/models/ClassPropertyValueItemContractV1.java
 src/main/java/datacat/models/ClassReferenceContractV1.java
 src/main/java/datacat/models/ClassRelationContractV1.java
+src/main/java/datacat/models/CountryContractV1.java
+
 src/main/java/datacat/models/DictionaryClassesResponseContractV1Classes.java
 src/main/java/datacat/models/DictionaryContractV1.java
 src/main/java/datacat/models/DictionaryResponseContractV1.java
-src/main/java/datacat/models/GroupListItemContractV1Classes.java
+
+src/main/java/datacat/models/LanguageContractV1.java
+
+src/main/java/datacat/models/PropertyClassContractV4.java
+src/main/java/datacat/models/PropertyClassesContractV1.java
+src/main/java/datacat/models/PropertyClassItemContractV1.java
+src/main/java/datacat/models/PropertyContractV4.java
+src/main/java/datacat/models/PropertyRelationContractV4.java
+src/main/java/datacat/models/PropertyRelationItemContractV1.java
+src/main/java/datacat/models/PropertyValueContractV4.java
+
+src/main/java/datacat/models/ReferenceDocumentContractV1.java
 src/main/java/datacat/models/StatisticsResponseContractV1.java
+src/main/java/datacat/models/UnitContractV1.java
+
 
 src/main/java/datacat/restapi/ApiApiController.java
-src/main/java/datacat/restapi/ApiUtil.java
 src/main/java/datacat/restapi/ApiService.java
+src/main/java/datacat/restapi/ApiUtil.java
 
 src/main/java/org/openapitools/OpenApiApplication.java
 src/main/java/org/openapitools/OpenApiGeneratorApplication.java
 
 src/main/java/org/openapitools/configuration/HomeController.java
-src/main/java/org/openapitools/configuration/OpenApiCustom.java
-src/main/java/org/openapitools/configuration/SpringDocConfiguration.java
 
 src/main/resources/application.properties
 
