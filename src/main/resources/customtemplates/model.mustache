@@ -1,31 +1,17 @@
 package {{package}};
 
-// =====================================================================================================================
-// I M P O R T   S E C T I O N
-// =====================================================================================================================
-{{#import}}
-import java.util.*;
-{{#additionalPropertiesType}}
-import java.util.Objects;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Object;
-import java.util.Map;
-import java.util.HashMap;
-import org.springframework.format.annotation.DateTimeFormat;
-{{/additionalPropertiesType}}
-{{#jackson}}
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-{{/jackson}}
-import datacat.customization.DefaultValuesHandler;
-{{/imports}}
 {{#models}}
 {{#model}}
 {{^isEnum}} 
 {{#vendorExtensions.x-is-one-of-interface}}{{>oneof_interface}}{{/vendorExtensions.x-is-one-of-interface}}{{^vendorExtensions.x-is-one-of-interface}}
+// =====================================================================================================================
+// I M P O R T   S E C T I O N
+// =====================================================================================================================
+import java.util.*;
+import jakarta.validation.Valid;
+import com.fasterxml.jackson.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import datacat.customization.DefaultValuesHandler;
 
 // =====================================================================================================================
 // M O D E L   C L A S S   S E C T I O N
@@ -36,12 +22,12 @@ public class {{classname}} {
 
     {{#vars}}
     @JsonProperty("{{baseName}}")
-    private {{datatype}} {{baseName}};
+    private {{{dataType}}} {{baseName}};
 
     {{/vars}}
 
     // =====================================================================================================================
-    // non-argument constructor
+    // setting default values
     public {{classname}}() {
         DefaultValuesHandler.ensureDefaults(this);
     }
@@ -50,13 +36,13 @@ public class {{classname}} {
     // =====================================================================================================================
     // getters and setters
     {{#vars}}
-    public {{datatype}} get{{baseName}}() {
+    public {{{dataType}}} {{getter}}() {
         return {{baseName}};
     }
-
-    public void set{{baseName}}({{datatype}} {{baseName}}) {
+    public void {{setter}}({{{dataType}}} {{baseName}}) {
         this.{{baseName}} = {{baseName}};
     }
+
     {{/vars}}
 
     // =====================================================================================================================
@@ -67,11 +53,11 @@ public class {{classname}} {
         }
     }
 
-    //public void transformToLowerCase() {
-    //    if(this.code != null) {
-    //        this.code = this.code.toLowerCase();
-    //    }
-    //}
+    public void transformToLowerCase() {
+        if(this.code != null) {
+            this.code = this.code.toLowerCase();
+        }
+    }
 
 
     // standard object methods equals, hashCode, and toString
@@ -89,20 +75,19 @@ public class {{classname}} {
     public int hashCode() {
         return Objects.hash({{#vars}}
             {{baseName}}{{^isLast}},{{/isLast}}{{/vars}});
-
     }
 
     @Override
     public String toString() {
-        return "{{classname}}{" +
-                {{#vars}}
-                "{{baseName}}=" + {{baseName}} + 
-                {{/vars}} 
-                "}";
+        return 
+            "{{classname}}{" +
+            {{#vars}}
+            ", {{baseName}}=" + {{baseName}} + '\'' +
+            {{/vars}} 
+            "}";
     }
 }
 {{/vendorExtensions.x-is-one-of-interface}}
 {{/isEnum}}
-
 {{/model}}
 {{/models}}
