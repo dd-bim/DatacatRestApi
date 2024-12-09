@@ -43,7 +43,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-12-09T10:39:35.505472500+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-12-09T11:10:53.963934800+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
 @Validated
 @Controller
 public interface ApiApi {
