@@ -9,9 +9,9 @@ info:
     <h3>Upcoming changes:</h3>
     <ul><li>v1.2.X "major endpoint overhaul"<ul>
         <li>step-by-step inclusion of missing endpoints</li>
-    </ul><li></ul>
+    </ul></li></ul>
     <h3>Latest changes:</h3>
-    <ul><li>v1.2.1 "major endpoint overhaul"<ul>
+    <ul><li>v1.2.2 "major endpoint overhaul"<ul>
         <li>putting /api/Class/Properties/v1 under rework</li>
         <li>putting /api/Dictionary/v1 under rework</li>
         <li>minor improvements for v1.1</li>
@@ -184,7 +184,9 @@ paths:
         Due to incompatibility the following features of this endpoint are not implemented (yet): <br>
         <ul><li>include language code filter (to be implemented)</li>
         <li>include limit filter (to be implemented)</li>
+        <li>include offset filter (to be implemented)</li>
         <li>various filter options</li>
+        <li>total count is malfunctioning</li>
         <li>various response contents</li></ul>
       operationId: ClassPropertiesGet
       parameters:
@@ -273,6 +275,7 @@ paths:
       description: >-
         Due to incompatibility the following features of this endpoint are not implemented (yet): <br>
         <ul><li>include limit filter (to be implemented)</li>
+        <li>include offset filter (to be implemented)</li>
         <li>various filter options</li>
         <li>various response contents</li></ul>
       parameters:
@@ -333,7 +336,7 @@ paths:
         <ul><li>filter for text</li>
         <li>consideration of limit and offset (to be implemented)</li>
         <li>include language code filter (to be implemented)</li>
-        <li>various filter options</li></ul>
+        <li>various filter options</li>
         <li>various response contents</li></ul>
       operationId: DictionaryClassesGetWithClasses
       parameters:
@@ -445,6 +448,11 @@ paths:
         - Property
       summary: "[IN REWORK]Get Property details"
       operationId: PropertyGet
+      description: >-
+        Due to incompatibility the following features of this endpoint are not implemented (yet): <br>
+        <ul><li>include language code filter (to be implemented)</li>
+        <li>include classes (to be implemented)</li>
+        <li>various response contents</li></ul>
       parameters:
         - name: uri
           in: query
@@ -461,7 +469,7 @@ paths:
           description: >-
             "Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br>
             Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br>
-            Preferred way to get the classes is by using /api/Property/Classes/v1"
+            Preferred way to get the classes is by using /api/Property/Classes/v1"<br>
             ! This option is not yet implemented.
           schema:
             type: boolean
@@ -563,7 +571,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PropertyClassesContract.v1'
-      deprecated: false
+      deprecated: true
 
 ##############################################################################################################
 

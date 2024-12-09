@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 // Java
-import javax.annotation.PostConstruct;
 import java.time.*;
 
 // Logging
@@ -22,6 +21,10 @@ import org.slf4j.*;
 // GSON
 import com.google.gson.*;
 
+// Jakarta
+import jakarta.annotation.PostConstruct;
+
+// Internal
 import datacat.customization.CustomProperties;
 
 // =====================================================================================================================

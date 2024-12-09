@@ -10,11 +10,10 @@ public class GraphQlProperty {
     // SECTION: PROPERTY
     // =====================================================================================================================
     // ENDPOINT: /api/Property/v4
-
     public static String getPropertyDetailsQuery(String id, boolean includeClasses, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ getProperty(id: \\\"" + id + "\\\") { ")
-                    .append("udi:id ")
+                    .append("uid:id ")
                     .append("uri:id ")
                     .append("code:name ")
                     .append("activationDateUtc:created ")
@@ -42,8 +41,8 @@ public class GraphQlProperty {
     // classes
     public static String getPropertyClassQuery() {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("assignedTo { ")
-                    .append("propertyClasses:nodes { ")
+        queryBuilder.append("propertyClasses:assignedTo { ")
+                    .append("nodes { ")
                     .append("relatingObject {")
                     .append("uri:id ")
                     .append("code:name ")
@@ -59,7 +58,25 @@ public class GraphQlProperty {
 
     // =====================================================================================================================
     // ENDPOINT: /api/Property/Classes/v1
+    // classes
+    public static String getPropertyClassesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("{ findProperties(input:{pageSize: " + queryLimit + " idIn: \\\"" + id + "\\\"}) {" )
+                    .append("nodes { ")
+                    .append("assignedTo { ")
+                    .append("nodes { ")
+                    .append("relatingObject { ")
+                    .append("uri:id ")
+                    .append("code:name ")
+                    .append("name ")
+                    .append("} ")
+                    .append("} ")
+                    .append("} ")
+                    .append("} ")
+                    .append("} }");
 
+        return queryBuilder.toString();
+    }
 
     // =====================================================================================================================
     // ENDPOINT: /api/PropertyValue/v2

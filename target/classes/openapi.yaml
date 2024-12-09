@@ -4,26 +4,27 @@ info:
     email: lennart.hildebrandt@htw-dresden.de
     name: Support/Contact
     url: https://github.com/dd-bim
-  description: |-
-    <p>OpenAPI-based API to access the Datacat catalogue system.</br></p> <h3>Upcoming changes:</h3> <ul><li>v1.2.X "major endpoint overhaul"<ul>
-        <li>step-by-step inclusion of missing endpoints</li>
-    </ul><li></ul> <h3>Latest changes:</h3> <ul><li>v1.2.1 "major endpoint overhaul"<ul>
-        <li>putting /api/Class/Properties/v1 under rework</li>
-        <li>putting /api/Dictionary/v1 under rework</li>
-        <li>minor improvements for v1.1</li>
-        <li>temporarily removed server drop down menu</li>
-    </ul><li>v1.1.1 "ekkodale minimal requirements"<ul>
-        <li>general rework of /api/Class/v1</li>
-        <li>general rework of /api/Dictionary/v1/Classes</li>
-        <li>schema adjustment (including non-implemented attributes)</li>
-        <li>backend logic and query rework</li>
-        <li>minor UI adjustments</li>
-        <li>improved accessibility of specification</li>
-    </ul></li></ul>
+  description: "<p>OpenAPI-based API to access the Datacat catalogue system.</br></p>\
+    \ <h3>Upcoming changes:</h3> <ul><li>v1.2.X \"major endpoint overhaul\"<ul>\n\
+    \    <li>step-by-step inclusion of missing endpoints</li>\n    <li>preparation\
+    \ for Datacat v1.0 update</li>\n</ul></li></ul> <h3>Latest changes:</h3> <ul><li>v1.2.3\
+    \ \"further minor improvements\"<ul>\n    <li>added offset & limit logic</li>\n\
+    \    \n    \n    <li>added licence</li>\n    <li>backend logic and query rework</li>\n\
+    \    <li>minor UI adjustments</li>\n    <li>improved accessibility of specification</li>\n\
+    </ul><li>v1.2.2 \"improvement for project partners\"<ul>\n    <li>general rework\
+    \ for /api/Dictionary/v1</li>\n    <li>general rework for /api/ReferenceDocument/v1</li>\n\
+    \    <li>general rework for /api/Language/v1</li>\n    <li>general rework for\
+    \ /api/Country/v1</li>\n    <li>putting /api/Class/Properties/v1 under rework</li>\n\
+    \    <li>putting /api/Dictionary/v1/Classes under rework</li>\n    <li>putting\
+    \ /api/Property/v4 under rework</li>\n    <li>minor improvements for v1.1</li>\n\
+    \    <li>temporarily removed server drop down menu</li>\n    <li>schema adjustment\
+    \ (including non-implemented attributes)</li>\n    <li>backend logic and query\
+    \ rework</li>\n    <li>minor UI adjustments</li>\n</ul></li></ul>"
   license:
-    name: '* licence name placeholder *'
+    name: GPLv3 Lizenz
+    url: https://www.gnu.org/licenses/gpl-3.0.html
   title: Datacat REST API
-  version: 1.2.2
+  version: 1.2.3
 servers:
 - url: /
 paths:
@@ -95,7 +96,8 @@ paths:
             type: string
           type: array
         style: form
-      - description: "Specify language (case sensitive).<br> For those items the text\
+      - deprecated: true
+        description: "Specify language (case sensitive).<br> For those items the text\
           \ is not available in the requested language, the text will be returned\
           \ in the default language of the dictionary<br> ! This option is not yet\
           \ implemented."
@@ -139,8 +141,8 @@ paths:
       deprecated: false
       description: "Due to incompatibility the following features of this endpoint\
         \ are not implemented (yet): <br> <ul><li>include language code filter (to\
-        \ be implemented)</li> <li>include limit filter (to be implemented)</li> <li>various\
-        \ filter options</li> <li>various response contents</li></ul>"
+        \ be implemented)</li> <li>various filter options</li> <li>total count is\
+        \ malfunctioning</li> <li>various response contents</li></ul>"
       operationId: ClassPropertiesGet
       parameters:
       - description: "URI of the class, e.g.<br> DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br>\
@@ -184,9 +186,9 @@ paths:
         schema:
           type: string
         style: form
-      - deprecated: true
+      - deprecated: false
         description: Zero-based offset of the first item to be returned. Default is
-          0.<br> ! This option is not yet implemented.
+          0.<br>
         explode: true
         in: query
         name: Offset
@@ -195,10 +197,10 @@ paths:
           format: int32
           type: integer
         style: form
-      - deprecated: true
+      - deprecated: false
         description: "Limit number of items to be returned. The default and maximum\
           \ number<br> of items returned is 1000. When Offset is specified, then the<br>\
-          \ default limit is 100.<br> ! This option is not yet implemented."
+          \ default limit is 100.<br>"
         explode: true
         in: query
         name: Limit
@@ -226,7 +228,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ClassPropertiesContract.v1'
           description: Success
-      summary: "[IN REWORK]Get class properties (paginated)"
+      summary: Get class properties (paginated)
       tags:
       - Class
       x-accepts:
@@ -237,8 +239,8 @@ paths:
     get:
       deprecated: false
       description: "Due to incompatibility the following features of this endpoint\
-        \ are not implemented (yet): <br> <ul><li>include limit filter (to be implemented)</li>\
-        \ <li>various filter options</li> <li>various response contents</li></ul>"
+        \ are not implemented (yet): <br> <li>various filter options</li> <li>various\
+        \ response contents</li></ul>"
       operationId: DictionaryGet
       parameters:
       - description: "Optional filtering, URI of a specific dictionary, e.g. <br>\
@@ -261,9 +263,9 @@ paths:
         schema:
           type: boolean
         style: form
-      - deprecated: true
+      - deprecated: false
         description: Zero-based offset of the first item to be returned. Default is
-          0.<br> ! This option is not yet implemented.
+          0.<br>
         explode: true
         in: query
         name: Offset
@@ -272,9 +274,10 @@ paths:
           format: int32
           type: integer
         style: form
-      - description: "Limit number of items to be returned. The default and maximum\
+      - deprecated: false
+        description: "Limit number of items to be returned. The default and maximum\
           \ number<br> of items returned is 1000. When Offset is specified, then the<br>\
-          \ default limit is 100.<br> ! This option is not yet implemented."
+          \ default limit is 100.<br>"
         explode: true
         in: query
         name: Limit
@@ -301,10 +304,9 @@ paths:
     get:
       deprecated: false
       description: "Due to incompatibility the following features of this endpoint\
-        \ are not implemented (yet): <br> <ul><li>filter for text</li> <li>consideration\
-        \ of limit and offset (to be implemented)</li> <li>include language code filter\
-        \ (to be implemented)</li> <li>various filter options</li></ul> <li>various\
-        \ response contents</li></ul>"
+        \ are not implemented (yet): <br> <ul><li>include language code filter (to\
+        \ be implemented)</li> <li>filter for text</li> <li>various filter options</li>\
+        \ <li>various response contents</li></ul>"
       operationId: DictionaryClassesGetWithClasses
       parameters:
       - description: "URI of the dictionary, e.g.<br> DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_<br>\
@@ -359,7 +361,7 @@ paths:
         style: form
       - deprecated: false
         description: Zero-based offset of the first item to be returned. Default is
-          0.<br> ! This option is not yet implemented.
+          0.<br>
         explode: true
         in: query
         name: Offset
@@ -371,7 +373,7 @@ paths:
       - deprecated: false
         description: "Limit number of items to be returned. The default and maximum\
           \ number<br> of items returned is 1000. When Offset is specified, then the<br>\
-          \ default limit is 100.<br> ! This option is not yet implemented."
+          \ default limit is 100.<br>"
         explode: true
         in: query
         name: Limit
@@ -380,7 +382,7 @@ paths:
           format: int32
           type: integer
         style: form
-      - deprecated: false
+      - deprecated: true
         description: "Specify language (case sensitive).<br> For those items the text\
           \ is not available in the requested language, the text will be returned\
           \ in the default language of the dictionary<br> ! This option is not yet\
@@ -399,8 +401,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DictionaryClassesResponseContract.v1.Classes'
           description: Success
-      summary: "[IN REWORK]Get dictionary with tree of classes from Datacat (i.e.\
-        \ XtdSubject)."
+      summary: Get dictionary with tree of classes from Datacat (i.e. XtdSubject).
       tags:
       - Dictionary
       x-accepts:
@@ -437,6 +438,10 @@ paths:
   /api/Property/v4:
     get:
       deprecated: false
+      description: "Due to incompatibility the following features of this endpoint\
+        \ are not implemented (yet): <br> <ul><li>include language code filter (to\
+        \ be implemented)</li> <li>include classes (to be implemented)</li> <li>various\
+        \ response contents</li></ul>"
       operationId: PropertyGet
       parameters:
       - description: "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br>\
@@ -448,11 +453,12 @@ paths:
         schema:
           type: string
         style: form
-      - description: '"Set to true to get list of classes where property is used (only
+      - deprecated: true
+        description: '"Set to true to get list of classes where property is used (only
           classes of the same dictionary as the property).<br> Maximum number of class
           properties returned is 2000. In the next version of the API this option
           probably will be removed.<br> Preferred way to get the classes is by using
-          /api/Property/Classes/v1" ! This option is not yet implemented.'
+          /api/Property/Classes/v1"<br> ! This option is not yet implemented.'
         explode: true
         in: query
         name: includeClasses
@@ -460,7 +466,8 @@ paths:
         schema:
           type: boolean
         style: form
-      - description: "Specify language (case sensitive).<br> For those items the text\
+      - deprecated: true
+        description: "Specify language (case sensitive).<br> For those items the text\
           \ is not available in the requested language, the text will be returned\
           \ in the default language of the dictionary<br> ! This option is not yet\
           \ implemented."
@@ -478,7 +485,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PropertyContract.v4'
           description: Success
-      summary: "[IN REWORK]Get Property details"
+      summary: Get Property details
       tags:
       - Property
       x-accepts:
@@ -500,7 +507,7 @@ paths:
       - tag: Property
   /api/Property/Classes/v1:
     get:
-      deprecated: false
+      deprecated: true
       operationId: PropertyClassesGet
       parameters:
       - description: "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br>\
@@ -656,7 +663,8 @@ paths:
   /api/ReferenceDocument/v1:
     get:
       deprecated: false
-      description: "\"For IBPDI an error will occur, because there is no ref doc available\""
+      description: "\"For IBPDI an error will occur, because there is no reference\
+        \ document available\""
       operationId: ReferenceDocumentGet
       responses:
         "200":

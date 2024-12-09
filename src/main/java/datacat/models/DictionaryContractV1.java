@@ -217,7 +217,7 @@ public class DictionaryContractV1 {
     // business logic method
     public void generateUri(String serverUrl) {
         if(this.uri != null) {
-            this.uri = serverUrl + "/class/" + this.uri;
+            this.uri = serverUrl + "/model/" + this.uri;
         }
     }
 

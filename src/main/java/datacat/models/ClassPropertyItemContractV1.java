@@ -391,7 +391,7 @@ public class ClassPropertyItemContractV1 {
     public void generateUri(String serverUrl) {
         if(this.uri != null) {
             this.uri = serverUrl + "/property/" + this.uri;
-            // this.propertyUri = uri;
+            this.propertyUri = uri;
         }
     }
 

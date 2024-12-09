@@ -69,16 +69,6 @@ public class GraphQlClass {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     // =====================================================================================================================
     // ENDPOINT: /api/Class/Relations/v1
 
@@ -86,9 +76,9 @@ public class GraphQlClass {
 
     // =====================================================================================================================
     // ENDPOINT: /api/Class/Properties/v1
-    public static String getClassPropertiesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
+    public static String getClassPropertiesQuery(String id, int pageSize, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ findSubjects(input:{pageSize: \\\"" + queryLimit + "\\\" idIn: \\\"" + id + "\\\"} ) { ")
+        queryBuilder.append("{ findSubjects(input:{pageSize: " + pageSize + " idIn: \\\"" + id + "\\\"} ) { ")
                     .append("pageInfo { count:pageElements } ")
                     .append("totalCount:totalElements ")
                     .append("nodes { ")
@@ -105,6 +95,27 @@ public class GraphQlClass {
 
         return queryBuilder.toString();
     }
+
+    // worked properly so far without pageSize
+    // public static String getClassPropertiesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
+    //     StringBuilder queryBuilder = new StringBuilder();
+    //     queryBuilder.append("{ findSubjects(input:{pageSize: " + queryLimit + " idIn: \\\"" + id + "\\\"} ) { ")
+    //                 .append("pageInfo { count:pageElements } ")
+    //                 .append("totalCount:totalElements ")
+    //                 .append("nodes { ")
+    //                 .append("classProperties:properties { ")
+    //                 .append("name ")
+    //                 .append("description ")
+    //                 .append("uid:id ")
+    //                 .append("uri:id ")
+    //                 .append("propertyCode:name ")
+    //                 .append("}")
+    //                 .append("classUri:id ")
+    //                 .append("}")
+    //                 .append("} }");
+
+    //     return queryBuilder.toString();
+    // }
 
 
 
