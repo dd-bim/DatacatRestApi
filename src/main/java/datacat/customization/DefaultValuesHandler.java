@@ -20,8 +20,8 @@ public class DefaultValuesHandler {
         defaultValues.put("defaultLanguageCode", "de");
         // defaultValues.put("countryOfOrigin", "DE");
         defaultValues.put("propertyStatus", "active");
-        defaultValues.put("licence", "");
-        defaultValues.put("licenceUrl", "");
+        defaultValues.put("licence", "GPLv3");
+        defaultValues.put("licenceUrl", "https://www.gnu.org/licenses/gpl-3.0.html");
         defaultValues.put("isLatestVersion", true);
         defaultValues.put("isVerified", true);
         defaultValues.put("moreInfoUrl", "https://datacat.org/");
