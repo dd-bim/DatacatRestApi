@@ -166,17 +166,20 @@ public class ApiService {
     }
 
 
-
-
     // =====================================================================================================================
     // ENDPOINT: /api/Class/Relations/v1
 
     // =====================================================================================================================
     // ENDPOINT: /api/Class/Properties/v1
-    public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit, String languageCode) {
-        
+    // DONE
+    public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit, int pageSize, String languageCode) {
+        logger.info("INPUT PARAMETERS:");
+        logger.info("QUERY OFFSET: {}", queryOffset);
+        logger.info("QUERY LIMIT: {}", queryLimit);
+        logger.info("PAGE SIZE: {}", pageSize);
+    
         // STEP 1: Execute the query to fetch the response
-        String query = GraphQlClass.getClassPropertiesQuery(id, queryOffset, queryLimit, languageCode);
+        String query = GraphQlClass.getClassPropertiesQuery(id, pageSize, languageCode);
         String response = executeQuery(query, bearerToken);
     
         // STEP 2: Deserialize the outer fields of the response
@@ -197,11 +200,16 @@ public class ApiService {
             classProperties.generateUri(serverUrl);
     
             if (classProperties.getClassProperties() != null) {
-                // for (ClassPropertyItemContractV1 property : classProperties.getClassProperties()) {
-                for (ClassPropertyItemContractV1 property : classPropertyItems) {
+                // Skip the number of elements specified by queryOffset and limit the results to queryLimit
+                int endIndex = Math.min(queryOffset + queryLimit, classPropertyItems.size());
+                List<ClassPropertyItemContractV1> paginatedItems = classPropertyItems.subList(queryOffset, endIndex);
+                logger.debug("Total Class Property Items: {}", classPropertyItems.size());
+                logger.debug("SubList from {} to {}", queryOffset, endIndex);
+                for (ClassPropertyItemContractV1 property : paginatedItems) {
                     property.generateUri(serverUrl);
                     property.transformToLowerCase();
                 }
+                classProperties.setClassProperties(paginatedItems);
             } else {
                 logger.warn("Class properties are not included or are null for class ID: {}", id);
             }
@@ -212,83 +220,11 @@ public class ApiService {
 
 
     // =====================================================================================================================
-    // approach to go throught inner and outer response step by step
-    // public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit, String languageCode) {
-    //     // STEP 1: Execute the query to fetch the response
-    //     String query = GraphQlClass.getClassPropertiesQuery(id, queryOffset, queryLimit, languageCode);
-    //     String response = executeQuery(query, bearerToken);
-    //     // STEP 2: Deserialize the outer fields of the response
-    //     String rootField = "findSubjects";
-    //     ClassPropertiesContractV1 classProperties = deserializeOuterFindResponse(response, rootField, ClassPropertiesContractV1.class);
-    //     logger.debug("Deserialized Outer Fields of Class Properties Response: {}", classProperties);
-    //     // STEP 3: Deserialize the inner fields (nodes array) of the response
-    //     List<ClassPropertyItemContractV1> classPropertyItems = deserializeInnerFindResponse(response, rootField, ClassPropertyItemContractV1.class);
-    //     logger.debug("Deserialized Inner Fields (Nodes) of Class Properties Response: {}", classPropertyItems);
-    //     // if (classPropertyItems != null) {
-    //     //     String serverUrl = customProperties.getServerUrl();
-    //     //     for (ClassPropertyItemContractV1 property : classPropertyItems) {
-    //     //         property.generateUri(serverUrl);
-    //     //         property.transformToLowerCase();
-    //     //     }
-    //     // }
-    //     // STEP 4: Combine the results
-    //     if (classProperties != null) {
-    //         classProperties.setClassProperties(classPropertyItems);
-    //     }
-    //     return classProperties;
-    // }
-    // =====================================================================================================================
-    // using get leads to nodes as null
-    // public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit, String languageCode) {
-    //     String query = GraphQlClass.getClassPropertiesQuery(id, queryOffset, queryLimit, languageCode);
-    //     String response = executeQuery(query, bearerToken);
-    //     String rootField = "findSubjects";
-    //     ClassPropertiesContractV1 classProperties = deserializeGetResponse(response, rootField, ClassPropertiesContractV1.class);
-    //     logger.debug("Deserialized Class Details Response: {}", classProperties);
-    //     if (classProperties != null) {
-    //         String serverUrl = customProperties.getServerUrl(); 
-    //         classProperties.generateUri(serverUrl);
-    //         if (classProperties.getClassProperties() != null) {
-    //             for (ClassPropertyItemContractV1 property : classProperties.getClassProperties()) {
-    //                 property.generateUri(serverUrl);
-    //                 property.transformToLowerCase();
-    //             }
-    //         } else {
-    //             logger.warn("Class properties are not included or are null for class ID: {}", id);
-    //         }
-    //     }
-    //     return classProperties;
-    // }
-    // =====================================================================================================================
-    // old approach only working for classUri + nodes
-    // public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit, String languageCode) {
-    //     String query = GraphQlClass.getClassPropertiesQuery(id, queryOffset, queryLimit, languageCode);
-    //     String response = executeQuery(query, bearerToken);
-    //     String rootField = "findSubjects";
-    //     ClassPropertiesContractV1 classProperties = deserializeFindResponse(response, rootField, ClassPropertiesContractV1.class);
-    //     logger.debug("Deserialized Class Properties Response: {}", classProperties);
-    //     if (classProperties != null) {
-    //         String serverUrl = customProperties.getServerUrl();
-    //         classProperties.generateUri(serverUrl);
-    //         for (ClassPropertyItemContractV1 property : classProperties.getClassProperties()) {
-    //             property = deserializeFindResponse(response, rootField, ClassPropertyItemContractV1.class);           
-    //             if (property != null) {
-    //                 property.generateUri(serverUrl);
-    //                 property.transformToLowerCase();
-    //             }         
-    //         }
-    //         return classProperties;
-    //     }
-    //     return classProperties;
-    // }
-
-
-    // =====================================================================================================================
     // SECTION: DICTIONARY
     // =====================================================================================================================
     // ENDPOINT: /api/Dictionary/v1
     // DONE
-    // OPTION 1: query to fetch all dictionaries
+    // OPTION 1: query to fetch  dictionary by ID
     public DictionaryResponseContractV1 getDictionaryById(String bearerToken, String id, int queryOffset, int queryLimit) {
         
         // STEP 1: Execute the query to fetch the response
@@ -325,17 +261,18 @@ public class ApiService {
 
     // OPTION 2: query to fetch all dictionaries
     public DictionaryResponseContractV1 getAllDictionaries(String bearerToken, int queryOffset, int queryLimit) {
-
+        int pageSize = queryOffset + queryLimit; // Calculate pageSize as the sum of offset and limit
+    
         // STEP 1: Execute the query to fetch the response
-        String query = GraphQlDictionary.getAllDictionariesQuery(queryLimit);
+        String query = GraphQlDictionary.getAllDictionariesQuery(pageSize);
         String response = executeQuery(query, bearerToken);
-
+    
         // STEP 2: Deserialize the outer fields of the response
         String rootField = "findBags";
-
+    
         DictionaryResponseContractV1 dictionaryResponse = deserializeOuterFindResponse(response, rootField, DictionaryResponseContractV1.class);
         logger.debug("Deserialized Dictionary By Id Response: {}", dictionaryResponse);
-
+    
         // STEP 3: Deserialize the inner fields (nodes array) of the response
         List<DictionaryContractV1> dictionaryItems = deserializeDictionaryInnerFindResponse(response, rootField, DictionaryContractV1.class);
         logger.debug("Deserialized Inner Fields (Nodes) of Dictionary Response: {}", dictionaryItems);
@@ -343,22 +280,23 @@ public class ApiService {
         // STEP 4: Combine the results
         if (dictionaryResponse != null) {
             dictionaryResponse.setDictionaries(dictionaryItems);
-
+    
             String serverUrl = customProperties.getServerUrl();
             for (DictionaryContractV1 dictionary : dictionaryResponse.getDictionaries()) {
                 dictionary.generateUri(serverUrl);
                 dictionary.transformToLowerCase();
             }
-
+    
+            // Skip the number of elements specified by queryOffset and limit the results to queryLimit
+            int endIndex = Math.min(queryOffset + queryLimit, dictionaryItems.size());
+            List<DictionaryContractV1> paginatedItems = dictionaryItems.subList(queryOffset, endIndex);
+            dictionaryResponse.setDictionaries(paginatedItems);
         } else {
             logger.warn("Dictionaries are not included");
         }
-
+    
         return dictionaryResponse;
-        
     }
-
-
 
     // =====================================================================================================================
     // ENDPOINT: /api/Dictionary/v1/Properties
@@ -366,49 +304,47 @@ public class ApiService {
 
     // =====================================================================================================================
     // ENDPOINT: /api/Dictionary/v1/Classes
-    public DictionaryClassesResponseContractV1Classes getDictionaryClasses(String bearerToken, String id, int queryOffset, int queryLimit, String languageCode) {
-        
-        // STEP 1: Execute the first query to fetch dictionary and groups related to the requested dictionary
+    public DictionaryClassesResponseContractV1Classes getDictionaryClasses(String bearerToken, String id, int queryOffset, int queryLimit, int pageSize, String languageCode) {
+        // STEP 1: Execute the query to fetch the group IDs
         String dictGroupQuery = GraphQlDictionary.getDictionaryGroupQuery(id, languageCode);
         String dictGroupResponse = executeQuery(dictGroupQuery, bearerToken);
-        logger.debug("FIRST QUERY EXECUTED");
-
-        // STEP 2: Extract dictionary attributes, and group IDs from the first query response
-        List<String> internalGroupIds = extractGroupIdsFromResponse(dictGroupResponse);
-        logger.debug("Internal Group IDs: {}", internalGroupIds);
-
-        // STEP 3: Execute second query for each group ID
+    
+        // STEP 2: Deserialize the group IDs
+        List<String> groupIds = extractGroupIdsFromResponse(dictGroupResponse);
+        logger.debug("Deserialized Group IDs: {}", groupIds);
+    
         List<ClassListItemContractV1Classes> allClasses = new ArrayList<>();
-        for (String groupId : internalGroupIds) {
-            String classesQuery = GraphQlDictionary.getGroupClassesQuery(groupId, queryLimit, languageCode);
+    
+        // STEP 3: Fetch classes for each group
+        for (String groupId : groupIds) {
+            String classesQuery = GraphQlDictionary.getGroupClassesQuery(groupId, pageSize, languageCode);
             String classesResponse = executeQuery(classesQuery, bearerToken);
-            String rootField = "getBag";
-
-            List<ClassListItemContractV1Classes> classes = deserializeResponseAsList(classesResponse, rootField, ClassListItemContractV1Classes.class);
-            
+    
+            List<ClassListItemContractV1Classes> classes = deserializeResponseAsList(classesResponse, "getBag", ClassListItemContractV1Classes.class);
+    
             if (classes != null) {
                 String serverUrl = customProperties.getServerUrl();
                 for (ClassListItemContractV1Classes classItem : classes) {
                     classItem.generateUri(serverUrl);
                     classItem.transformToLowerCase();
                 }
+                allClasses.addAll(classes);
             }
-            allClasses.addAll(classes);
         }
-        String rootField = "getBag";
-
-        DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeGetResponse(dictGroupResponse, rootField, DictionaryClassesResponseContractV1Classes.class); 
-        logger.debug("Deserialized Dictionary Response: {}", dictionaryResponse);
-
-        if (dictionaryResponse != null) {
-            String serverUrl = customProperties.getServerUrl();
-            dictionaryResponse.generateUri(serverUrl);
-            dictionaryResponse.transformToLowerCase();
-        }
-        
-        // STEP 4: Set the classes in the dictionary response object and return the final object
-        dictionaryResponse.setClasses(allClasses);
-
+    
+        // STEP 4: Apply pagination logic
+        int totalClasses = allClasses.size();
+        int endIndex = Math.min(queryOffset + queryLimit, totalClasses);
+        List<ClassListItemContractV1Classes> paginatedClasses = allClasses.subList(queryOffset, endIndex);
+    
+        // STEP 5: Create and return the response
+        DictionaryClassesResponseContractV1Classes dictionaryResponse = new DictionaryClassesResponseContractV1Classes();
+        dictionaryResponse.setClasses(paginatedClasses);
+    
+        String serverUrl = customProperties.getServerUrl();
+        dictionaryResponse.generateUri(serverUrl);
+        dictionaryResponse.transformToLowerCase();
+    
         return dictionaryResponse;
     }
 
@@ -426,7 +362,7 @@ public class ApiService {
 
         String query = GraphQlProperty.getPropertyDetailsQuery(id, includeClasses, languageCode);
         String response = executeQuery(query, bearerToken);
-        String rootField = "getSubject";
+        String rootField = "getProperty";
 
         PropertyContractV4 propertyDetails = deserializeGetResponse(response, rootField, PropertyContractV4.class);
         logger.debug("Deserialized Property Details Response: {}", propertyDetails);
@@ -436,18 +372,15 @@ public class ApiService {
             propertyDetails.generateUri(serverUrl);
             propertyDetails.transformToLowerCase();
 
-            for (PropertyClassContractV4 document : propertyDetails.getPropertyClasses()) {
-                document.generateUri(serverUrl);
-                document.transformToLowerCase();
+            if (includeClasses && propertyDetails.getPropertyClasses() != null) {
+                for (PropertyClassContractV4 classItem : propertyDetails.getPropertyClasses()) {
+                    classItem.generateUri(serverUrl);
+                    classItem.transformToLowerCase();
+                }
+            } else {
+                logger.warn("Classes are not included or are null for property ID: {}", id);
             }
-            // if (includeClasses && propertyDetails.getClasses() != null) {
-            //     for (ClassListItemContractV4 classItem : propertyDetails.getClasses()) {
-            //         classItem.generateUri(serverUrl);
-            //         classItem.transformToLowerCase();
-            //     }
-            // } else {
-            //     logger.warn("Classes are not included or are null for property ID: {}", id);
-            // }
+
         }
 
         return propertyDetails;
@@ -458,6 +391,43 @@ public class ApiService {
     // ENDPOINT: /api/Property/Relations/v1
     // =====================================================================================================================
     // ENDPOINT: /api/Property/Classes/v1
+    public PropertyClassesContractV1 getPropertyClasses(String bearerToken, String ID, int queryOffset, int queryLimit, String languageCode) {
+
+        // STEP 1: Execute the query to fetch the response
+        String query = GraphQlProperty.getPropertyClassesQuery(ID, queryOffset, queryLimit, languageCode);
+        String response = executeQuery(query, bearerToken);
+
+
+        // STEP 2: Deserialize the outer fields of the response
+        String rootField = "findProperties";
+
+        PropertyClassesContractV1 propertyClasses = deserializeOuterFindResponse(response, rootField, PropertyClassesContractV1.class);
+        logger.debug("Deserialized Outer Fields of Property Classes Response: {}", propertyClasses);
+
+        // STEP 3: Deserialize the inner fields (nodes array) of the response
+        List<PropertyClassItemContractV1> propertyClassItems = deserializeClassInnerFindResponse(response, rootField, PropertyClassItemContractV1.class);
+        logger.debug("Deserialized Inner Fields (Nodes) of Property Classes Response: {}", propertyClassItems);
+
+        // STEP 4: Combine the results
+        if (propertyClasses != null) {
+            propertyClasses.setPropertyClasses(propertyClassItems);
+
+            String serverUrl = customProperties.getServerUrl();
+            propertyClasses.generateUri(serverUrl);
+
+            if (propertyClasses.getPropertyClasses() != null) {
+                for (PropertyClassItemContractV1 propertyClass : propertyClasses.getPropertyClasses()) {
+                    propertyClass.generateUri(serverUrl);
+                }
+            } else {
+                logger.warn("Property classes are not included or are null for property ID: {}", ID);
+            }
+        }
+
+        return propertyClasses;
+    }
+
+
     // =====================================================================================================================
     // ENDPOINT: /api/PropertyValue/v2
 

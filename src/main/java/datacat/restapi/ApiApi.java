@@ -43,7 +43,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-26T11:07:04.289391100+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-12-09T10:39:35.505472500+01:00[Europe/Berlin]", comments = "Generator version: 7.8.0")
 @Validated
 @Controller
 public interface ApiApi {
@@ -321,7 +321,7 @@ public interface ApiApi {
         @Parameter(name = "IncludeClassRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassRelations", required = false) @Deprecated Boolean includeClassRelations,
         @Parameter(name = "IncludeReverseRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeReverseRelations", required = false) @Deprecated Boolean includeReverseRelations,
         @Parameter(name = "ReverseRelationDictionaryUris", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "ReverseRelationDictionaryUris", required = false) @Deprecated List<String> reverseRelationDictionaryUris,
-        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -338,22 +338,22 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Class/Properties/v1 : [IN REWORK]Get class properties (paginated)
-     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;include limit filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
+     * GET /api/Class/Properties/v1 : Get class properties (paginated)
+     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;total count is malfunctioning&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param classUri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6&lt;br&gt; CAFM: https://cafm.datacat.org/class/442.90&lt;br&gt; IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a (required)
      * @param propertySet &#39;Optional: Property set to filter the properties&#39;&lt;br&gt; ! This option is not yet implemented. (optional)
      * @param propertyCode &#39;Optional: Property code to filter the properties&#39;&lt;br&gt; ! This option is not yet implemented. (optional)
      * @param searchText \&quot;Optional: Search text to filter the properties.&lt;br&gt; Search is done in the property name, property description and property code.&lt;br&gt; Cannot be used together with PropertySet or PropertyCode.\&quot;&lt;br&gt; ! This option is not yet implemented. (optional)
-     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; ! This option is not yet implemented. (optional)
-     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; (optional)
+     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; (optional)
      * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "classPropertiesGet",
-        summary = "[IN REWORK]Get class properties (paginated)",
-        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>include language code filter (to be implemented)</li> <li>include limit filter (to be implemented)</li> <li>various filter options</li> <li>various response contents</li></ul>",
+        summary = "Get class properties (paginated)",
+        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>include language code filter (to be implemented)</li> <li>various filter options</li> <li>total count is malfunctioning</li> <li>various response contents</li></ul>",
         tags = { "Class" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -372,8 +372,8 @@ public interface ApiApi {
         @Parameter(name = "PropertySet", deprecated = true, description = "'Optional: Property set to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertySet", required = false) @Deprecated String propertySet,
         @Parameter(name = "PropertyCode", deprecated = true, description = "'Optional: Property code to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyCode", required = false) @Deprecated String propertyCode,
         @Parameter(name = "SearchText", deprecated = true, description = "\"Optional: Search text to filter the properties.<br> Search is done in the property name, property description and property code.<br> Cannot be used together with PropertySet or PropertyCode.\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
-        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
-        @Parameter(name = "Limit", deprecated = true, description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,
+        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
         @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
         getRequest().ifPresent(request -> {
@@ -458,23 +458,23 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Dictionary/v1/Classes : [IN REWORK]Get dictionary with tree of classes from Datacat (i.e. XtdSubject).
-     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;filter for text&lt;/li&gt; &lt;li&gt;consideration of limit and offset (to be implemented)&lt;/li&gt; &lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt;&lt;/ul&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
+     * GET /api/Dictionary/v1/Classes : Get dictionary with tree of classes from Datacat (i.e. XtdSubject).
+     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;filter for text&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param URI URI of the dictionary, e.g.&lt;br&gt; DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_&lt;br&gt; CAFM: https://cafm.datacat.org/model/0bf5d7c3-5397-4255-ba9f-9607480f1ee1&lt;br&gt; IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a (required)
      * @param useNestedClasses ! This option is not compatible with datacat.org or any of its instances (optional)
      * @param classType ! This option is not compatible with datacat.org or any of its instances (optional)
      * @param searchText ! This option is not compatible with datacat.org or any of its instances (optional)
      * @param relatedIfcEntity ! This option is not compatible with datacat.org or any of its instances (optional)
-     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; ! This option is not yet implemented. (optional)
-     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; (optional)
+     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; (optional)
      * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "dictionaryClassesGetWithClasses",
-        summary = "[IN REWORK]Get dictionary with tree of classes from Datacat (i.e. XtdSubject).",
-        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>filter for text</li> <li>consideration of limit and offset (to be implemented)</li> <li>include language code filter (to be implemented)</li> <li>various filter options</li></ul> <li>various response contents</li></ul>",
+        summary = "Get dictionary with tree of classes from Datacat (i.e. XtdSubject).",
+        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>include language code filter (to be implemented)</li> <li>filter for text</li> <li>various filter options</li> <li>various response contents</li></ul>",
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -494,9 +494,9 @@ public interface ApiApi {
         @Parameter(name = "ClassType", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClassType", required = false) @Deprecated String classType,
         @Parameter(name = "SearchText", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
         @Parameter(name = "RelatedIfcEntity", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "RelatedIfcEntity", required = false) @Deprecated String relatedIfcEntity,
-        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
-        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
-        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -514,18 +514,18 @@ public interface ApiApi {
 
     /**
      * GET /api/Dictionary/v1 : Get list of available dictionaries (i.e. XtdBag) with optional filtering.
-     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include limit filter (to be implemented)&lt;/li&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
+     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;li&gt;various filter options&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param URI Optional filtering, URI of a specific dictionary, e.g. &lt;br&gt; DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W&lt;br&gt;  CAFM: &lt;br&gt; IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a (optional)
      * @param includeTestDictionaries ! This option is not compatible with datacat.org or any of its instances (optional)
-     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; ! This option is not yet implemented. (optional)
-     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
+     * @param offset Zero-based offset of the first item to be returned. Default is 0.&lt;br&gt; (optional)
+     * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "dictionaryGet",
         summary = "Get list of available dictionaries (i.e. XtdBag) with optional filtering.",
-        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>include limit filter (to be implemented)</li> <li>various filter options</li> <li>various response contents</li></ul>",
+        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <li>various filter options</li> <li>various response contents</li></ul>",
         tags = { "Dictionary" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -542,8 +542,8 @@ public interface ApiApi {
     default ResponseEntity<DictionaryResponseContractV1> dictionaryGet(
         @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI,
         @Parameter(name = "IncludeTestDictionaries", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) @Deprecated Boolean includeTestDictionaries,
-        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
-        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
+        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -646,10 +646,13 @@ public interface ApiApi {
      * @param limit Limit number of items to be returned. The default and maximum number&lt;br&gt; of items returned is 1000. When Offset is specified, then the&lt;br&gt; default limit is 100.&lt;br&gt; ! This option is not yet implemented. (optional)
      * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
+     * @deprecated
      */
+    @Deprecated
     @Operation(
         operationId = "propertyClassesGet",
         summary = "[IN REWORK]Get list of classes that uses the property (paginated)",
+        deprecated = true,
         tags = { "Property" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -685,16 +688,18 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Property/v4 : [IN REWORK]Get Property details
+     * GET /api/Property/v4 : Get Property details
+     * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;include classes (to be implemented)&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param uri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/property/6&lt;br&gt; CAFM: https://cafm.datacat.org/property/&lt;br&gt; IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2 (required)
-     * @param includeClasses \&quot;Set to true to get list of classes where property is used (only classes of the same dictionary as the property).&lt;br&gt; Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.&lt;br&gt; Preferred way to get the classes is by using /api/Property/Classes/v1\&quot; ! This option is not yet implemented. (optional)
+     * @param includeClasses \&quot;Set to true to get list of classes where property is used (only classes of the same dictionary as the property).&lt;br&gt; Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.&lt;br&gt; Preferred way to get the classes is by using /api/Property/Classes/v1\&quot;&lt;br&gt; ! This option is not yet implemented. (optional)
      * @param languageCode Specify language (case sensitive).&lt;br&gt; For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary&lt;br&gt; ! This option is not yet implemented. (optional)
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "propertyGet",
-        summary = "[IN REWORK]Get Property details",
+        summary = "Get Property details",
+        description = "Due to incompatibility the following features of this endpoint are not implemented (yet): <br> <ul><li>include language code filter (to be implemented)</li> <li>include classes (to be implemented)</li> <li>various response contents</li></ul>",
         tags = { "Property" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -710,8 +715,8 @@ public interface ApiApi {
     
     default ResponseEntity<PropertyContractV4> propertyGet(
         @NotNull @Parameter(name = "uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "uri", required = true) String uri,
-        @Parameter(name = "includeClasses", description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\" ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) Boolean includeClasses,
-        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+        @Parameter(name = "includeClasses", deprecated = true, description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) @Deprecated Boolean includeClasses,
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -729,14 +734,14 @@ public interface ApiApi {
 
     /**
      * GET /api/ReferenceDocument/v1 : Get list of all ReferenceDocuments
-     * \&quot;For IBPDI an error will occur, because there is no ref doc available\&quot;
+     * \&quot;For IBPDI an error will occur, because there is no reference document available\&quot;
      *
      * @return Success (status code 200)
      */
     @Operation(
         operationId = "referenceDocumentGet",
         summary = "Get list of all ReferenceDocuments",
-        description = "\"For IBPDI an error will occur, because there is no ref doc available\"",
+        description = "\"For IBPDI an error will occur, because there is no reference document available\"",
         tags = { "Lookup Data" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {

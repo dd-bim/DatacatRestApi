@@ -22,7 +22,6 @@ import java.util.List;
 // Logging
 import org.slf4j.*;
 
-
 // Jakarta
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -63,7 +62,7 @@ public class ApiApiController implements ApiApi {
         @Parameter(name = "IncludeClassRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassRelations", required = false) @Deprecated Boolean includeClassRelations,
         @Parameter(name = "IncludeReverseRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeReverseRelations", required = false) @Deprecated Boolean includeReverseRelations,
         @Parameter(name = "ReverseRelationDictionaryUris", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "ReverseRelationDictionaryUris", required = false) @Deprecated List<String> reverseRelationDictionaryUris,
-        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
         
         String ID;
@@ -111,8 +110,8 @@ public class ApiApiController implements ApiApi {
         @Parameter(name = "PropertySet", deprecated = true, description = "'Optional: Property set to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertySet", required = false) @Deprecated String propertySet,
         @Parameter(name = "PropertyCode", deprecated = true, description = "'Optional: Property code to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyCode", required = false) @Deprecated String propertyCode,
         @Parameter(name = "SearchText", deprecated = true, description = "\"Optional: Search text to filter the properties.<br> Search is done in the property name, property description and property code.<br> Cannot be used together with PropertySet or PropertyCode.\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
-        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
-        @Parameter(name = "Limit", deprecated = true, description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,
+        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
         @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
 
@@ -132,9 +131,10 @@ public class ApiApiController implements ApiApi {
             HttpHeaders headers = authenticationService.getAuthorizationHeaders();
             String bearerToken = headers.getFirst("Authorization").substring(7);
             int queryOffset = offset != null ? offset : 0; // default value is 0
-            int queryLimit = limit != null ? limit : 1000; // default value is 1000
+            int queryLimit = limit != null ? limit : (queryOffset != 0 ? 100 : 1000); // default value is 1000, but 100 if offset is not 0
+            int pageSize = queryOffset + queryLimit; // pageSize is the sum of offset and limit
 
-            ClassPropertiesContractV1 response = apiService.classPropertiesGet(bearerToken, ID, queryOffset, queryLimit, languageCode);
+            ClassPropertiesContractV1 response = apiService.classPropertiesGet(bearerToken, ID, queryOffset, queryLimit, pageSize, languageCode);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
@@ -157,52 +157,17 @@ public class ApiApiController implements ApiApi {
     @Tag(name = "Dictionary")
     public ResponseEntity<DictionaryResponseContractV1> dictionaryGet(
         @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI,
-        @Parameter(name = "IncludeTestDictionaries", deprecated = true, description = "Should test dictionaries be included in the result? By default it is set to false.  This option is ignored if you specify a URI.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) @Deprecated Boolean includeTestDictionaries,
-        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
-        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
+        @Parameter(name = "IncludeTestDictionaries", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) @Deprecated Boolean includeTestDictionaries,
+        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
     ) {
-
-        // String ID;
-        // try {
-        //     ID = IdExtractor.extractIdFromUri(URI, "/model/");
-        // } catch (URISyntaxException e) {
-        //     logger.error("Invalid URI format: {}", URI, e);
-        //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        // } catch (IllegalArgumentException e) {
-        //     logger.error("Failed to extract ID from URI", e);
-        //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        // }
-
-        // try {
-        //     HttpHeaders headers = authenticationService.getAuthorizationHeaders();
-        //     String bearerToken = headers.getFirst("Authorization").substring(7);
-        //     int queryOffset = offset != null ? offset : 0; // default value is 0
-        //     int queryLimit = limit != null ? limit : 1000; // default value is 1000
-
-        //     if (URI != null) {
-        //         DictionaryResponseContractV1 dictionaryResponse = apiService.getDictionaryById(bearerToken, ID, queryOffset, queryLimit);
-        //         return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
-        //     } else {
-        //         DictionaryResponseContractV1 dictionaryResponse = apiService.getAllDictionaries(bearerToken, queryOffset, queryLimit);
-        //         return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
-        //     }
-
-        //     // DictionaryResponseContractV1 dictionaryResponse = apiService.getDictionaryById(bearerToken, ID, queryOffset, queryLimit);
-        //     // return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
-
-        // } catch (HttpServerErrorException e) {
-        //     logger.error("Error executing query for dictionaryGet", e);
-        //     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        // } catch (Exception e) {
-        //     logger.error("Error fetching dictionary", e);
-        //     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        // }
 
         try {
             HttpHeaders headers = authenticationService.getAuthorizationHeaders();
             String bearerToken = headers.getFirst("Authorization").substring(7);
             int queryOffset = offset != null ? offset : 0; // default value is 0
-            int queryLimit = limit != null ? limit : 1000; // default value is 1000
+            int queryLimit = limit != null ? limit : (queryOffset != 0 ? 100 : 1000); // default value is 1000, but 100 if offset is not 0
+            int pageSize = queryOffset + queryLimit; // pageSize is the sum of offset and limit
     
             if (URI != null) {
                 String ID;
@@ -215,6 +180,11 @@ public class ApiApiController implements ApiApi {
                     logger.error("Failed to extract ID from URI", e);
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
+
+                // Set offset to 0 and limit to 1 when ID is used
+                queryOffset = 0;
+                queryLimit = 1;
+                pageSize = queryOffset + queryLimit;
     
                 DictionaryResponseContractV1 dictionaryResponse = apiService.getDictionaryById(bearerToken, ID, queryOffset, queryLimit);
                 return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
@@ -248,9 +218,9 @@ public class ApiApiController implements ApiApi {
         @Parameter(name = "ClassType", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClassType", required = false) @Deprecated String classType,
         @Parameter(name = "SearchText", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
         @Parameter(name = "RelatedIfcEntity", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "RelatedIfcEntity", required = false) @Deprecated String relatedIfcEntity,
-        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
-        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number of items returned is 1000.<br> When Offset is specified, then the default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
-        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+        @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
+        @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
 
         String ID;
@@ -268,9 +238,10 @@ public class ApiApiController implements ApiApi {
             HttpHeaders headers = authenticationService.getAuthorizationHeaders();
             String bearerToken = headers.getFirst("Authorization").substring(7);
             int queryOffset = offset != null ? offset : 0; // default value is 0
-            int queryLimit = limit != null ? limit : 1000; // default value is 1000
+            int queryLimit = limit != null ? limit : (queryOffset != 0 ? 100 : 1000); // default value is 1000, but 100 if offset is not 0
+            int pageSize = queryOffset + queryLimit; // pageSize is the sum of offset and limit
 
-            DictionaryClassesResponseContractV1Classes dictionaryResponse = apiService.getDictionaryClasses(bearerToken, ID, queryOffset, queryLimit, languageCode); // No query passed here
+            DictionaryClassesResponseContractV1Classes dictionaryResponse = apiService.getDictionaryClasses(bearerToken, ID, queryOffset, queryLimit, pageSize, languageCode); // No query passed here
             return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
@@ -300,9 +271,9 @@ public class ApiApiController implements ApiApi {
     @Tag(name = "Property")
     public ResponseEntity<PropertyContractV4> propertyGet(
         @NotNull @Parameter(name = "uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "uri", required = true) String uri,
-        @Parameter(name = "includeClasses", description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\" ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) Boolean includeClasses,
-        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
-    ) { 
+        @Parameter(name = "includeClasses", deprecated = true, description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) @Deprecated Boolean includeClasses,
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
+    ) {
         
         String ID;
         try {
@@ -342,44 +313,44 @@ public class ApiApiController implements ApiApi {
 
     // =====================================================================================================================
     // ENDPOINT: /api/Property/Classes/v1
-    // @Override
-    // @Tag(name = "Property")
-    // public ResponseEntity<PropertyClassesContractV1> propertyClassesGet(
-    //     @NotNull @Parameter(name = "PropertyUri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyUri", required = true) String propertyUri,
-    //     @Parameter(name = "SearchText", description = "Search text to filter classes<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) String searchText,
-    //     @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
-    //     @Parameter(name = "Limit", deprecated = true, description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,
-    //     @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
-    // ) { 
+    @Override
+    @Tag(name = "Property")
+    public ResponseEntity<PropertyClassesContractV1> propertyClassesGet(
+        @NotNull @Parameter(name = "PropertyUri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyUri", required = true) String propertyUri,
+        @Parameter(name = "SearchText", description = "Search text to filter classes<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) String searchText,
+        @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
+        @Parameter(name = "Limit", deprecated = true, description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,
+        @Parameter(name = "languageCode", description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) String languageCode
+    ) { 
         
-    //     String ID;
-    //     try {
-    //         ID = IdExtractor.extractIdFromUri(propertyUri, "/property/");
-    //     } catch (URISyntaxException e) {
-    //         logger.error("Invalid URI format: {}", propertyUri, e);
-    //         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    //     } catch (IllegalArgumentException e) {
-    //         logger.error("Failed to extract ID from URI", e);
-    //         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    //     }
+        String ID;
+        try {
+            ID = IdExtractor.extractIdFromUri(propertyUri, "/property/");
+        } catch (URISyntaxException e) {
+            logger.error("Invalid URI format: {}", propertyUri, e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            logger.error("Failed to extract ID from URI", e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
-    //     try {
-    //         HttpHeaders headers = authenticationService.getAuthorizationHeaders();
-    //         String bearerToken = headers.getFirst("Authorization").substring(7);
-    //         int queryOffset = offset != null ? offset : 0; // default value is 0
-    //         int queryLimit = limit != null ? limit : 1000; // default value is 1000
+        try {
+            HttpHeaders headers = authenticationService.getAuthorizationHeaders();
+            String bearerToken = headers.getFirst("Authorization").substring(7);
+            int queryOffset = offset != null ? offset : 0; // default value is 0
+            int queryLimit = limit != null ? limit : 1000; // default value is 1000
 
-    //         PropertyClassesContractV1 response = apiService.getPropertyClasses(bearerToken, ID, queryOffset, queryLimit, languageCode);
-    //         return new ResponseEntity<>(response, HttpStatus.OK);
+            PropertyClassesContractV1 response = apiService.getPropertyClasses(bearerToken, ID, queryOffset, queryLimit, languageCode);
+            return new ResponseEntity<>(response, HttpStatus.OK);
 
-    //     } catch (HttpServerErrorException e) {
-    //         logger.error("Error executing query for propertyClassesGet", e);
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     } catch (Exception e) {
-    //         logger.error("Error fetching property classes", e);
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+        } catch (HttpServerErrorException e) {
+            logger.error("Error executing query for propertyClassesGet", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            logger.error("Error fetching property classes", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
     // =====================================================================================================================

@@ -24,7 +24,7 @@ public class SpringDocConfiguration {
             .info(
                 new Info()
                     .title("Datacat REST API")
-                    .description("<p>OpenAPI-based API to access the Datacat catalogue system.</br></p> <h3>Upcoming changes:</h3> <ul><li>v1.2.X \"major endpoint overhaul\"<ul>     <li>step-by-step inclusion of missing endpoints</li> </ul><li></ul> <h3>Latest changes:</h3> <ul><li>v1.2.1 \"major endpoint overhaul\"<ul>     <li>putting /api/Class/Properties/v1 under rework</li>     <li>putting /api/Dictionary/v1 under rework</li>     <li>minor improvements for v1.1</li>     <li>temporarily removed server drop down menu</li> </ul><li>v1.1.1 \"ekkodale minimal requirements\"<ul>     <li>general rework of /api/Class/v1</li>     <li>general rework of /api/Dictionary/v1/Classes</li>     <li>schema adjustment (including non-implemented attributes)</li>     <li>backend logic and query rework</li>     <li>minor UI adjustments</li>     <li>improved accessibility of specification</li> </ul></li></ul>")
+                    .description("<p>OpenAPI-based API to access the Datacat catalogue system.</br></p> <h3>Upcoming changes:</h3> <ul><li>v1.2.X \"major endpoint overhaul\"<ul>     <li>step-by-step inclusion of missing endpoints</li>     <li>preparation for Datacat v1.0 update</li> </ul></li></ul> <h3>Latest changes:</h3> <ul><li>v1.2.3 \"further minor improvements\"<ul>     <li>added offset & limit logic</li>               <li>added licence</li>     <li>backend logic and query rework</li>     <li>minor UI adjustments</li>     <li>improved accessibility of specification</li> </ul><li>v1.2.2 \"improvement for project partners\"<ul>     <li>general rework for /api/Dictionary/v1</li>     <li>general rework for /api/ReferenceDocument/v1</li>     <li>general rework for /api/Language/v1</li>     <li>general rework for /api/Country/v1</li>     <li>putting /api/Class/Properties/v1 under rework</li>     <li>putting /api/Dictionary/v1/Classes under rework</li>     <li>putting /api/Property/v4 under rework</li>     <li>minor improvements for v1.1</li>     <li>temporarily removed server drop down menu</li>     <li>schema adjustment (including non-implemented attributes)</li>     <li>backend logic and query rework</li>     <li>minor UI adjustments</li> </ul></li></ul>")
                     .contact(
                         new Contact()
                             .name("Support/Contact")
@@ -33,10 +33,10 @@ public class SpringDocConfiguration {
                     )
                     .license(
                             new License()
-                                    .name("* licence name placeholder *")
-                                    .url("http://unlicense.org")
+                                    .name("GPLv3 Lizenz")
+                                    .url("https://www.gnu.org/licenses/gpl-3.0.html")
                     )
-                    .version("1.2.2")
+                    .version("1.2.3")
     )
     .tags(List.of(
         new Tag().name("Class").description("Operations about classes"),
