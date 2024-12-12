@@ -173,10 +173,10 @@ public class ApiService {
     // ENDPOINT: /api/Class/Properties/v1
     // DONE
     public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit, int pageSize, String languageCode) {
-        logger.info("INPUT PARAMETERS:");
-        logger.info("QUERY OFFSET: {}", queryOffset);
-        logger.info("QUERY LIMIT: {}", queryLimit);
-        logger.info("PAGE SIZE: {}", pageSize);
+        // logger.info("INPUT PARAMETERS:");
+        // logger.info("QUERY OFFSET: {}", queryOffset);
+        // logger.info("QUERY LIMIT: {}", queryLimit);
+        // logger.info("PAGE SIZE: {}", pageSize);
     
         // STEP 1: Execute the query to fetch the response
         String query = GraphQlClass.getClassPropertiesQuery(id, pageSize, languageCode);
