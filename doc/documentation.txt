@@ -1,122 +1,98 @@
 ***********************************************************************************************************************************************
  * * * * D O C U M E N T A T I O N * * * *
-This document provides all information to work out the business logic of the datacat REST API
-The used framework is Spring Boot v3
-
-
-
-
+This document provides all information to work out the business logic of the datacat REST API.
+The used framework is Spring Boot v3.3.0 - dependencies are adjusted accordingly.
 
 ***********************************************************************************************************************************************
 Packages:
-The .. consists of two main directories and a few more service components.
-The java dictionarie holds the source code for the application.
-The resources dictionarie holds information like properties and other utility components.
+The project workspace consists of two main directories and a few more service components.
+The java directory holds the source code for the application.
+The resources directory holds information like properties and other utility components.
 
-java/auth holds the logic for the authentication
-java/customization holds the logic for adjustments of other resources
-java/graphql holds the logic that processes the GraphQL queries and other logic components, classes are divided by the section tags
-java/models holds all model classes, aka schemas, that are responsible for the output format
-java/restapi 
+    > /java/org holds the main class
+    > /java/org/openapitools holds OpenAPI utility classes (e.g. building header and layout)
 
-java/org/openapitools 
-java/org 
+    > /java/datacat/auth holds the logic for the authentication, incl. GraphQL query for bearer token
+    > /java/datacat/customization holds the logic for adjustments of other resources, like the rest template & default values
+    > /java/datacat/graphql holds the GraphQL queries, the logic that processes the GraphQL queries and other logic components
+    > /java/datacat/models holds all model classes - aka schemas - that are responsible for the output format
+    > /java/datacat/restapi holds the core classes, the API interface, its controller and a service class
 
+    > /resources holds the application properties
+    > /resources/customtemplates holds a few customized mustache templates for the generator
+
+In addition, the project workspace base directory holds docker files, the pom.xml, the generator-ignore, a directory for the specifications
+and the documentation. The not mentioned directories are from lesser importance.
+
+***********************************************************************************************************************************************
+In case of an API update / inclusion of a new endpoint:
+
+    > adjustment of YAML specification and storing in "/init":
+        > editing description & filter options in the top section
+        > editing the output variables in schema at the bottom section
+        
+    > adjustment of the "pom.xml" in base directory:
+        > enter name (with directory) of the "*.yml" in the "pom.xml" in the project directory ( Plugin -> <inputSpec> )
+        > generator should be "spring" ( Plugin -> <generatorName> )
+        > an error at "<execution>" indicates incorrect path specification (or yml != yaml)
+        > in case of incorrect imports, the dependencies in the "pom.xml" must be checked and updated if necessary
+
+    > code generation via terminal:
+        > ! prove for inconsistencies in ".openapi-generator-ignore" to not lose certain classes ! (a list is provided down below)
+        > use "mvn generate-sources" in terminal to auto generate the code
+        > entering newly created model classes into the ".openapi-generator-ignore"
+
+    > API adjustment procedure:
+        > for each endpoint that has been edited or added, the parameters in "ApiApi.java" need to be copied and pasted 
+          into place in "ApiApiController.java"
+        > implement business logic in "ApiApiController.java" into each endpoint controller method (can be implemented as seen 
+          in most other endpoint methods, positions are labeled)
+        > implement business logic in "ApiService.java" with pointer on deserialization method (positions are labeled)
+
+    > schema adjustment procedure:
+        > adjust newly generated model classes as follows:
+            > check for inconsistencies with data type (DateTimeOffset should be Date)
+            > check "generateUri" method and change the base path accordingly (e.g. "/class/", when URI points on a class)
+            > change variable names in "generateUri" and "transformToLowerCase" if needed (there might be more than one code variable)
+            > delete "&&" in last line in "equals" method
+            > delete "," in last line in "hashCode" method
+            > delete "," in second line of strings and "+ '\'' +" in last line in "toString" method
+
+    > GraphQL query adjustment procedure:
+        > each dictionary tag (e.g. Class, Lookup Data, etc.) should has its own GraphQL class, add a new one if required
+        > including GraphQL query logic into the responsible GraphQL class (see logic in existing code)
+
+    > Testing:
+        > search for a fitting example id in datacat editor
+        > start the application (keep an eye on the log)
+        > copy the id into the new endpoint
+        > check the result
+        > congratulations!
 
 
 ***********************************************************************************************************************************************
+List of the minimum content of the ".openapi-generator-ignore":
 
+    > init/* 
+    > src/main/java/datacat/auth/*
+    > src/main/java/datacat/customization/*
+    > src/main/java/datacat/graphql/*
+    > src/main/java/datacat/restapi/ApiApiController.java
+    > src/main/java/datacat/restapi/ApiService.java
+    > src/main/java/datacat/restapi/ApiUtil.java
+    > src/main/java/org/openapitools/OpenApiApplication.java
+    > src/main/java/org/openapitools/OpenApiGeneratorApplication.java
+    > src/main/java/org/openapitools/configuration/HomeController.java
+    > src/main/resources/application.properties
+    > .openapi-generator-ignore
+    > docker-compose.yml
+    > Dockerfile
+    > pom.xml
 
-
+Even tho classes outside of the ".src" directory shouldn't be involved in the code generation process, it is more save to keep them in the 
+".openapi-generator-ignore". The directory "src/main/java/datacat/models" is not listed, because each class should be listed individually.
+Otherwise new model classes can't be generated and added to the folder. "src/main/java/org/openapitools/OpenApiGeneratorApplication.java"
+should remain in generator-ignore, otherwise the main class will be created under the name.
 
 
 ***********************************************************************************************************************************************
-
-
-
-
-
-***********************************************************************************************************************************************
-
-
-
-
-
-***********************************************************************************************************************************************
-
-
-
-
-
-***********************************************************************************************************************************************
-Vorbereitung:
- - Ablage der YAML Spezifikation unter „init/“
- - Angabe von Name (und Verzeichnis) der YAML in der „pom.xml“ im Projektverzeichnis ( Plugin -> <inputSpec> )
- - Fehler bei <execution> weißt auf falsche Pfadangabe hin (oder yml != yaml)
- - Generator sollte „spring“ sein ( Plugin -> <generatorName> )
- - Angabe zum Output in das Projektverzeichnis mit „${project.basedir} ( Plugin -> <output> )
- - Prüfung der „.openapi-generator-ignore“ auf Richtigkeit und Vollständigkeit der Angaben
- - Prüfung auf Vollständigkeit für „Component Scan“ in der Main Class
-
-====================================================================================================================
-
-Ausführung:
- - Maven mittels Terminalbefehl compilieren, dabei wird der Generator gestartet
- - „mvn clean compile“ löscht das target-Verzeichnis und überschreibt/erzeugt die Klassen neu
- - „mvn compile“ überschreibt die generierten Dateien
-
-====================================================================================================================
-
-Nachbereitung:
- - bei Angabe des Projektverzeichnisses als Output sollten keine Dateien im target-Verzeichnis geschrieben werden
- - bei Erstanwendung müssen manuell erstellte Klassen in die korrekten Verzeichnisse kopiert werden
- - bei weiterer Anwendung sollten die Klassen in der ignore geführt sein
- - bei fehlerhaften Importen müssen die Dependecies in der „pom.xml“ geprüft und ggf. aktualisiert werden
- - bei gewünschter Gruppierung der API-Befehle/-Endpunkte in der Swagger UI muss die Annotation „@Tag“ in „ApiApi.java“ entfernt/auskommentiert werden
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator/src/main/resources/JavaSpring
-
-
-
-
-
-
- src/main/java/org/openapitools/OpenApiGeneratorApplication.java sollte in generator-ignore stehen bleiben, sonst wird die main class unter dem namen erzeugt
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Inclusion of a new endpoint:
-Adjustment of the YAML specification, editing the filter options in the top, editing the output variables in schema section at the bottom
-Usage of 'mvn generate-sources' to generate new model classes
-Adjustment of model classes (camel case for getters and setters, cleaning hashCode and equals)
-Copiying parameters from ApiApi.java to ApiApiController.java
-Building GraphQL query in certain class, linking query with logic in GraphQLService.java
