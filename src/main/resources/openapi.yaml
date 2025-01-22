@@ -4,27 +4,37 @@ info:
     email: lennart.hildebrandt@htw-dresden.de
     name: Support/Contact
     url: https://github.com/dd-bim
-  description: "<p>OpenAPI-based API to access the Datacat catalogue system.</br></p>\
-    \ <h3>Upcoming changes:</h3> <ul><li>v1.2.X \"major endpoint overhaul\"<ul>\n\
-    \    <li>step-by-step inclusion of missing endpoints</li>\n    <li>preparation\
-    \ for Datacat v1.0 update</li>\n</ul></li></ul> <h3>Latest changes:</h3> <ul><li>v1.2.3\
-    \ \"further minor improvements\"<ul>\n    <li>added offset & limit logic</li>\n\
-    \    \n    \n    <li>added licence</li>\n    <li>backend logic and query rework</li>\n\
-    \    <li>minor UI adjustments</li>\n    <li>improved accessibility of specification</li>\n\
-    </ul><li>v1.2.2 \"improvement for project partners\"<ul>\n    <li>general rework\
-    \ for /api/Dictionary/v1</li>\n    <li>general rework for /api/ReferenceDocument/v1</li>\n\
-    \    <li>general rework for /api/Language/v1</li>\n    <li>general rework for\
-    \ /api/Country/v1</li>\n    <li>putting /api/Class/Properties/v1 under rework</li>\n\
-    \    <li>putting /api/Dictionary/v1/Classes under rework</li>\n    <li>putting\
-    \ /api/Property/v4 under rework</li>\n    <li>minor improvements for v1.1</li>\n\
-    \    <li>temporarily removed server drop down menu</li>\n    <li>schema adjustment\
-    \ (including non-implemented attributes)</li>\n    <li>backend logic and query\
-    \ rework</li>\n    <li>minor UI adjustments</li>\n</ul></li></ul>"
+  description: |-
+    <p>OpenAPI-based API to access the Datacat catalogue system.</br></p> <h3>Upcoming changes:</h3> <ul><li>v1.2.X "major endpoint overhaul"<ul>
+        <li>step-by-step inclusion of missing endpoints</li>
+        <li>preparation for Datacat v1.0 update</li>
+    </ul></li></ul> <h3>Latest changes:</h3> <ul><li>v1.2.4 "minor improvements"<ul>
+        <li>added null return when requesting with higher offset then deliverable db entries</li>
+    </ul><li>v1.2.3 "further minor improvements"<ul>
+        <li>added offset & limit logic</li>
+        <li>added licence</li>
+        <li>backend logic and query rework</li>
+        <li>minor UI adjustments</li>
+        <li>improved accessibility of specification</li>
+    </ul><li>v1.2.2 "improvement for project partners"<ul>
+        <li>general rework for /api/Dictionary/v1</li>
+        <li>general rework for /api/ReferenceDocument/v1</li>
+        <li>general rework for /api/Language/v1</li>
+        <li>general rework for /api/Country/v1</li>
+        <li>putting /api/Class/Properties/v1 under rework</li>
+        <li>putting /api/Dictionary/v1/Classes under rework</li>
+        <li>putting /api/Property/v4 under rework</li>
+        <li>minor improvements for v1.1</li>
+        <li>temporarily removed server drop down menu</li>
+        <li>schema adjustment (including non-implemented attributes)</li>
+        <li>backend logic and query rework</li>
+        <li>minor UI adjustments</li>
+    </ul></li></ul>
   license:
     name: GPLv3 Lizenz
     url: https://www.gnu.org/licenses/gpl-3.0.html
   title: Datacat REST API
-  version: 1.2.3
+  version: 1.2.4
 servers:
 - url: /
 paths:

@@ -200,6 +200,12 @@ public class ApiService {
             classProperties.generateUri(serverUrl);
     
             if (classProperties.getClassProperties() != null) {
+                // Check if the offset is higher than the actual count of elements
+                if (queryOffset >= classPropertyItems.size()) {
+                    logger.warn("Query offset {} is higher than the number of class property items {}", queryOffset, classPropertyItems.size());
+                    return null;
+                }
+
                 // Skip the number of elements specified by queryOffset and limit the results to queryLimit
                 int endIndex = Math.min(queryOffset + queryLimit, classPropertyItems.size());
                 List<ClassPropertyItemContractV1> paginatedItems = classPropertyItems.subList(queryOffset, endIndex);
@@ -286,6 +292,12 @@ public class ApiService {
                 dictionary.generateUri(serverUrl);
                 dictionary.transformToLowerCase();
             }
+
+            // Check if the offset is higher than the actual count of elements
+            if (queryOffset >= dictionaryItems.size()) {
+                logger.warn("Query offset {} is higher than the number of dictionary items {}", queryOffset, dictionaryItems.size());
+                return null;
+            }
     
             // Skip the number of elements specified by queryOffset and limit the results to queryLimit
             int endIndex = Math.min(queryOffset + queryLimit, dictionaryItems.size());
@@ -332,7 +344,13 @@ public class ApiService {
             }
         }
     
-        // STEP 4: Apply pagination logic
+        // STEP 4: Check if the offset is higher than the actual count of elements
+        if (queryOffset >= allClasses.size()) {
+            logger.warn("Query offset {} is higher than the number of class items {}", queryOffset, allClasses.size());
+            return null;
+        }
+
+        // STEP 5: Apply pagination logic
         int totalClasses = allClasses.size();
         int endIndex = Math.min(queryOffset + queryLimit, totalClasses);
         List<ClassListItemContractV1Classes> paginatedClasses = allClasses.subList(queryOffset, endIndex);
