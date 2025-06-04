@@ -285,7 +285,7 @@ paths:
         <li>various filter options</li>
         <li>various response contents</li></ul>
       parameters:
-        - name: URI
+        - name: Uri
           in: query
           description: >-
             Optional filtering, URI of a specific dictionary, e.g. <br>
@@ -344,7 +344,7 @@ paths:
         <li>various response contents</li></ul>
       operationId: DictionaryClassesGetWithClasses
       parameters:
-        - name: URI
+        - name: Uri
           in: query
           description: >-
             URI of the dictionary, e.g.<br>
@@ -456,7 +456,7 @@ paths:
         <li>include classes (to be implemented)</li>
         <li>various response contents</li></ul>
       parameters:
-        - name: uri
+        - name: Uri
           in: query
           description: >-
             URI of the class, e.g.<br>

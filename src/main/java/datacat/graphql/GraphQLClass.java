@@ -8,9 +8,9 @@ import org.slf4j.*;
 // =====================================================================================================================
 // C L A S S   Q U E R I E S
 // =====================================================================================================================
-public class GraphQlClass {
+public class GraphQLClass {
 
-    private static final Logger logger = LoggerFactory.getLogger(GraphQlClass.class);
+    private static final Logger logger = LoggerFactory.getLogger(GraphQLClass.class);
 
     // =====================================================================================================================
     // SECTION: CLASS

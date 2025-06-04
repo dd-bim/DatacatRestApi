@@ -19,11 +19,11 @@ import org.slf4j.*;
 // Internal
 import datacat.models.*;
 import datacat.customization.CustomProperties;
-import datacat.graphql.GraphQlClass;
-import datacat.graphql.GraphQlDatacatSpecifics;
-import datacat.graphql.GraphQlDictionary;
-import datacat.graphql.GraphQlLookupData;
-import datacat.graphql.GraphQlProperty;
+import datacat.graphql.GraphQLClass;
+import datacat.graphql.GraphQLDatacatSpecifics;
+import datacat.graphql.GraphQLDictionary;
+import datacat.graphql.GraphQLLookupData;
+import datacat.graphql.GraphQLProperty;
 import datacat.graphql.IdExtractor;
 import datacat.graphql.ResponseDeserializer;
 
@@ -140,7 +140,7 @@ public class ApiService {
     // ENDPOINT: /api/Class/v1
     public ClassContractV1 getClassDetails(String bearerToken, String id, boolean includeProperties, String languageCode) {
 
-        String query = GraphQlClass.getClassDetailsQuery(id, includeProperties, languageCode);
+        String query = GraphQLClass.getClassDetailsQuery(id, includeProperties, languageCode);
         String response = executeQuery(query, bearerToken);
         String rootField = "getSubject";
         
@@ -179,7 +179,7 @@ public class ApiService {
         // logger.info("PAGE SIZE: {}", pageSize);
     
         // STEP 1: Execute the query to fetch the response
-        String query = GraphQlClass.getClassPropertiesQuery(id, pageSize, languageCode);
+        String query = GraphQLClass.getClassPropertiesQuery(id, pageSize, languageCode);
         String response = executeQuery(query, bearerToken);
     
         // STEP 2: Deserialize the outer fields of the response
@@ -234,7 +234,7 @@ public class ApiService {
     public DictionaryResponseContractV1 getDictionaryById(String bearerToken, String id, int queryOffset, int queryLimit) {
         
         // STEP 1: Execute the query to fetch the response
-        String query = GraphQlDictionary.getDictionaryByIdQuery(id, queryLimit);
+        String query = GraphQLDictionary.getDictionaryByIdQuery(id, queryLimit);
         String response = executeQuery(query, bearerToken);
     
         // STEP 2: Deserialize the outer fields of the response
@@ -270,7 +270,7 @@ public class ApiService {
         int pageSize = queryOffset + queryLimit; // Calculate pageSize as the sum of offset and limit
     
         // STEP 1: Execute the query to fetch the response
-        String query = GraphQlDictionary.getAllDictionariesQuery(pageSize);
+        String query = GraphQLDictionary.getAllDictionariesQuery(pageSize);
         String response = executeQuery(query, bearerToken);
     
         // STEP 2: Deserialize the outer fields of the response
@@ -318,7 +318,7 @@ public class ApiService {
     // ENDPOINT: /api/Dictionary/v1/Classes
     public DictionaryClassesResponseContractV1Classes getDictionaryClasses(String bearerToken, String id, int queryOffset, int queryLimit, int pageSize, String languageCode) {
         // STEP 1: Execute the query to fetch the group IDs
-        String dictGroupQuery = GraphQlDictionary.getDictionaryGroupQuery(id, languageCode);
+        String dictGroupQuery = GraphQLDictionary.getDictionaryGroupQuery(id, languageCode);
         String dictGroupResponse = executeQuery(dictGroupQuery, bearerToken);
     
         // STEP 2: Deserialize the group IDs
@@ -329,7 +329,7 @@ public class ApiService {
     
         // STEP 3: Fetch classes for each group
         for (String groupId : groupIds) {
-            String classesQuery = GraphQlDictionary.getGroupClassesQuery(groupId, pageSize, languageCode);
+            String classesQuery = GraphQLDictionary.getGroupClassesQuery(groupId, pageSize, languageCode);
             String classesResponse = executeQuery(classesQuery, bearerToken);
     
             List<ClassListItemContractV1Classes> classes = deserializeResponseAsList(classesResponse, "getBag", ClassListItemContractV1Classes.class);
@@ -378,7 +378,7 @@ public class ApiService {
     // ENDPOINT: /api/Property/v4
     public PropertyContractV4 getPropertyDetails(String bearerToken, String id, boolean includeClasses, String languageCode) {
 
-        String query = GraphQlProperty.getPropertyDetailsQuery(id, includeClasses, languageCode);
+        String query = GraphQLProperty.getPropertyDetailsQuery(id, includeClasses, languageCode);
         String response = executeQuery(query, bearerToken);
         String rootField = "getProperty";
 
@@ -412,7 +412,7 @@ public class ApiService {
     public PropertyClassesContractV1 getPropertyClasses(String bearerToken, String ID, int queryOffset, int queryLimit, String languageCode) {
 
         // STEP 1: Execute the query to fetch the response
-        String query = GraphQlProperty.getPropertyClassesQuery(ID, queryOffset, queryLimit, languageCode);
+        String query = GraphQLProperty.getPropertyClassesQuery(ID, queryOffset, queryLimit, languageCode);
         String response = executeQuery(query, bearerToken);
 
 
@@ -484,7 +484,7 @@ public class ApiService {
     // DONE
     public List<ReferenceDocumentContractV1> getReferenceDocuments(String bearerToken) {
 
-        String query = GraphQlLookupData.getReferenceDocumentsQuery();
+        String query = GraphQLLookupData.getReferenceDocumentsQuery();
         String response = executeQuery(query, bearerToken);
         String rootField = "findDocuments";
 
@@ -499,7 +499,7 @@ public class ApiService {
     // DONE
     public List<LanguageContractV1> getLanguages(String bearerToken) {
 
-        String query = GraphQlLookupData.getLanguagesQuery();
+        String query = GraphQLLookupData.getLanguagesQuery();
         String response = executeQuery(query, bearerToken);
         String rootField = "languages";
 
@@ -515,7 +515,7 @@ public class ApiService {
     // DONE
     public List<CountryContractV1> getCountries(String bearerToken) {
 
-        String query = GraphQlLookupData.getCountriesQuery();
+        String query = GraphQLLookupData.getCountriesQuery();
         String response = executeQuery(query, bearerToken);
         String rootField = "languages";
 
@@ -532,7 +532,7 @@ public class ApiService {
     // DONE
     public StatisticsResponseContractV1 getStatistics() {
 
-        String query = GraphQlDatacatSpecifics.getStatisticsQuery();
+        String query = GraphQLDatacatSpecifics.getStatisticsQuery();
         String response = executeQuery(query, null);
         String rootField = "statistics";
 

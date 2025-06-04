@@ -156,7 +156,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Dictionary")
     public ResponseEntity<DictionaryResponseContractV1> dictionaryGet(
-        @Parameter(name = "URI", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = false) String URI,
+        @Parameter(name = "Uri", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = false) String uri,
         @Parameter(name = "IncludeTestDictionaries", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) @Deprecated Boolean includeTestDictionaries,
         @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
         @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
@@ -169,12 +169,12 @@ public class ApiApiController implements ApiApi {
             int queryLimit = limit != null ? limit : (queryOffset != 0 ? 100 : 1000); // default value is 1000, but 100 if offset is not 0
             int pageSize = queryOffset + queryLimit; // pageSize is the sum of offset and limit
     
-            if (URI != null) {
+            if (uri != null) {
                 String ID;
                 try {
-                    ID = IdExtractor.extractIdFromUri(URI, "/model/");
+                    ID = IdExtractor.extractIdFromUri(uri, "/model/");
                 } catch (URISyntaxException e) {
-                    logger.error("Invalid URI format: {}", URI, e);
+                    logger.error("Invalid URI format: {}", uri, e);
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 } catch (IllegalArgumentException e) {
                     logger.error("Failed to extract ID from URI", e);
@@ -213,21 +213,21 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Dictionary")
     public ResponseEntity<DictionaryClassesResponseContractV1Classes> dictionaryClassesGetWithClasses(
-        @NotNull @Parameter(name = "URI", description = "URI of the dictionary, e.g.<br> DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_<br> CAFM: https://cafm.datacat.org/model/0bf5d7c3-5397-4255-ba9f-9607480f1ee1<br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "URI", required = true) String URI,
+        @NotNull @Parameter(name = "Uri", description = "URI of the dictionary, e.g.<br> DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_<br> CAFM: https://cafm.datacat.org/model/0bf5d7c3-5397-4255-ba9f-9607480f1ee1<br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
         @Parameter(name = "UseNestedClasses", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "UseNestedClasses", required = false) @Deprecated Boolean useNestedClasses,
         @Parameter(name = "ClassType", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClassType", required = false) @Deprecated String classType,
         @Parameter(name = "SearchText", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
         @Parameter(name = "RelatedIfcEntity", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "RelatedIfcEntity", required = false) @Deprecated String relatedIfcEntity,
         @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
         @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit,
-        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
+        @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(required = false) @Deprecated String languageCode
     ) {
 
         String ID;
         try {
-            ID = IdExtractor.extractIdFromUri(URI, "/model/");
+            ID = IdExtractor.extractIdFromUri(uri, "/model/");
         } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", URI, e);
+            logger.error("Invalid URI format: {}", uri, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
             logger.error("Failed to extract ID from URI", e);
@@ -270,7 +270,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Property")
     public ResponseEntity<PropertyContractV4> propertyGet(
-        @NotNull @Parameter(name = "uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "uri", required = true) String uri,
+        @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
         @Parameter(name = "includeClasses", deprecated = true, description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) @Deprecated Boolean includeClasses,
         @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {

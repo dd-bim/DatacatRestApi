@@ -1,12 +1,12 @@
 services:
   datacatapi:
     container_name: datacatapi
+    image: schi11er/datacatrestapi:1.2.5
     build: .
     ports:
       - "3001:3001"
     environment:
       - custom.server-url=https://datacat.org
       - custom.base-path=/graphql
-      - custom.username=Lennart
-      - custom.password=yM25!?afGN
-    image: lh420/datacatrestapi:1.2.4
+      - custom.username=username
+      - custom.password=password

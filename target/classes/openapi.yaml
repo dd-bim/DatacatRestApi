@@ -258,7 +258,7 @@ paths:
           \ IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a"
         explode: true
         in: query
-        name: URI
+        name: Uri
         required: false
         schema:
           type: string
@@ -324,7 +324,7 @@ paths:
           \ IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a"
         explode: true
         in: query
-        name: URI
+        name: Uri
         required: true
         schema:
           type: string
@@ -458,7 +458,7 @@ paths:
           \ CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2"
         explode: true
         in: query
-        name: uri
+        name: Uri
         required: true
         schema:
           type: string
