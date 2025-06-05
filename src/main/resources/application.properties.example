@@ -24,12 +24,7 @@ logging.level.datacat.restapi=DEBUG
 logging.level.org.openapitools.configuration=DEBUG
 logging.level.org.openapitools.OpenApiApplication=DEBUG
 
-# custom.server-url=https://ibpdi.datacat.org
-# custom.base-path=/graphql
-# custom.username=username
-# custom.password=password
-
 custom.server-url=https://ibpdi.datacat.org
 custom.base-path=/graphql
-custom.username=admin
-custom.password=xDraz6wS
+custom.username=username
+custom.password=password

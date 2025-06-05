@@ -8,8 +8,8 @@ services:
     environment:
       - custom.server-url=https://ibpdi.datacat.org
       - custom.base-path=/graphql
-      - custom.username=admin
-      - custom.password=xDraz6wS
+      - custom.username=
+      - custom.password=
     develop:
       watch:
         - action: rebuild
