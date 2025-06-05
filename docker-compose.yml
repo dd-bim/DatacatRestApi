@@ -1,12 +1,16 @@
 services:
   datacatapi:
     container_name: datacatapi
-    image: schi11er/datacatrestapi:1.2.5
+    # image: schi11er/datacatrestapi:1.2.5
     build: .
     ports:
       - "3001:3001"
     environment:
-      - custom.server-url=https://datacat.org
+      - custom.server-url=https://ibpdi.datacat.org
       - custom.base-path=/graphql
-      - custom.username=username
-      - custom.password=password
+      - custom.username=admin
+      - custom.password=xDraz6wS
+    develop:
+      watch:
+        - action: rebuild
+          path: .

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,40 +24,83 @@ import java.util.List;
 public class ResponseDeserializer {
 
     private static final Logger logger = LoggerFactory.getLogger(ResponseDeserializer.class);
-    
+
     private final ObjectMapper objectMapper;
 
     public ResponseDeserializer(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-
     // =====================================================================================================================
-    // D E S E R I A L I Z A T I O N   M E T H O D S
+    // D E S E R I A L I Z A T I O N M E T H O D S
     // =====================================================================================================================
     // get responses
     public <T> T deserializeGetResponse(String response, String rootField, Class<T> modelType) {
         try {
             JsonNode rootNode = objectMapper.readTree(response); // represents the entire JSON response
             logger.debug("Root Node: {}", rootNode);
-            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the rootField node
+            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the
+                                                                       // rootField node
             logger.debug("Data Node: {}", dataNode);
 
             if (dataNode.isMissingNode()) { // checks if the data node is missing (e.g. when the query is invalid)
                 logger.error("No '{}' field in the 'data' response", rootField);
                 return null;
             }
-    
+
             T result = objectMapper.treeToValue(dataNode, modelType); // deserializes the single object
             logger.debug("Deserialized Result: {}", result);
             return result;
-            
+
         } catch (Exception e) {
             logger.error("Error deserializing response", e);
             return null;
         }
     }
 
+    public String extractFirstDictionaryUriFromCollectedBy(String response, String rootField) {
+        try {
+            JsonNode root = objectMapper.readTree(response);
+            JsonNode dataNode = root.path("data").path(rootField);
+            JsonNode nodes = dataNode.path("collectedBy").path("nodes");
+            if (nodes.isArray() && nodes.size() > 0) {
+                JsonNode relatingCollection = nodes.get(0).path("relatingCollection");
+                JsonNode collectedBy = relatingCollection.path("collectedBy").path("nodes");
+                if (collectedBy.isArray() && collectedBy.size() > 0) {
+                    JsonNode innerRelatingCollection = collectedBy.get(0).path("relatingCollection");
+                    String dictionaryUri = innerRelatingCollection.path("dictionaryUri").asText(null);
+                    return dictionaryUri;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error extracting first dictionaryUri", e);
+        }
+        return null;
+    }
+
+    public String extractFirstDictionaryUriFromAssignedTo(String response, String rootField) {
+        try {
+            JsonNode root = objectMapper.readTree(response);
+            JsonNode dataNode = root.path("data").path(rootField);
+            JsonNode assignedTo = dataNode.path("assignedTo").path("nodes");
+            if (assignedTo.isArray() && assignedTo.size() > 0) {
+                JsonNode relatingObject = assignedTo.get(0).path("relatingObject");
+                JsonNode nodes = relatingObject.path("collectedBy").path("nodes");
+                if (nodes.isArray() && nodes.size() > 0) {
+                    JsonNode relatingCollection = nodes.get(0).path("relatingCollection");
+                    JsonNode collectedBy = relatingCollection.path("collectedBy").path("nodes");
+                    if (collectedBy.isArray() && collectedBy.size() > 0) {
+                        JsonNode innerRelatingCollection = collectedBy.get(0).path("relatingCollection");
+                        String dictionaryUri = innerRelatingCollection.path("dictionaryUri").asText(null);
+                        return dictionaryUri;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error extracting first dictionaryUri", e);
+        }
+        return null;
+    }
 
     // =====================================================================================================================
     // outer find response
@@ -82,19 +124,19 @@ public class ResponseDeserializer {
         }
     }
 
-
     // =====================================================================================================================
     // general inner find response (former find response)
     public <T> List<T> deserializeGeneralInnerFindResponse(String response, String rootField, Class<T> modelType) {
         try {
             JsonNode rootNode = objectMapper.readTree(response); // represents the entire JSON response
-            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the rootField node
+            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the
+                                                                       // rootField node
 
             if (dataNode.isMissingNode()) { // checks if the data node is missing (e.g. when the query is invalid)
                 logger.error("No '{}' field in the 'data' response", rootField);
                 return null;
             }
-			
+
             JsonNode nodesNode = dataNode.path("nodes"); // navigates to the nodes array
             logger.debug("Nodes Node: {}", nodesNode);
 
@@ -119,19 +161,19 @@ public class ResponseDeserializer {
         }
     }
 
-
     // =====================================================================================================================
     // inner find response
     public <T> List<T> deserializeClassInnerFindResponse(String response, String rootField, Class<T> modelType) {
         try {
             JsonNode rootNode = objectMapper.readTree(response); // represents the entire JSON response
-            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the rootField node
+            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the
+                                                                       // rootField node
 
             if (dataNode.isMissingNode()) { // checks if the data node is missing (e.g. when the query is invalid)
                 logger.error("No '{}' field in the 'data' response", rootField);
                 return null;
             }
-			
+
             JsonNode nodesNode = dataNode.path("nodes"); // navigates to the nodes array
             logger.debug("Nodes Node: {}", nodesNode);
 
@@ -173,23 +215,24 @@ public class ResponseDeserializer {
     public <T> List<T> deserializeDictionaryInnerFindResponse(String response, String rootField, Class<T> modelType) {
         try {
             JsonNode rootNode = objectMapper.readTree(response); // represents the entire JSON response
-            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the rootField node
+            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the
+                                                                       // rootField node
 
             if (dataNode.isMissingNode()) { // checks if the data node is missing (e.g. when the query is invalid)
                 logger.error("No '{}' field in the 'data' response", rootField);
                 return null;
             }
-			
+
             JsonNode nodesNode = dataNode.path("nodes"); // navigates to the nodes array
             logger.debug("Nodes Node: {}", nodesNode);
 
             // working for dictionary
             // List<T> result = new ArrayList<>();
             // for (JsonNode node : nodesNode) {
-            //     logger.debug("Processing Node: {}", node);
-            //     T item = objectMapper.treeToValue(node, modelType);
-            //     logger.debug("Deserialized Item: {}", item);
-            //     result.add(item);
+            // logger.debug("Processing Node: {}", node);
+            // T item = objectMapper.treeToValue(node, modelType);
+            // logger.debug("Deserialized Item: {}", item);
+            // result.add(item);
             // }
 
             // working for dictionary
@@ -218,36 +261,39 @@ public class ResponseDeserializer {
         }
     }
 
-
     // =====================================================================================================================
     // as list response
     public <T> List<T> deserializeResponseAsList(String response, String rootField, Class<T> modelType) {
         try {
             JsonNode rootNode = objectMapper.readTree(response); // represents the entire JSON response
-            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the rootField node
-    
+            JsonNode dataNode = rootNode.path("data").path(rootField); // skips the 'data' node and navigates to the
+                                                                       // rootField node
+
             if (dataNode.isMissingNode()) { // checks if the data node is missing (e.g. when the query is invalid)
                 logger.error("No '{}' field in the 'data' response", rootField);
                 return new ArrayList<>();
             }
-    
-            JsonNode collectsNode = dataNode.path("collects").path("nodes"); // navigates to collects.nodes[].relatedThings based on the provided JSON structure
+
+            JsonNode collectsNode = dataNode.path("collects").path("nodes"); // navigates to
+                                                                             // collects.nodes[].relatedThings based on
+                                                                             // the provided JSON structure
             List<T> resultList = new ArrayList<>();
-    
-            if (collectsNode.isArray()) { // loops through each node in collects.nodes and access relatedThings array within each node
+
+            if (collectsNode.isArray()) { // loops through each node in collects.nodes and access relatedThings array
+                                          // within each node
                 for (JsonNode node : collectsNode) {
                     JsonNode relatedThingsNode = node.path("relatedThings");
-                    
-                    if (relatedThingsNode.isArray()) { // deserialize each relatedThings entry into instances of modelType and add them to the resultList
+
+                    if (relatedThingsNode.isArray()) { // deserialize each relatedThings entry into instances of
+                                                       // modelType and add them to the resultList
                         List<T> relatedThings = objectMapper.treeToValue(
-                            relatedThingsNode,
-                            objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, modelType)
-                        );
+                                relatedThingsNode,
+                                objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, modelType));
                         resultList.addAll(relatedThings);
                     }
                 }
             }
-    
+
             return resultList;
 
         } catch (Exception e) {

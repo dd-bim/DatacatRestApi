@@ -146,6 +146,8 @@ public class ApiService {
         
         ClassContractV1 classDetails = deserializeGetResponse(response, rootField, ClassContractV1.class);
         logger.debug("Deserialized Class Details Response: {}", classDetails);
+        String dictionaryUri = responseDeserializer.extractFirstDictionaryUriFromCollectedBy(response, rootField);
+        classDetails.setDictionaryUri(dictionaryUri);
 
         if (classDetails != null) {
             String serverUrl = customProperties.getServerUrl(); 
@@ -384,6 +386,8 @@ public class ApiService {
 
         PropertyContractV4 propertyDetails = deserializeGetResponse(response, rootField, PropertyContractV4.class);
         logger.debug("Deserialized Property Details Response: {}", propertyDetails);
+        String dictionaryUri = responseDeserializer.extractFirstDictionaryUriFromAssignedTo(response, rootField);
+        propertyDetails.setDictionaryUri(dictionaryUri);
 
         if (propertyDetails != null) {
             String serverUrl = customProperties.getServerUrl();

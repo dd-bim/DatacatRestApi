@@ -20,11 +20,12 @@ public class GraphQLClass {
     public static String getClassDetailsQuery(String id, boolean includeProperties, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ getSubject(id: \\\"" + id + "\\\") { ")
-                    .append("documentedBy { nodes { relatingDocument { dictionaryUri:id } } } ") // missing logic to transform id into uri
+                    .append("collectedBy { nodes { relatingCollection { collectedBy { nodes { relatingCollection { dictionaryUri:id}}}}}}")
                     .append("activationDateUtc:created ")
                     .append("description ")
-                    .append("documentedBy { nodes { relatingDocument { documentReference:name dictionaryUri:id } } } ");
-        
+                    .append("documentedBy { nodes { relatingDocument { documentReference:name } } } ");
+
+            
         if (languageCode != null && !languageCode.isEmpty()) {
             queryBuilder.append("name(input:{languageTags:\\\"" + languageCode + "\\\"}) ");
         } else {

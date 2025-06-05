@@ -542,7 +542,7 @@ public class PropertyContractV4 {
             this.uri = serverUrl + "/property/" + this.uri;
         }
         if(this.dictionaryUri != null) {
-            this.dictionaryUri = serverUrl + "/dictionary/" + this.dictionaryUri;
+            this.dictionaryUri = serverUrl + "/model/" + this.dictionaryUri;
         }
     }
 

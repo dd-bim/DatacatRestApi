@@ -13,12 +13,13 @@ public class GraphQLProperty {
     public static String getPropertyDetailsQuery(String id, boolean includeClasses, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ getProperty(id: \\\"" + id + "\\\") { ")
+                    .append("assignedTo { nodes { relatingObject { collectedBy { nodes { relatingCollection { collectedBy { nodes { relatingCollection { dictionaryUri:id}}}}}}}}}")
                     .append("uid:id ")
                     .append("uri:id ")
                     .append("code:name ")
                     .append("activationDateUtc:created ")
                     .append("description ")
-                    .append("documentedBy { nodes { relatingDocument { dictionaryUri:id documentReference:name } } } ");
+                    .append("documentedBy { nodes { relatingDocument { documentReference:name } } } ");
 
         if (languageCode != null && !languageCode.isEmpty()) {
             queryBuilder.append("name(input:{languageTags:\\\"" + languageCode + "\\\"}) ");
