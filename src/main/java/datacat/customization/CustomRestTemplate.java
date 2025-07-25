@@ -6,7 +6,6 @@ package datacat.customization;
 // Spring Boot
 import org.springframework.context.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 
 // Java
@@ -32,7 +31,6 @@ public class CustomRestTemplate {
     @Bean("authRestTemplate")
     public RestTemplate authRestTemplate(RestTemplateBuilder builder) {
         return builder
-                .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                 .build();
     }
 
@@ -40,7 +38,6 @@ public class CustomRestTemplate {
     @Bean("securedRestTemplate")
     public RestTemplate securedRestTemplate(RestTemplateBuilder builder) {
         return builder
-                .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                 .interceptors(List.of(tokenInterceptor))
                 .build();
     }

@@ -9,8 +9,6 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
-
 // Logging
 import org.slf4j.*;
 import java.io.IOException;
@@ -26,7 +24,6 @@ public class TokenInterceptor implements ClientHttpRequestInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(TokenInterceptor.class);
     private final AuthenticationService authenticationService;
 
-    @Autowired
     public TokenInterceptor(@Lazy AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }

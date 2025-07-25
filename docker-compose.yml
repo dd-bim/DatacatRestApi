@@ -6,10 +6,10 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - custom.server-url=https://ibpdi.datacat.org
-      - custom.base-path=/graphql
-      - custom.username=
-      - custom.password=
+      - SERVER_URL=http://host.docker.internal:8080
+      - BASE_PATH=/graphql
+      - USERNAME=
+      - PASSWORD=
     develop:
       watch:
         - action: rebuild

@@ -1,30 +1,14 @@
 package datacat.auth;
 
-// =====================================================================================================================
-// I M P O R T   S E C T I O N
-// =====================================================================================================================
-// Spring Boot
 import org.springframework.http.*;
 import org.springframework.context.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
-// Java
 import java.time.*;
-
-// Logging
 import org.slf4j.*;
-
-// GSON
 import com.google.gson.*;
-
-// Jakarta
-import jakarta.annotation.PostConstruct;
-
-// Internal
 import datacat.customization.CustomProperties;
 
 // =====================================================================================================================
@@ -42,7 +26,6 @@ public class AuthenticationService {
     private Instant tokenIssueTime;
     private static final Duration TOKEN_LIFETIME = Duration.ofMinutes(20); // token lifespan
 
-    @Autowired
     public AuthenticationService(CustomProperties customProperties, @Lazy RestTemplate authRestTemplate) {
         this.customProperties = customProperties;
         this.authRestTemplate = authRestTemplate;
@@ -96,10 +79,8 @@ public class AuthenticationService {
     }
 
     // =====================================================================================================================
-    // scheduled authentication methods 
-    @PostConstruct
     public void authenticateOnStartup() {
-        authenticate();  // authenticates at application startup
+        authenticate();
     }
 
     public boolean isTokenExpired() {
