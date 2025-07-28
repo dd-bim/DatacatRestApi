@@ -5,14 +5,20 @@ package datacat.models;
 // =====================================================================================================================
 import java.util.*;
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.format.annotation.DateTimeFormat;
 import datacat.customization.DefaultValuesHandler;
+import datacat.models.deserializers.DictionaryDeserializer;
+import datacat.models.dto.LanguageDto;
+import lombok.Data;
 
 // =====================================================================================================================
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
 @JsonTypeName("DictionaryContract.v1")
+@JsonDeserialize(using = DictionaryDeserializer.class)
+@Data
 public class DictionaryContractV1 {
 
     @JsonProperty("code")
@@ -45,6 +51,9 @@ public class DictionaryContractV1 {
     @JsonProperty("isVerified")
     private Boolean isVerified;
 
+    @JsonProperty("isPrivate")
+    private Boolean isPrivate;
+
     @JsonProperty("license")
     private String license;
 
@@ -74,7 +83,7 @@ public class DictionaryContractV1 {
     private Date lastUpdatedUtc;
 
     @JsonProperty("availableLanguages")
-    private List<String> availableLanguages = new ArrayList<>();
+    private List<LanguageDto> availableLanguages = new ArrayList<>();
 
 
     // =====================================================================================================================
@@ -82,136 +91,6 @@ public class DictionaryContractV1 {
     public DictionaryContractV1() {
         DefaultValuesHandler.ensureDefaults(this);
     }
-
-    
-    // =====================================================================================================================
-    // getters and setters
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getOrganizationCodeOwner() {
-        return organizationCodeOwner;
-    }
-    public void setOrganizationCodeOwner(String organizationCodeOwner) {
-        this.organizationCodeOwner = organizationCodeOwner;
-    }
-
-    public String getOrganizationNameOwner() {
-        return organizationNameOwner;
-    }
-    public void setOrganizationNameOwner(String organizationNameOwner) {
-        this.organizationNameOwner = organizationNameOwner;
-    }
-
-    public String getChangeRequestEmail() {
-        return changeRequestEmail;
-    }
-    public void setChangeRequestEmail(String changeRequestEmail) {
-        this.changeRequestEmail = changeRequestEmail;
-    }
-
-    public String getDefaultLanguageCode() {
-        return defaultLanguageCode;
-    }
-    public void setDefaultLanguageCode(String defaultLanguageCode) {
-        this.defaultLanguageCode = defaultLanguageCode;
-    }
-
-    public Boolean getIsLatestVersion() {
-        return isLatestVersion;
-    }
-    public void setIsLatestVersion(Boolean isLatestVersion) {
-        this.isLatestVersion = isLatestVersion;
-    }
-
-    public Boolean getIsVerified() {
-        return isVerified;
-    }
-    public void setIsVerified(Boolean isVerified) {
-        this.isVerified = isVerified;
-    }
-
-    public String getLicense() {
-        return license;
-    }
-    public void setLicense(String license) {
-        this.license = license;
-    }
-
-    public String getLicenseUrl() {
-        return licenseUrl;
-    }
-    public void setLicenseUrl(String licenseUrl) {
-        this.licenseUrl = licenseUrl;
-    }
-
-    public String getQualityAssuranceProcedure() {
-        return qualityAssuranceProcedure;
-    }
-    public void setQualityAssuranceProcedure(String qualityAssuranceProcedure) {
-        this.qualityAssuranceProcedure = qualityAssuranceProcedure;
-    }
-
-    public String getQualityAssuranceProcedureUrl() {
-        return qualityAssuranceProcedureUrl;
-    }
-    public void setQualityAssuranceProcedureUrl(String qualityAssuranceProcedureUrl) {
-        this.qualityAssuranceProcedureUrl = qualityAssuranceProcedureUrl;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getMoreInfoUrl() {
-        return moreInfoUrl;
-    }
-    public void setMoreInfoUrl(String moreInfoUrl) {
-        this.moreInfoUrl = moreInfoUrl;
-    }
-
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public Date getLastUpdatedUtc() {
-        return lastUpdatedUtc;
-    }
-    public void setLastUpdatedUtc(Date lastUpdatedUtc) {
-        this.lastUpdatedUtc = lastUpdatedUtc;
-    }
-
 
     // =====================================================================================================================
     // business logic method
@@ -224,87 +103,9 @@ public class DictionaryContractV1 {
     public void transformToLowerCase() {
         if(this.code != null) {
             this.code = this.code.toLowerCase();
+        } else {
+            this.code = this.name.toLowerCase();
         }
     }
 
-
-    // standard object methods equals, hashCode, and toString
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DictionaryContractV1 that = (DictionaryContractV1) o;
-        return 
-            Objects.equals(code, that.code) &&
-            Objects.equals(uri, that.uri) &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(version, that.version) &&
-            Objects.equals(organizationCodeOwner, that.organizationCodeOwner) &&
-            Objects.equals(organizationNameOwner, that.organizationNameOwner) &&
-            Objects.equals(changeRequestEmail, that.changeRequestEmail) &&
-            Objects.equals(defaultLanguageCode, that.defaultLanguageCode) &&
-            Objects.equals(isLatestVersion, that.isLatestVersion) &&
-            Objects.equals(isVerified, that.isVerified) &&
-            Objects.equals(license, that.license) &&
-            Objects.equals(licenseUrl, that.licenseUrl) &&
-            Objects.equals(qualityAssuranceProcedure, that.qualityAssuranceProcedure) &&
-            Objects.equals(qualityAssuranceProcedureUrl, that.qualityAssuranceProcedureUrl) &&
-            Objects.equals(status, that.status) &&
-            Objects.equals(moreInfoUrl, that.moreInfoUrl) &&
-            Objects.equals(releaseDate, that.releaseDate) &&
-            Objects.equals(lastUpdatedUtc, that.lastUpdatedUtc) &&
-            Objects.equals(availableLanguages, that.availableLanguages);
-    }
-
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-            code,
-            uri,
-            name,
-            version,
-            organizationCodeOwner,
-            organizationNameOwner,
-            changeRequestEmail,
-            defaultLanguageCode,
-            isLatestVersion,
-            isVerified,
-            license,
-            licenseUrl,
-            qualityAssuranceProcedure,
-            qualityAssuranceProcedureUrl,
-            status,
-            moreInfoUrl,
-            releaseDate,
-            lastUpdatedUtc,
-            availableLanguages
-        );
-    }
-
-    @Override
-    public String toString() {
-        return 
-            "DictionaryContractV1{" +
-            "code=" + code + '\'' +
-            ", uri=" + uri + '\'' +
-            ", name=" + name + '\'' +
-            ", version=" + version + '\'' +
-            ", organizationCodeOwner=" + organizationCodeOwner + '\'' +
-            ", organizationNameOwner=" + organizationNameOwner + '\'' +
-            ", changeRequestEmail=" + changeRequestEmail + '\'' +
-            ", defaultLanguageCode=" + defaultLanguageCode + '\'' +
-            ", isLatestVersion=" + isLatestVersion + '\'' +
-            ", isVerified=" + isVerified + '\'' +
-            ", license=" + license + '\'' +
-            ", licenseUrl=" + licenseUrl + '\'' +
-            ", qualityAssuranceProcedure=" + qualityAssuranceProcedure + '\'' +
-            ", qualityAssuranceProcedureUrl=" + qualityAssuranceProcedureUrl + '\'' +
-            ", status=" + status + '\'' +
-            ", moreInfoUrl=" + moreInfoUrl + '\'' +
-            ", releaseDate=" + releaseDate + '\'' +
-            ", lastUpdatedUtc=" + lastUpdatedUtc + '\'' +
-            ", availableLanguages=" + availableLanguages + '\'' +
-            "}";
-    }
 }

@@ -25,10 +25,11 @@ public class GraphQLLookupData {
     // ENDPOINT: /api/ReferenceDocument/v1
     public static String getReferenceDocumentsQuery() {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ findDocuments(input:{pageSize:100}) { ")
+        queryBuilder.append("{ findExternalDocuments(input:{pageSize:100}) { ")
                     .append("nodes { ")
-                    .append("code:name ")
-                    .append("date:versionDate ")
+                    .append("title:name ")
+                    .append("name ")
+                    .append("date:dateOfPublication ")
                     .append("} ")
                     .append("} }");
         return queryBuilder.toString();
@@ -39,10 +40,10 @@ public class GraphQLLookupData {
     // ENDPOINT: /api/Language/v1
     public static String getLanguagesQuery() {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ languages { ")
+        queryBuilder.append("{ findLanguages { ")
                     .append("nodes { ")
-                    .append("isoCode:languageTag ")
-                    .append("name:displayLanguage ")
+                    .append("isoCode:code ")
+                    .append("name:englishName ")
                     .append("} ")
                     .append("} }");
         return queryBuilder.toString();
@@ -52,10 +53,10 @@ public class GraphQLLookupData {
     // ENDPOINT: /api/Country/v1
     public static String getCountriesQuery() {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ languages { ")
+        queryBuilder.append("{ findCountries { ")
                     .append("nodes { ")
-                    .append("code:id ")
-                    .append("name:displayCountry ")
+                    .append("code ")
+                    .append("name")
                     .append("} ")
                     .append("} }");
         return queryBuilder.toString();
