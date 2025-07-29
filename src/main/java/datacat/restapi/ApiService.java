@@ -325,50 +325,51 @@ public class ApiService {
     // ENDPOINT: /api/Dictionary/v1/Classes
     public DictionaryClassesResponseContractV1Classes getDictionaryClasses(String bearerToken, String id,
             int queryOffset, int queryLimit, int pageSize, String languageCode) {
-        // STEP 1: Execute the query to fetch the dictionary with classes
-        String dictGroupQuery = GraphQLDictionary.getDictionaryGroupQuery(id, languageCode);
-        String dictGroupResponse = executeQuery(dictGroupQuery, bearerToken);
+        
+        String response = executeQuery(
+            GraphQLDictionary.getDictionaryGroupQuery(id, languageCode), 
+            bearerToken
+        );
 
-        String rootField = "getDictionary";
-
-        // STEP 2: Deserialize the dictionary response with embedded classes
-        DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeGetResponse(dictGroupResponse,
-                rootField, DictionaryClassesResponseContractV1Classes.class);
+        DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeGetResponse(response,
+                "getDictionary", DictionaryClassesResponseContractV1Classes.class);
         log.debug("Deserialized Dictionary Classes Response: {}", dictionaryResponse);
 
-        // STEP 3: Extract classes from the concepts field and apply business logic
-        if (dictionaryResponse != null && dictionaryResponse.getClasses() != null) {
-            List<ClassListItemContractV1Classes> allClasses = dictionaryResponse.getClasses();
-
-            for (ClassListItemContractV1Classes classItem : allClasses) {
-                classItem.generateUri(serverUrl);
-                classItem.transformToLowerCase();
-            }
-
-            // STEP 4: Check if the offset is higher than the actual count of elements
-            if (queryOffset >= allClasses.size()) {
-                log.warn("Query offset {} is higher than the number of class items {}", queryOffset,
-                        allClasses.size());
-                return null;
-            }
-
-            // STEP 5: Apply pagination logic
-            int totalClasses = allClasses.size();
-            int endIndex = Math.min(queryOffset + queryLimit, totalClasses);
-            List<ClassListItemContractV1Classes> paginatedClasses = allClasses.subList(queryOffset, endIndex);
-
-            // Update the response with paginated classes
-            dictionaryResponse.setClasses(paginatedClasses);
-            dictionaryResponse.setClassesTotalCount(totalClasses);
-            dictionaryResponse.setClassesOffset(queryOffset);
-            dictionaryResponse.setClassesCount(paginatedClasses.size());
+        if (dictionaryResponse == null) {
+            return null;
         }
 
         // Apply business logic to dictionary fields
-        if (dictionaryResponse != null) {
-            dictionaryResponse.generateUri(serverUrl);
-            dictionaryResponse.transformToLowerCase();
+        dictionaryResponse.generateUri(serverUrl);
+        dictionaryResponse.transformToLowerCase();
+
+        List<ClassListItemContractV1Classes> allClasses = dictionaryResponse.getClasses();
+        if (allClasses == null || allClasses.isEmpty()) {
+            return dictionaryResponse;
         }
+
+        // Apply URI generation and transformation to all classes
+        allClasses.forEach(classItem -> {
+            classItem.generateUri(serverUrl);
+            classItem.transformToLowerCase();
+        });
+
+        // Check pagination bounds
+        if (queryOffset >= allClasses.size()) {
+            log.warn("Query offset {} is higher than the number of class items {}", queryOffset, allClasses.size());
+            return null;
+        }
+
+        // Apply pagination
+        int totalClasses = allClasses.size();
+        int endIndex = Math.min(queryOffset + queryLimit, totalClasses);
+        List<ClassListItemContractV1Classes> paginatedClasses = allClasses.subList(queryOffset, endIndex);
+
+        // Update response with paginated data
+        dictionaryResponse.setClasses(paginatedClasses);
+        dictionaryResponse.setClassesTotalCount(totalClasses);
+        dictionaryResponse.setClassesOffset(queryOffset);
+        dictionaryResponse.setClassesCount(paginatedClasses.size());
 
         return dictionaryResponse;
     }
@@ -381,32 +382,19 @@ public class ApiService {
     // =====================================================================================================================
     // SECTION: PROPERTY
     // =====================================================================================================================
-    // ENDPOINT: /api/Property/v4
-    public PropertyContractV4 getPropertyDetails(String bearerToken, String id, boolean includeClasses,
-            String languageCode) {
+    // ENDPOINT: /api/Property/v5
+    public PropertyContractV5 getPropertyDetails(String bearerToken, String id, String languageCode) {
+        String response = executeQuery(
+            GraphQLProperty.getPropertyDetailsQuery(id, languageCode), 
+            bearerToken
+        );
 
-        String query = GraphQLProperty.getPropertyDetailsQuery(id, includeClasses, languageCode);
-        String response = executeQuery(query, bearerToken);
-        String rootField = "getProperty";
-
-        PropertyContractV4 propertyDetails = deserializeGetResponse(response, rootField, PropertyContractV4.class);
+        PropertyContractV5 propertyDetails = deserializeGetResponse(response, "getProperty", PropertyContractV5.class);
         log.debug("Deserialized Property Details Response: {}", propertyDetails);
-        String dictionaryUri = responseDeserializer.extractFirstDictionaryUriFromAssignedTo(response, rootField);
-        propertyDetails.setDictionaryUri(dictionaryUri);
 
         if (propertyDetails != null) {
             propertyDetails.generateUri(serverUrl);
             propertyDetails.transformToLowerCase();
-
-            if (includeClasses && propertyDetails.getPropertyClasses() != null) {
-                for (PropertyClassContractV4 classItem : propertyDetails.getPropertyClasses()) {
-                    classItem.generateUri(serverUrl);
-                    classItem.transformToLowerCase();
-                }
-            } else {
-                log.warn("Classes are not included or are null for property ID: {}", id);
-            }
-
         }
 
         return propertyDetails;

@@ -264,12 +264,11 @@ public class ApiApiController implements ApiApi {
     // =====================================================================================================================
     // SECTION: PROPERTY
     // =====================================================================================================================
-    // ENDPOINT: /api/Property/v4
+    // ENDPOINT: /api/Property/v5
     @Override
     @Tag(name = "Property")
-    public ResponseEntity<PropertyContractV4> propertyGet(
+    public ResponseEntity<PropertyContractV5> propertyGet(
         @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br>https://datacat.org/property/6<br>", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
-        @Parameter(name = "includeClasses", deprecated = true, description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) @Deprecated Boolean includeClasses,
         @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
         
@@ -287,10 +286,9 @@ public class ApiApiController implements ApiApi {
         try {
             HttpHeaders headers = authenticationService.getAuthorizationHeaders();
             String bearerToken = headers.getFirst("Authorization").substring(7);
-            boolean includeClassesFlag = includeClasses != null ? includeClasses : false; // default value is false
             String language = languageCode != null ? languageCode : "de"; // default value is "de" (german)
 
-            PropertyContractV4 propertyDetails = apiService.getPropertyDetails(bearerToken, ID, includeClassesFlag, language);
+            PropertyContractV5 propertyDetails = apiService.getPropertyDetails(bearerToken, ID, language);
             return new ResponseEntity<>(propertyDetails, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {

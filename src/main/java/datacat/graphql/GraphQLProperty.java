@@ -9,17 +9,29 @@ public class GraphQLProperty {
     // =====================================================================================================================
     // SECTION: PROPERTY
     // =====================================================================================================================
-    // ENDPOINT: /api/Property/v4
-    public static String getPropertyDetailsQuery(String id, boolean includeClasses, String languageCode) {
+    // ENDPOINT: /api/Property/v5
+    public static String getPropertyDetailsQuery(String id, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ getProperty(id: \\\"" + id + "\\\") { ")
-                    .append("assignedTo { nodes { relatingObject { collectedBy { nodes { relatingCollection { collectedBy { nodes { relatingCollection { dictionaryUri:id}}}}}}}}}")
-                    .append("uid:id ")
-                    .append("uri:id ")
-                    .append("code:name ")
-                    .append("activationDateUtc:created ")
-                    .append("description ")
-                    .append("documentedBy { nodes { relatingDocument { documentReference:name } } } ");
+                .append("dictionary { dictionaryUri:id } ")
+                .append("activationDateUtc:created ")
+                .append("description ")
+                .append("referenceDocuments { documentReference:name } ")
+                .append("con:countryOfOrigin { countryOfOrigin:code }")
+                .append("def:definition { texts { definition:text } } ")
+                .append("dep:deprecationExplanation { texts { deprecationExplanation:text } } ")
+                .append("status ")
+                .append("revisionDateUtc:lastModified ")
+                .append("versionDateUtc:lastModified ")
+                .append("uid:id ")
+                .append("uri:id ")
+                .append("majorVersion ")
+                .append("minorVersion ")
+                .append("allowedValues:possibleValues { values { sortNumber:order orderedValue { uri:id value:name code:name } } } ")
+                .append("units { name } ")
+                .append("dataType ")
+                .append("examples { texts { example:text } } ")
+                .append("code:name ");
 
         if (languageCode != null && !languageCode.isEmpty()) {
             queryBuilder.append("name(input:{languageTags:\\\"" + languageCode + "\\\"}) ");
@@ -27,28 +39,7 @@ public class GraphQLProperty {
             queryBuilder.append("name ");
         }
 
-        queryBuilder.append("revisionDateUtc:lastModified ")
-                    .append("versionDateUtc:versionDate ")
-                    .append("versionNumber:versionId ");
-
-        if (includeClasses == true) {
-            queryBuilder.append(getPropertyClassQuery());
-        }
         queryBuilder.append("} }");
-
-        return queryBuilder.toString();
-    }
-
-    // classes
-    public static String getPropertyClassQuery() {
-        StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("propertyClasses:assignedTo { ")
-                    .append("nodes { ")
-                    .append("relatingObject {")
-                    .append("uri:id ")
-                    .append("code:name ")
-                    .append("name ")
-                    .append("} } }");
 
         return queryBuilder.toString();
     }
@@ -56,25 +47,24 @@ public class GraphQLProperty {
     // =====================================================================================================================
     // ENDPOINT: /api/Property/Relations/v1
 
-
     // =====================================================================================================================
     // ENDPOINT: /api/Property/Classes/v1
     // classes
     public static String getPropertyClassesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("{ findProperties(input:{pageSize: " + queryLimit + " idIn: \\\"" + id + "\\\"}) {" )
-                    .append("nodes { ")
-                    .append("assignedTo { ")
-                    .append("nodes { ")
-                    .append("relatingObject { ")
-                    .append("uri:id ")
-                    .append("code:name ")
-                    .append("name ")
-                    .append("} ")
-                    .append("} ")
-                    .append("} ")
-                    .append("} ")
-                    .append("} }");
+        queryBuilder.append("{ findProperties(input:{pageSize: " + queryLimit + " idIn: \\\"" + id + "\\\"}) {")
+                .append("nodes { ")
+                .append("assignedTo { ")
+                .append("nodes { ")
+                .append("relatingObject { ")
+                .append("uri:id ")
+                .append("code:name ")
+                .append("name ")
+                .append("} ")
+                .append("} ")
+                .append("} ")
+                .append("} ")
+                .append("} }");
 
         return queryBuilder.toString();
     }

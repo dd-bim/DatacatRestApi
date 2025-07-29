@@ -12,7 +12,7 @@ import datacat.models.DictionaryClassesResponseContractV1Classes;
 import datacat.models.DictionaryResponseContractV1;
 import datacat.models.LanguageContractV1;
 import datacat.models.PropertyClassesContractV1;
-import datacat.models.PropertyContractV4;
+import datacat.models.PropertyContractV5;
 import datacat.models.ReferenceDocumentContractV1;
 import datacat.models.StatisticsResponseContractV1;
 import datacat.models.UnitContractV1;
@@ -681,7 +681,7 @@ public interface ApiApi {
 
 
     /**
-     * GET /api/Property/v4 : Get Property details
+     * GET /api/Property/v5 : Get Property details
      * Due to incompatibility the following features of this endpoint are not implemented (yet): &lt;br&gt; &lt;ul&gt;&lt;li&gt;include language code filter (to be implemented)&lt;/li&gt; &lt;li&gt;include classes (to be implemented)&lt;/li&gt; &lt;li&gt;various response contents&lt;/li&gt;&lt;/ul&gt;
      *
      * @param uri URI of the class, e.g.&lt;br&gt; DATACAT: https://datacat.org/property/6&lt;br&gt; CAFM: https://cafm.datacat.org/property/&lt;br&gt; IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2 (required)
@@ -696,19 +696,18 @@ public interface ApiApi {
         tags = { "Property" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = PropertyContractV4.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = PropertyContractV5.class))
             })
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/Property/v4",
+        value = "/api/Property/v5",
         produces = { "application/json" }
     )
     
-    default ResponseEntity<PropertyContractV4> propertyGet(
+    default ResponseEntity<PropertyContractV5> propertyGet(
         @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
-        @Parameter(name = "includeClasses", deprecated = true, description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) @Deprecated Boolean includeClasses,
         @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
         getRequest().ifPresent(request -> {
