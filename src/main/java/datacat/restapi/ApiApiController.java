@@ -54,7 +54,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Class")
     public ResponseEntity<ClassContractV1> classGet(
-        @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br> CAFM: https://cafm.datacat.org/class/442.90<br> IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
+        @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br> https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br>", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
         @Parameter(name = "IncludeClassProperties", description = "Use this option to include properties of the class. By default, it is set to true.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties,
         @Parameter(name = "IncludeChildClassReferences", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeChildClassReferences", required = false) @Deprecated Boolean includeChildClassReferences,
         @Parameter(name = "IncludeClassRelations", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeClassRelations", required = false) @Deprecated Boolean includeClassRelations,
@@ -104,7 +104,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Class")
     public ResponseEntity<ClassPropertiesContractV1> classPropertiesGet(
-        @NotNull @Parameter(name = "ClassUri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br> CAFM: https://cafm.datacat.org/class/442.90<br> IBPDI: https://ibpdi.datacat.org/class/c102a240-c3f2-11ec-ac20-5d24a21d559a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClassUri", required = true) String classUri,
+        @NotNull @Parameter(name = "ClassUri", description = "URI of the class, e.g.<br>https://datacat.org/class/41e55123-7bf4-4e2f-8c04-a713f3a087c6<br>", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClassUri", required = true) String classUri,
         @Parameter(name = "PropertySet", deprecated = true, description = "'Optional: Property set to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertySet", required = false) @Deprecated String propertySet,
         @Parameter(name = "PropertyCode", deprecated = true, description = "'Optional: Property code to filter the properties'<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyCode", required = false) @Deprecated String propertyCode,
         @Parameter(name = "SearchText", deprecated = true, description = "\"Optional: Search text to filter the properties.<br> Search is done in the property name, property description and property code.<br> Cannot be used together with PropertySet or PropertyCode.\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
@@ -154,7 +154,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Dictionary")
     public ResponseEntity<DictionaryResponseContractV1> dictionaryGet(
-        @Parameter(name = "Uri", description = "Optional filtering, URI of a specific dictionary, e.g. <br> DATACAT: https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>  CAFM: <br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = false) String uri,
+        @Parameter(name = "Uri", description = "Optional filtering, URI of a specific dictionary, e.g. <br>https://datacat.org/model/34mDkKGrz2FhzL8laZhy9W<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = false) String uri,
         @Parameter(name = "IncludeTestDictionaries", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "IncludeTestDictionaries", required = false) @Deprecated Boolean includeTestDictionaries,
         @Parameter(name = "Offset", description = "Zero-based offset of the first item to be returned. Default is 0.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) Integer offset,
         @Parameter(name = "Limit", description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br>", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) Integer limit
@@ -211,7 +211,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Dictionary")
     public ResponseEntity<DictionaryClassesResponseContractV1Classes> dictionaryClassesGetWithClasses(
-        @NotNull @Parameter(name = "Uri", description = "URI of the dictionary, e.g.<br> DATACAT: https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_<br> CAFM: https://cafm.datacat.org/model/0bf5d7c3-5397-4255-ba9f-9607480f1ee1<br> IBPDI: https://ibpdi.datacat.org/model/800da571-b537-4549-9237-11568678ef9a", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
+        @NotNull @Parameter(name = "Uri", description = "URI of the dictionary, e.g.<br>https://datacat.org/model/2CCiym3eLCQOUDoIy7tUE_<br>", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
         @Parameter(name = "UseNestedClasses", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "UseNestedClasses", required = false) @Deprecated Boolean useNestedClasses,
         @Parameter(name = "ClassType", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "ClassType", required = false) @Deprecated String classType,
         @Parameter(name = "SearchText", deprecated = true, description = "! This option is not compatible with datacat.org or any of its instances", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
@@ -268,7 +268,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Property")
     public ResponseEntity<PropertyContractV4> propertyGet(
-        @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
+        @NotNull @Parameter(name = "Uri", description = "URI of the class, e.g.<br>https://datacat.org/property/6<br>", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "Uri", required = true) String uri,
         @Parameter(name = "includeClasses", deprecated = true, description = "\"Set to true to get list of classes where property is used (only classes of the same dictionary as the property).<br> Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.<br> Preferred way to get the classes is by using /api/Property/Classes/v1\"<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "includeClasses", required = false) @Deprecated Boolean includeClasses,
         @Parameter(name = "languageCode", deprecated = true, description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
@@ -314,7 +314,7 @@ public class ApiApiController implements ApiApi {
     @Override
     @Tag(name = "Property")
     public ResponseEntity<PropertyClassesContractV1> propertyClassesGet(
-        @NotNull @Parameter(name = "PropertyUri", description = "URI of the class, e.g.<br> DATACAT: https://datacat.org/property/6<br> CAFM: https://cafm.datacat.org/property/<br> IBPDI: https://ibpdi.datacat.org/property/e82d1d40-1499-4c56-9729-00fc2414dac2", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyUri", required = true) String propertyUri,
+        @NotNull @Parameter(name = "PropertyUri", description = "URI of the class, e.g.<br>https://datacat.org/property/6<br>", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "PropertyUri", required = true) String propertyUri,
         @Parameter(name = "SearchText", description = "Search text to filter classes<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "SearchText", required = false) String searchText,
         @Parameter(name = "Offset", deprecated = true, description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
         @Parameter(name = "Limit", deprecated = true, description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,

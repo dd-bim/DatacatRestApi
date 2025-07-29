@@ -38,12 +38,14 @@ public class ApiService {
     private final RestTemplate restTemplate;
     private final CustomProperties customProperties;
     private final ResponseDeserializer responseDeserializer;
+    private final String serverUrl; // Cache the server URL to avoid repeated calls
 
     public ApiService(CustomProperties customProperties, RestTemplateBuilder restTemplateBuilder,
             ResponseDeserializer responseDeserializer) {
         this.restTemplate = restTemplateBuilder.build();
         this.customProperties = customProperties;
         this.responseDeserializer = responseDeserializer;
+        this.serverUrl = customProperties.getServerUrl(); // Initialize once
     }
 
     // =====================================================================================================================
@@ -55,8 +57,8 @@ public class ApiService {
     public String executeQuery(String query, String bearerToken) {
         log.info(" E X E C U T I O N ");
 
-        String url = customProperties.getServerUrl() + customProperties.getBasePath(); // URL string creation from
-                                                                                       // custom application properties
+        String url = serverUrl + customProperties.getBasePath(); // URL string creation from
+                                                                 // custom application properties
         log.debug("URL: {}", url);
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -140,7 +142,6 @@ public class ApiService {
         // Dictionary URI wird jetzt wieder im Deserializer extrahiert, aber aus einfacher dictionary Struktur
 
         if (classDetails != null) {
-            String serverUrl = customProperties.getServerUrl();
             classDetails.generateUri(serverUrl);
             classDetails.transformToLowerCase();
 
@@ -182,15 +183,22 @@ public class ApiService {
         log.debug("Deserialized Outer Fields of Class Properties Response: {}", classProperties);
 
         // STEP 3: Deserialize the inner fields (nodes array) of the response
-        List<ClassPropertyItemContractV1> classPropertyItems = deserializeClassInnerFindResponse(response, rootField,
-                ClassPropertyItemContractV1.class);
+        List<ClassPropertyContractV1> classPropertyItems = deserializeClassInnerFindResponse(response, rootField,
+                ClassPropertyContractV1.class);
         log.debug("Deserialized Inner Fields (Nodes) of Class Properties Response: {}", classPropertyItems);
 
         // STEP 4: Combine the results
         if (classProperties != null) {
             classProperties.setClassProperties(classPropertyItems);
 
-            String serverUrl = customProperties.getServerUrl();
+            // Extract and set classUri from the first node if available
+            String extractedClassUri = responseDeserializer.extractClassUriFromFindResponse(response, rootField);
+            if (extractedClassUri != null) {
+                classProperties.setClassUri(extractedClassUri);
+                log.debug("Extracted classUri from response: {}", extractedClassUri);
+            }
+
+            // Generate URIs for the classProperties object and individual properties
             classProperties.generateUri(serverUrl);
 
             if (classProperties.getClassProperties() != null) {
@@ -204,10 +212,10 @@ public class ApiService {
                 // Skip the number of elements specified by queryOffset and limit the results to
                 // queryLimit
                 int endIndex = Math.min(queryOffset + queryLimit, classPropertyItems.size());
-                List<ClassPropertyItemContractV1> paginatedItems = classPropertyItems.subList(queryOffset, endIndex);
+                List<ClassPropertyContractV1> paginatedItems = classPropertyItems.subList(queryOffset, endIndex);
                 log.debug("Total Class Property Items: {}", classPropertyItems.size());
                 log.debug("SubList from {} to {}", queryOffset, endIndex);
-                for (ClassPropertyItemContractV1 property : paginatedItems) {
+                for (ClassPropertyContractV1 property : paginatedItems) {
                     property.generateUri(serverUrl);
                     property.transformToLowerCase();
                 }
@@ -249,7 +257,6 @@ public class ApiService {
         if (dictionaryResponse != null) {
             dictionaryResponse.setDictionaries(dictionaryItems);
 
-            String serverUrl = customProperties.getServerUrl();
             for (DictionaryContractV1 dictionary : dictionaryResponse.getDictionaries()) {
                 dictionary.generateUri(serverUrl);
                 dictionary.transformToLowerCase();
@@ -287,7 +294,6 @@ public class ApiService {
         if (dictionaryResponse != null) {
             dictionaryResponse.setDictionaries(dictionaryItems);
 
-            String serverUrl = customProperties.getServerUrl();
             for (DictionaryContractV1 dictionary : dictionaryResponse.getDictionaries()) {
                 dictionary.generateUri(serverUrl);
                 dictionary.transformToLowerCase();
@@ -324,7 +330,6 @@ public class ApiService {
         String dictGroupResponse = executeQuery(dictGroupQuery, bearerToken);
 
         String rootField = "getDictionary";
-        String serverUrl = customProperties.getServerUrl();
 
         // STEP 2: Deserialize the dictionary response with embedded classes
         DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeGetResponse(dictGroupResponse,
@@ -390,7 +395,6 @@ public class ApiService {
         propertyDetails.setDictionaryUri(dictionaryUri);
 
         if (propertyDetails != null) {
-            String serverUrl = customProperties.getServerUrl();
             propertyDetails.generateUri(serverUrl);
             propertyDetails.transformToLowerCase();
 
@@ -435,7 +439,6 @@ public class ApiService {
         if (propertyClasses != null) {
             propertyClasses.setPropertyClasses(propertyClassItems);
 
-            String serverUrl = customProperties.getServerUrl();
             propertyClasses.generateUri(serverUrl);
 
             if (propertyClasses.getPropertyClasses() != null) {

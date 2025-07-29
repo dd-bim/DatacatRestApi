@@ -260,4 +260,34 @@ public class ResponseDeserializer {
             return null;
         }
     }
+    
+    /**
+     * Extrahiert die classUri aus der findSubjects Response
+     * findSubjects -> nodes[0] -> classUri
+     */
+    public String extractClassUriFromFindResponse(String response, String rootField) {
+        try {
+            JsonNode rootNode = objectMapper.readTree(response);
+            JsonNode dataNode = rootNode.path("data").path(rootField);
+            
+            if (dataNode.isMissingNode()) {
+                logger.error("No '{}' field in the 'data' response", rootField);
+                return null;
+            }
+            
+            JsonNode nodesNode = dataNode.path("nodes");
+            if (nodesNode.isArray() && nodesNode.size() > 0) {
+                JsonNode firstNode = nodesNode.get(0);
+                if (firstNode.has("classUri")) {
+                    String classUri = firstNode.get("classUri").asText();
+                    logger.debug("Extracted classUri: {}", classUri);
+                    return classUri;
+                }
+            }
+            
+        } catch (Exception e) {
+            logger.error("Error extracting classUri from response", e);
+        }
+        return null;
+    }
 }

@@ -42,8 +42,6 @@ public class GraphQLClass {
                 .append("majorVersion ")
                 .append("minorVersion ")
                 .append("classType:recordType ");
-        // .append("assignedCollections { nodes {
-        // parentClassReference:relatedCollections { uri:id name } } } ");
 
         if (includeProperties == true) {
             queryBuilder.append(getClassPropertyQuery());
@@ -86,6 +84,7 @@ public class GraphQLClass {
         queryBuilder.append("{ findSubjects(input:{pageSize: " + pageSize + " idIn: \\\"" + id + "\\\"} ) { ")
                 .append("pageInfo { count:pageElements } ")
                 .append("totalCount:totalElements ")
+                .append("count:totalElements ")
                 .append("nodes { ")
                 .append("classProperties:properties { ")
                 .append("name ")
@@ -93,6 +92,12 @@ public class GraphQLClass {
                 .append("uid:id ")
                 .append("uri:id ")
                 .append("propertyCode:name ")
+                .append("allowedValues:possibleValues { values { sortNumber:order orderedValue { uri:id value:name code:name } } } ")
+                .append("units { name } ")
+                .append("def:definition { texts { definition:text } } ")
+                .append("dataType ")
+                .append("examples { texts { example:text } } ")
+                .append("dictionary { propertyDictionaryUri:id } ")
                 .append("}")
                 .append("classUri:id ")
                 .append("}")
@@ -100,28 +105,5 @@ public class GraphQLClass {
 
         return queryBuilder.toString();
     }
-
-    // worked properly so far without pageSize
-    // public static String getClassPropertiesQuery(String id, int queryOffset, int
-    // queryLimit, String languageCode) {
-    // StringBuilder queryBuilder = new StringBuilder();
-    // queryBuilder.append("{ findSubjects(input:{pageSize: " + queryLimit + " idIn:
-    // \\\"" + id + "\\\"} ) { ")
-    // .append("pageInfo { count:pageElements } ")
-    // .append("totalCount:totalElements ")
-    // .append("nodes { ")
-    // .append("classProperties:properties { ")
-    // .append("name ")
-    // .append("description ")
-    // .append("uid:id ")
-    // .append("uri:id ")
-    // .append("propertyCode:name ")
-    // .append("}")
-    // .append("classUri:id ")
-    // .append("}")
-    // .append("} }");
-
-    // return queryBuilder.toString();
-    // }
 
 }
