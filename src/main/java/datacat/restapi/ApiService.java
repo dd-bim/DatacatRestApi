@@ -13,7 +13,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import java.util.List;
 
 // Logging
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 
 // Internal
 import datacat.models.*;
@@ -23,7 +23,6 @@ import datacat.graphql.GraphQLDatacatSpecifics;
 import datacat.graphql.GraphQLDictionary;
 import datacat.graphql.GraphQLLookupData;
 import datacat.graphql.GraphQLProperty;
-import datacat.graphql.IdExtractor;
 import datacat.graphql.ResponseDeserializer;
 
 // =====================================================================================================================
@@ -33,20 +32,18 @@ import datacat.graphql.ResponseDeserializer;
 // perspectively the service will include further parsing and processing of the response
 // =====================================================================================================================
 @Service
+@Slf4j
 public class ApiService {
-    private static final Logger logger = LoggerFactory.getLogger(ApiService.class);
 
     private final RestTemplate restTemplate;
     private final CustomProperties customProperties;
     private final ResponseDeserializer responseDeserializer;
-    private final IdExtractor idExtractor; // no idea why marked as not in use
 
     public ApiService(CustomProperties customProperties, RestTemplateBuilder restTemplateBuilder,
-            ResponseDeserializer responseDeserializer, IdExtractor idExtractor) {
+            ResponseDeserializer responseDeserializer) {
         this.restTemplate = restTemplateBuilder.build();
         this.customProperties = customProperties;
         this.responseDeserializer = responseDeserializer;
-        this.idExtractor = idExtractor;
     }
 
     // =====================================================================================================================
@@ -56,45 +53,45 @@ public class ApiService {
     // =====================================================================================================================
     // main logic for query execution
     public String executeQuery(String query, String bearerToken) {
-        logger.info(" E X E C U T I O N ");
+        log.info(" E X E C U T I O N ");
 
         String url = customProperties.getServerUrl() + customProperties.getBasePath(); // URL string creation from
                                                                                        // custom application properties
-        logger.debug("URL: {}", url);
+        log.debug("URL: {}", url);
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         if (bearerToken != null) {
             requestHeaders.setBearerAuth(bearerToken);
-            logger.debug("Bearer Token used: {}", bearerToken);
-            // logger.debug("Bearer Token used.");
+            log.debug("Bearer Token used: {}", bearerToken);
+            // log.debug("Bearer Token used.");
         } else {
-            logger.debug("No Bearer Token used");
+            log.debug("No Bearer Token used");
         }
 
         String requestBody = "{\"query\":\"" + query + "\"}";
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
-        logger.debug("Request Headers: {}", requestHeaders);
-        logger.debug("Request Body: {}", requestBody);
+        log.debug("Request Headers: {}", requestHeaders);
+        log.debug("Request Body: {}", requestBody);
 
         try {
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-            logger.debug("Raw response from GraphQLService: {}", response.getBody());
+            log.debug("Raw response from GraphQLService: {}", response.getBody());
             return response.getBody();
         } catch (HttpServerErrorException e) {
-            logger.error("Server error when executing query: status code = {}, response body = {}, headers = {}",
+            log.error("Server error when executing query: status code = {}, response body = {}, headers = {}",
                     e.getStatusCode(), e.getResponseBodyAsString(), e.getResponseHeaders());
             throw new RuntimeException("Server error", e);
         } catch (HttpClientErrorException e) {
-            logger.error("Client error when executing query: status code = {}, response body = {}, headers = {}",
+            log.error("Client error when executing query: status code = {}, response body = {}, headers = {}",
                     e.getStatusCode(), e.getResponseBodyAsString(), e.getResponseHeaders());
             throw new RuntimeException("Client error", e);
         } catch (ResourceAccessException e) {
-            logger.error("Resource access error when executing query: {}", e.getMessage());
+            log.error("Resource access error when executing query: {}", e.getMessage());
             throw new RuntimeException("Resource access error", e);
         } catch (Exception e) {
-            logger.error("Error executing query", e);
+            log.error("Error executing query", e);
             throw new RuntimeException("Error executing query", e);
         }
     }
@@ -121,14 +118,6 @@ public class ApiService {
         return responseDeserializer.deserializeClassInnerFindResponse(response, rootField, modelType);
     }
 
-    private <T> List<T> deserializeResponseAsList(String response, String rootField, Class<T> modelType) {
-        return responseDeserializer.deserializeResponseAsList(response, rootField, modelType);
-    }
-
-    private List<String> extractGroupIdsFromResponse(String groupsResponse) {
-        return idExtractor.extractGroupIdsFromResponse(groupsResponse);
-    }
-
     // =====================================================================================================================
     // E N D P O I N T L O G I C
     // specified endpoint logic for each query
@@ -147,9 +136,8 @@ public class ApiService {
         String rootField = "getSubject";
 
         ClassContractV1 classDetails = deserializeGetResponse(response, rootField, ClassContractV1.class);
-        logger.debug("Deserialized Class Details Response: {}", classDetails);
-        String dictionaryUri = responseDeserializer.extractFirstDictionaryUriFromCollectedBy(response, rootField);
-        classDetails.setDictionaryUri(dictionaryUri);
+        log.debug("Deserialized Class Details Response: {}", classDetails);
+        // Dictionary URI wird jetzt wieder im Deserializer extrahiert, aber aus einfacher dictionary Struktur
 
         if (classDetails != null) {
             String serverUrl = customProperties.getServerUrl();
@@ -162,7 +150,7 @@ public class ApiService {
                     property.transformToLowerCase();
                 }
             } else {
-                logger.warn("Class properties are not included or are null for class ID: {}", id);
+                log.warn("Class properties are not included or are null for class ID: {}", id);
             }
         }
 
@@ -191,12 +179,12 @@ public class ApiService {
 
         ClassPropertiesContractV1 classProperties = deserializeOuterFindResponse(response, rootField,
                 ClassPropertiesContractV1.class);
-        logger.debug("Deserialized Outer Fields of Class Properties Response: {}", classProperties);
+        log.debug("Deserialized Outer Fields of Class Properties Response: {}", classProperties);
 
         // STEP 3: Deserialize the inner fields (nodes array) of the response
         List<ClassPropertyItemContractV1> classPropertyItems = deserializeClassInnerFindResponse(response, rootField,
                 ClassPropertyItemContractV1.class);
-        logger.debug("Deserialized Inner Fields (Nodes) of Class Properties Response: {}", classPropertyItems);
+        log.debug("Deserialized Inner Fields (Nodes) of Class Properties Response: {}", classPropertyItems);
 
         // STEP 4: Combine the results
         if (classProperties != null) {
@@ -208,7 +196,7 @@ public class ApiService {
             if (classProperties.getClassProperties() != null) {
                 // Check if the offset is higher than the actual count of elements
                 if (queryOffset >= classPropertyItems.size()) {
-                    logger.warn("Query offset {} is higher than the number of class property items {}", queryOffset,
+                    log.warn("Query offset {} is higher than the number of class property items {}", queryOffset,
                             classPropertyItems.size());
                     return null;
                 }
@@ -217,15 +205,15 @@ public class ApiService {
                 // queryLimit
                 int endIndex = Math.min(queryOffset + queryLimit, classPropertyItems.size());
                 List<ClassPropertyItemContractV1> paginatedItems = classPropertyItems.subList(queryOffset, endIndex);
-                logger.debug("Total Class Property Items: {}", classPropertyItems.size());
-                logger.debug("SubList from {} to {}", queryOffset, endIndex);
+                log.debug("Total Class Property Items: {}", classPropertyItems.size());
+                log.debug("SubList from {} to {}", queryOffset, endIndex);
                 for (ClassPropertyItemContractV1 property : paginatedItems) {
                     property.generateUri(serverUrl);
                     property.transformToLowerCase();
                 }
                 classProperties.setClassProperties(paginatedItems);
             } else {
-                logger.warn("Class properties are not included or are null for class ID: {}", id);
+                log.warn("Class properties are not included or are null for class ID: {}", id);
             }
         }
 
@@ -250,12 +238,12 @@ public class ApiService {
 
         DictionaryResponseContractV1 dictionaryResponse = deserializeOuterFindResponse(response, rootField,
                 DictionaryResponseContractV1.class);
-        logger.debug("Deserialized Dictionary By Id Response: {}", dictionaryResponse);
+        log.debug("Deserialized Dictionary By Id Response: {}", dictionaryResponse);
 
         // STEP 3: Deserialize the inner fields (nodes array) of the response
         List<DictionaryContractV1> dictionaryItems = deserializeDictionaryInnerFindResponse(response, rootField,
                 DictionaryContractV1.class);
-        logger.debug("Deserialized Inner Fields (Nodes) of Dictionary Response: {}", dictionaryItems);
+        log.debug("Deserialized Inner Fields (Nodes) of Dictionary Response: {}", dictionaryItems);
 
         // STEP 4: Combine the results
         if (dictionaryResponse != null) {
@@ -268,7 +256,7 @@ public class ApiService {
             }
 
         } else {
-            logger.warn("Dictionaries are not included or are null for the ID: {}", id);
+            log.warn("Dictionaries are not included or are null for the ID: {}", id);
         }
 
         return dictionaryResponse;
@@ -288,12 +276,12 @@ public class ApiService {
 
         DictionaryResponseContractV1 dictionaryResponse = deserializeOuterFindResponse(response, rootField,
                 DictionaryResponseContractV1.class);
-        logger.debug("Deserialized Dictionary By Id Response: {}", dictionaryResponse);
+        log.debug("Deserialized Dictionary By Id Response: {}", dictionaryResponse);
 
         // STEP 3: Deserialize the inner fields (nodes array) of the response
         List<DictionaryContractV1> dictionaryItems = deserializeDictionaryInnerFindResponse(response, rootField,
                 DictionaryContractV1.class);
-        logger.debug("Deserialized Inner Fields (Nodes) of Dictionary Response: {}", dictionaryItems);
+        log.debug("Deserialized Inner Fields (Nodes) of Dictionary Response: {}", dictionaryItems);
 
         // STEP 4: Combine the results
         if (dictionaryResponse != null) {
@@ -307,7 +295,7 @@ public class ApiService {
 
             // Check if the offset is higher than the actual count of elements
             if (queryOffset >= dictionaryItems.size()) {
-                logger.warn("Query offset {} is higher than the number of dictionary items {}", queryOffset,
+                log.warn("Query offset {} is higher than the number of dictionary items {}", queryOffset,
                         dictionaryItems.size());
                 return null;
             }
@@ -318,7 +306,7 @@ public class ApiService {
             List<DictionaryContractV1> paginatedItems = dictionaryItems.subList(queryOffset, endIndex);
             dictionaryResponse.setDictionaries(paginatedItems);
         } else {
-            logger.warn("Dictionaries are not included");
+            log.warn("Dictionaries are not included");
         }
 
         return dictionaryResponse;
@@ -341,7 +329,7 @@ public class ApiService {
         // STEP 2: Deserialize the dictionary response with embedded classes
         DictionaryClassesResponseContractV1Classes dictionaryResponse = deserializeGetResponse(dictGroupResponse,
                 rootField, DictionaryClassesResponseContractV1Classes.class);
-        logger.debug("Deserialized Dictionary Classes Response: {}", dictionaryResponse);
+        log.debug("Deserialized Dictionary Classes Response: {}", dictionaryResponse);
 
         // STEP 3: Extract classes from the concepts field and apply business logic
         if (dictionaryResponse != null && dictionaryResponse.getClasses() != null) {
@@ -354,7 +342,7 @@ public class ApiService {
 
             // STEP 4: Check if the offset is higher than the actual count of elements
             if (queryOffset >= allClasses.size()) {
-                logger.warn("Query offset {} is higher than the number of class items {}", queryOffset,
+                log.warn("Query offset {} is higher than the number of class items {}", queryOffset,
                         allClasses.size());
                 return null;
             }
@@ -372,8 +360,10 @@ public class ApiService {
         }
 
         // Apply business logic to dictionary fields
-        dictionaryResponse.generateUri(serverUrl);
-        dictionaryResponse.transformToLowerCase();
+        if (dictionaryResponse != null) {
+            dictionaryResponse.generateUri(serverUrl);
+            dictionaryResponse.transformToLowerCase();
+        }
 
         return dictionaryResponse;
     }
@@ -395,7 +385,7 @@ public class ApiService {
         String rootField = "getProperty";
 
         PropertyContractV4 propertyDetails = deserializeGetResponse(response, rootField, PropertyContractV4.class);
-        logger.debug("Deserialized Property Details Response: {}", propertyDetails);
+        log.debug("Deserialized Property Details Response: {}", propertyDetails);
         String dictionaryUri = responseDeserializer.extractFirstDictionaryUriFromAssignedTo(response, rootField);
         propertyDetails.setDictionaryUri(dictionaryUri);
 
@@ -410,7 +400,7 @@ public class ApiService {
                     classItem.transformToLowerCase();
                 }
             } else {
-                logger.warn("Classes are not included or are null for property ID: {}", id);
+                log.warn("Classes are not included or are null for property ID: {}", id);
             }
 
         }
@@ -434,12 +424,12 @@ public class ApiService {
 
         PropertyClassesContractV1 propertyClasses = deserializeOuterFindResponse(response, rootField,
                 PropertyClassesContractV1.class);
-        logger.debug("Deserialized Outer Fields of Property Classes Response: {}", propertyClasses);
+        log.debug("Deserialized Outer Fields of Property Classes Response: {}", propertyClasses);
 
         // STEP 3: Deserialize the inner fields (nodes array) of the response
         List<PropertyClassItemContractV1> propertyClassItems = deserializeClassInnerFindResponse(response, rootField,
                 PropertyClassItemContractV1.class);
-        logger.debug("Deserialized Inner Fields (Nodes) of Property Classes Response: {}", propertyClassItems);
+        log.debug("Deserialized Inner Fields (Nodes) of Property Classes Response: {}", propertyClassItems);
 
         // STEP 4: Combine the results
         if (propertyClasses != null) {
@@ -453,7 +443,7 @@ public class ApiService {
                     propertyClass.generateUri(serverUrl);
                 }
             } else {
-                logger.warn("Property classes are not included or are null for property ID: {}", ID);
+                log.warn("Property classes are not included or are null for property ID: {}", ID);
             }
         }
 
@@ -502,7 +492,7 @@ public class ApiService {
 
         List<ReferenceDocumentContractV1> refDocs = deserializeGeneralInnerFindResponse(response, rootField,
                 ReferenceDocumentContractV1.class);
-        logger.debug("Deserialized Reference Document Response: {}", refDocs);
+        log.debug("Deserialized Reference Document Response: {}", refDocs);
 
         return refDocs;
     }
@@ -518,7 +508,7 @@ public class ApiService {
 
         List<LanguageContractV1> languages = deserializeGeneralInnerFindResponse(response, rootField,
                 LanguageContractV1.class);
-        logger.debug("Deserialized Languages Response: {}", languages);
+        log.debug("Deserialized Languages Response: {}", languages);
 
         return languages;
     }
@@ -534,7 +524,7 @@ public class ApiService {
 
         List<CountryContractV1> countries = deserializeGeneralInnerFindResponse(response, rootField,
                 CountryContractV1.class);
-        logger.debug("Deserialized Countries Response: {}", countries);
+        log.debug("Deserialized Countries Response: {}", countries);
 
         return countries;
     }
@@ -552,7 +542,7 @@ public class ApiService {
 
         StatisticsResponseContractV1 statistics = deserializeGetResponse(response, rootField,
                 StatisticsResponseContractV1.class);
-        logger.debug("Deserialized Statistics Response: {}", statistics);
+        log.debug("Deserialized Statistics Response: {}", statistics);
 
         return statistics;
     }

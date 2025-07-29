@@ -19,13 +19,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.net.URISyntaxException;
 import java.util.List;
 
-// Logging
-import org.slf4j.*;
+// Lombok Logging
+import lombok.extern.slf4j.Slf4j;
 
 // Jakarta
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
 // Internal
 import datacat.models.*;
 import datacat.auth.AuthenticationService;
@@ -35,9 +34,8 @@ import datacat.graphql.IdExtractor;
 // C O N T R O L L E R   S E C T I O N
 // =====================================================================================================================
 @Controller
+@Slf4j
 public class ApiApiController implements ApiApi {
-
-    private static final Logger logger = LoggerFactory.getLogger(ApiApiController.class);
 
     private final AuthenticationService authenticationService;
     private final ApiService apiService;
@@ -69,10 +67,10 @@ public class ApiApiController implements ApiApi {
         try {
             ID = IdExtractor.extractIdFromUri(uri, "/class/");
         } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", uri, e);
+            log.error("Invalid URI format: {}", uri, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
+            log.error("Failed to extract ID from URI", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -86,10 +84,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(classDetails, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getClassDetails", e);
+            log.error("Error executing query for getClassDetails", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching class details", e);
+            log.error("Error fetching class details", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -118,12 +116,12 @@ public class ApiApiController implements ApiApi {
         String ID;
         try {
             ID = IdExtractor.extractIdFromUri(classUri, "/class/");
-            logger.debug("Extracted ID from URI: {}", ID);
+            log.debug("Extracted ID from URI: {}", ID);
         } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", classUri, e);
+            log.error("Invalid URI format: {}", classUri, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
+            log.error("Failed to extract ID from URI", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -138,10 +136,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for classPropertiesGet", e);
+            log.error("Error executing query for classPropertiesGet", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching class properties", e);
+            log.error("Error fetching class properties", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
@@ -174,10 +172,10 @@ public class ApiApiController implements ApiApi {
                 try {
                     ID = IdExtractor.extractIdFromUri(uri, "/model/");
                 } catch (URISyntaxException e) {
-                    logger.error("Invalid URI format: {}", uri, e);
+                    log.error("Invalid URI format: {}", uri, e);
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 } catch (IllegalArgumentException e) {
-                    logger.error("Failed to extract ID from URI", e);
+                    log.error("Failed to extract ID from URI", e);
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
 
@@ -193,10 +191,10 @@ public class ApiApiController implements ApiApi {
                 return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
             }
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for dictionaryGet", e);
+            log.error("Error executing query for dictionaryGet", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching dictionary", e);
+            log.error("Error fetching dictionary", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -227,10 +225,10 @@ public class ApiApiController implements ApiApi {
         try {
             ID = IdExtractor.extractIdFromUri(uri, "/model/");
         } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", uri, e);
+            log.error("Invalid URI format: {}", uri, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
+            log.error("Failed to extract ID from URI", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -245,10 +243,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getDictionaryClasses", e);
+            log.error("Error executing query for getDictionaryClasses", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching dictionary classes", e);
+            log.error("Error fetching dictionary classes", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -279,10 +277,10 @@ public class ApiApiController implements ApiApi {
         try {
             ID = IdExtractor.extractIdFromUri(uri, "/property/");
         } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", uri, e);
+            log.error("Invalid URI format: {}", uri, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
+            log.error("Failed to extract ID from URI", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -296,10 +294,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(propertyDetails, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getPropertyDetails", e);
+            log.error("Error executing query for getPropertyDetails", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching property details", e);
+            log.error("Error fetching property details", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
      }
@@ -327,10 +325,10 @@ public class ApiApiController implements ApiApi {
         try {
             ID = IdExtractor.extractIdFromUri(propertyUri, "/property/");
         } catch (URISyntaxException e) {
-            logger.error("Invalid URI format: {}", propertyUri, e);
+            log.error("Invalid URI format: {}", propertyUri, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IllegalArgumentException e) {
-            logger.error("Failed to extract ID from URI", e);
+            log.error("Failed to extract ID from URI", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -344,10 +342,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for propertyClassesGet", e);
+            log.error("Error executing query for propertyClassesGet", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching property classes", e);
+            log.error("Error fetching property classes", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -419,10 +417,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(referenceDocuments, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getReferenceDocuments", e);
+            log.error("Error executing query for getReferenceDocuments", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching reference documents", e);
+            log.error("Error fetching reference documents", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -444,10 +442,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(languages, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getLanguages", e);
+            log.error("Error executing query for getLanguages", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching languages", e);
+            log.error("Error fetching languages", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -469,10 +467,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(countries, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getCountries", e);
+            log.error("Error executing query for getCountries", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching countries", e);
+            log.error("Error fetching countries", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -494,10 +492,10 @@ public class ApiApiController implements ApiApi {
             return new ResponseEntity<>(statistics, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {
-            logger.error("Error executing query for getStatistics", e);
+            log.error("Error executing query for getStatistics", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("Error fetching statistics", e);
+            log.error("Error fetching statistics", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         

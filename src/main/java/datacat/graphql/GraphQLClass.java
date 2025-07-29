@@ -20,26 +20,30 @@ public class GraphQLClass {
     public static String getClassDetailsQuery(String id, boolean includeProperties, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ getSubject(id: \\\"" + id + "\\\") { ")
-                    .append("collectedBy { nodes { relatingCollection { collectedBy { nodes { relatingCollection { dictionaryUri:id}}}}}}")
-                    .append("activationDateUtc:created ")
-                    .append("description ")
-                    .append("documentedBy { nodes { relatingDocument { documentReference:name } } } ");
+                .append("dictionary { dictionaryUri:id } ")
+                .append("activationDateUtc:created ")
+                .append("description ")
+                .append("referenceDocuments { documentReference:name } ")
+                .append("con:countryOfOrigin { countryOfOrigin:code }")
+                .append("def:definition { texts { definition:text } } ")
+                .append("dep:deprecationExplanation { texts { deprecationExplanation:text } } ");
 
-            
         if (languageCode != null && !languageCode.isEmpty()) {
             queryBuilder.append("name(input:{languageTags:\\\"" + languageCode + "\\\"}) ");
         } else {
             queryBuilder.append("name ");
         }
-        
+
         queryBuilder.append("revisionDateUtc:lastModified ")
-                    .append("uid:id ")
-                    .append("uri:id ")
-                    .append("code:name ")
-                    .append("versionDateUtc:versionDate ")
-                    .append("versionNumber:versionId ")
-                    .append("classType:recordType ")
-                    .append("assignedCollections { nodes { parentClassReference:relatedCollections { uri:id name } } } ");
+                .append("uid:id ")
+                .append("uri:id ")
+                .append("code:name ")
+                .append("versionDateUtc:lastModified ")
+                .append("majorVersion ")
+                .append("minorVersion ")
+                .append("classType:recordType ");
+        // .append("assignedCollections { nodes {
+        // parentClassReference:relatedCollections { uri:id name } } } ");
 
         if (includeProperties == true) {
             queryBuilder.append(getClassPropertyQuery());
@@ -56,68 +60,68 @@ public class GraphQLClass {
     public static String getClassPropertyQuery() {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("classProperties:properties { ")
-                    .append("name ")
-                    .append("description ")
-                    .append("uid:id ")
-                    .append("uri:id ")
-                    .append("propertyCode:name ")
-                    .append("assignedMeasures { nodes { relatedMeasures { assignedUnits { nodes { allowedValues:relatedUnits { uri:id value:name description } } } } } } ")
-                    .append("composedBy { nodes { propertySet:name } } ")
-                    .append("assignedMeasures { nodes { relatedMeasures { assignedUnits { nodes { units:relatedUnits { name } } } } } } ")
-                    .append("}");
+                .append("name ")
+                .append("description ")
+                .append("uid:id ")
+                .append("uri:id ")
+                .append("propertyCode:name ")
+                .append("allowedValues:possibleValues { values { sortNumber:order orderedValue { uri:id value:name code:name } } } ")
+                .append("units { name } ")
+                .append("def:definition { texts { definition:text } } ")
+                .append("dataType ")
+                .append("examples { texts { example:text } } ")
+                .append("dictionary { propertyDictionaryUri:id } ")
+                .append("}");
 
         return queryBuilder.toString();
     }
 
-
     // =====================================================================================================================
     // ENDPOINT: /api/Class/Relations/v1
-
-
 
     // =====================================================================================================================
     // ENDPOINT: /api/Class/Properties/v1
     public static String getClassPropertiesQuery(String id, int pageSize, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ findSubjects(input:{pageSize: " + pageSize + " idIn: \\\"" + id + "\\\"} ) { ")
-                    .append("pageInfo { count:pageElements } ")
-                    .append("totalCount:totalElements ")
-                    .append("nodes { ")
-                    .append("classProperties:properties { ")
-                    .append("name ")
-                    .append("description ")
-                    .append("uid:id ")
-                    .append("uri:id ")
-                    .append("propertyCode:name ")
-                    .append("}")
-                    .append("classUri:id ")
-                    .append("}")
-                    .append("} }");
+                .append("pageInfo { count:pageElements } ")
+                .append("totalCount:totalElements ")
+                .append("nodes { ")
+                .append("classProperties:properties { ")
+                .append("name ")
+                .append("description ")
+                .append("uid:id ")
+                .append("uri:id ")
+                .append("propertyCode:name ")
+                .append("}")
+                .append("classUri:id ")
+                .append("}")
+                .append("} }");
 
         return queryBuilder.toString();
     }
 
     // worked properly so far without pageSize
-    // public static String getClassPropertiesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
-    //     StringBuilder queryBuilder = new StringBuilder();
-    //     queryBuilder.append("{ findSubjects(input:{pageSize: " + queryLimit + " idIn: \\\"" + id + "\\\"} ) { ")
-    //                 .append("pageInfo { count:pageElements } ")
-    //                 .append("totalCount:totalElements ")
-    //                 .append("nodes { ")
-    //                 .append("classProperties:properties { ")
-    //                 .append("name ")
-    //                 .append("description ")
-    //                 .append("uid:id ")
-    //                 .append("uri:id ")
-    //                 .append("propertyCode:name ")
-    //                 .append("}")
-    //                 .append("classUri:id ")
-    //                 .append("}")
-    //                 .append("} }");
+    // public static String getClassPropertiesQuery(String id, int queryOffset, int
+    // queryLimit, String languageCode) {
+    // StringBuilder queryBuilder = new StringBuilder();
+    // queryBuilder.append("{ findSubjects(input:{pageSize: " + queryLimit + " idIn:
+    // \\\"" + id + "\\\"} ) { ")
+    // .append("pageInfo { count:pageElements } ")
+    // .append("totalCount:totalElements ")
+    // .append("nodes { ")
+    // .append("classProperties:properties { ")
+    // .append("name ")
+    // .append("description ")
+    // .append("uid:id ")
+    // .append("uri:id ")
+    // .append("propertyCode:name ")
+    // .append("}")
+    // .append("classUri:id ")
+    // .append("}")
+    // .append("} }");
 
-    //     return queryBuilder.toString();
+    // return queryBuilder.toString();
     // }
-
-
 
 }

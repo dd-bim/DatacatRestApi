@@ -45,7 +45,6 @@ public class GraphQLDictionary {
 
     // =====================================================================================================================
     // ENDPOINT: /api/Dictionary/v1/Classes
-    // STEP 1: first query to fetch the groups related to the requested dictionary
     public static String getDictionaryGroupQuery(String id, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ getDictionary(id:\\\"" + id + "\\\") { ")
@@ -63,24 +62,4 @@ public class GraphQLDictionary {
                     .append("} } ");
         return queryBuilder.toString();
     }
-    // // // STEP 2: queries fetch classes related to certain groups
-    // public static String getGroupClassesQuery(String groupId, int remainingClasses, String languageCode) {
-    //     StringBuilder queryBuilder = new StringBuilder();
-    //     queryBuilder.append("{ getBag(id:\\\"" + groupId + "\\\") { ")
-    //                 // .append("collects { nodes { relatedThings { uri:id name descriptionPart:description } } }")
-    //                 // .append("collects { nodes { relatedThings { name } } }")
-    //                 .append("collects { ")
-    //                 .append("nodes { ")
-    //                 .append("relatedThings { ")
-    //                 .append("name ")
-    //                 .append("code:name ")
-    //                 .append("uri:id ")
-    //                 .append("descriptionPart:description ")
-    //                 .append("collectedBy { nodes { parentClassCode:name } } ")
-    //                 .append("} } } } }");
-    //                 // .append("} }");
-    //     return queryBuilder.toString();
-    // }
-
-
 }
