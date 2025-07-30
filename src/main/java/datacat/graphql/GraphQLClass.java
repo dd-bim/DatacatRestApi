@@ -3,14 +3,13 @@ package datacat.graphql;
 // =====================================================================================================================
 // I M P O R T   S E C T I O N
 // =====================================================================================================================
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 
 // =====================================================================================================================
 // C L A S S   Q U E R I E S
 // =====================================================================================================================
+@Slf4j
 public class GraphQLClass {
-
-    private static final Logger logger = LoggerFactory.getLogger(GraphQLClass.class);
 
     // =====================================================================================================================
     // SECTION: CLASS
@@ -45,9 +44,9 @@ public class GraphQLClass {
 
         if (includeProperties == true) {
             queryBuilder.append(getClassPropertyQuery());
-            logger.debug("Query includes properties");
+            log.debug("Query includes properties");
         } else {
-            logger.debug("Query does not include properties");
+            log.debug("Query does not include properties");
         }
         queryBuilder.append("} }");
 

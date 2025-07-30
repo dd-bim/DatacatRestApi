@@ -53,18 +53,17 @@ public class GraphQLProperty {
     public static String getPropertyClassesQuery(String id, int queryOffset, int queryLimit, String languageCode) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("{ findProperties(input:{pageSize: " + queryLimit + " idIn: \\\"" + id + "\\\"}) {")
+                .append("totalCount:totalElements ")
+                .append("count:totalElements ")
                 .append("nodes { ")
-                .append("assignedTo { ")
-                .append("nodes { ")
-                .append("relatingObject { ")
+                .append("propertyUri:id ")
+                .append("propertyClasses:subjects { ")
                 .append("uri:id ")
-                .append("code:name ")
                 .append("name ")
+                .append("description ")
+                .append("dictionary { dictionaryUri:id } ")
                 .append("} ")
-                .append("} ")
-                .append("} ")
-                .append("} ")
-                .append("} }");
+                .append("} } }");
 
         return queryBuilder.toString();
     }

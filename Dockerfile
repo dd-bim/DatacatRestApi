@@ -6,9 +6,6 @@ RUN mvn dependency:go-offline -B
 
 COPY src/ ./src
 
-# COPY init/ ./init
-COPY .openapi-generator-ignore .
-
 RUN mvn package && cp target/*.jar application.jar
 
 FROM eclipse-temurin:21-jre-alpine

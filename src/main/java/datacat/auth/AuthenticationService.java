@@ -7,19 +7,19 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 import java.time.*;
-import org.slf4j.*;
 import com.google.gson.*;
 import datacat.customization.CustomProperties;
+import lombok.extern.slf4j.Slf4j;
 
 // =====================================================================================================================
 // S E R V I C E   S E C T I O N
 // service that handles authentication and token management with refreshing mechanism for uninterrupted API usage
 // ! long term token refreshing mechanism not tested !
 // =====================================================================================================================
+@Slf4j
 @Service
 public class AuthenticationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
     private final CustomProperties customProperties;
     private final RestTemplate authRestTemplate;  // only for initial authentication
     private String bearerToken;
@@ -50,21 +50,21 @@ public class AuthenticationService {
             if (response.getStatusCode() == HttpStatus.OK) {
                 bearerToken = extractTokenFromResponse(response.getBody());
                 tokenIssueTime = Instant.now();
-                logger.info("Authentication successful. Token obtained.");
-                logger.info("Token expires in {} minutes", TOKEN_LIFETIME.toMinutes());
+                log.info("Authentication successful. Token obtained.");
+                log.info("Token expires in {} minutes", TOKEN_LIFETIME.toMinutes());
                 return bearerToken;
             } else {
-                logger.error("Failed to authenticate: {}", response.getStatusCode());
+                log.error("Failed to authenticate: {}", response.getStatusCode());
                 throw new RuntimeException("Failed to authenticate: " + response.getStatusCode());
             }
         } catch (HttpClientErrorException e) {
-            logger.error("Client error during authentication: {}", e.getStatusCode());
+            log.error("Client error during authentication: {}", e.getStatusCode());
             throw new RuntimeException("Client error during authentication: " + e.getMessage(), e);
         } catch (HttpServerErrorException e) {
-            logger.error("Server error during authentication: {}", e.getStatusCode());
+            log.error("Server error during authentication: {}", e.getStatusCode());
             throw new RuntimeException("Server error during authentication: " + e.getMessage(), e);
         } catch (Exception e) {
-            logger.error("Error during authentication", e);
+            log.error("Error during authentication", e);
             throw new RuntimeException("Error during authentication: " + e.getMessage(), e);
         }
     }

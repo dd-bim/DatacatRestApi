@@ -9,8 +9,9 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.lang.NonNull;
+import lombok.extern.slf4j.Slf4j;
 // Logging
-import org.slf4j.*;
 import java.io.IOException;
 
 // =====================================================================================================================
@@ -18,10 +19,10 @@ import java.io.IOException;
 // this component intercepts the HTTP requests, checks the validity of the token and adds it to the request headers
 // is being used within the 'CustomRestTemplate' class
 // =====================================================================================================================
+@Slf4j
 @Component
 public class TokenInterceptor implements ClientHttpRequestInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(TokenInterceptor.class);
     private final AuthenticationService authenticationService;
 
     public TokenInterceptor(@Lazy AuthenticationService authenticationService) {
@@ -29,17 +30,27 @@ public class TokenInterceptor implements ClientHttpRequestInterceptor {
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        logger.debug("Intercepting request to: {}", request.getURI());
+    @NonNull
+    public ClientHttpResponse intercept(@NonNull HttpRequest request, @NonNull byte[] body, @NonNull ClientHttpRequestExecution execution) throws IOException {
+        log.debug("Intercepting request to: {}", request.getURI());
 
-        if (authenticationService.isTokenExpired()) { // checks if the token is expired and refreshes if necessary
-            logger.info("Token is expired. Refreshing token...");
-            authenticationService.authenticate();
+        try {
+            // Use the existing method that handles token expiration and refresh automatically
+            HttpHeaders authHeaders = authenticationService.getAuthorizationHeaders();
+            String authorizationValue = authHeaders.getFirst("Authorization");
+            
+            if (authorizationValue == null || authorizationValue.trim().isEmpty()) {
+                log.error("No valid authorization header available for request to: {}", request.getURI());
+                throw new IOException("Authentication failed: No valid authorization header available");
+            }
+
+            HttpHeaders headers = request.getHeaders();
+            headers.set("Authorization", authorizationValue); // injects token into the header
+
+            return execution.execute(request, body);
+        } catch (RuntimeException e) {
+            log.error("Authentication error during request to: {}", request.getURI(), e);
+            throw new IOException("Authentication failed: " + e.getMessage(), e);
         }
-
-        HttpHeaders headers = request.getHeaders();
-        headers.set("Authorization", "Bearer " + authenticationService.getBearerToken()); // injects token into the header
-
-        return execution.execute(request, body);
     }
 }

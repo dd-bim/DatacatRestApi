@@ -9,20 +9,18 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import datacat.models.PropertyContractV5;
 import datacat.models.PropertyValueContractV4;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 // =====================================================================================================================
 // D E S E R I A L I Z E R   C L A S S
 // =====================================================================================================================
+@Slf4j
 public class PropertyContractV5Deserializer extends JsonDeserializer<PropertyContractV5> {
 
-    private static final Logger logger = LoggerFactory.getLogger(PropertyContractV5Deserializer.class);
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     @Override
@@ -140,7 +138,7 @@ public class PropertyContractV5Deserializer extends JsonDeserializer<PropertyCon
             }
 
         } catch (Exception e) {
-            logger.error("Error deserializing PropertyContractV5", e);
+            log.error("Error deserializing PropertyContractV5", e);
         }
 
         return property;

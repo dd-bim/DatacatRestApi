@@ -55,19 +55,11 @@
 		</dependency>
 
 		<!-- S P R I N G D O C -->
-		<!-- Springdoc OpenAPI -->
+		<!-- Springdoc OpenAPI for Code-First approach -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.8.9</version>
-		</dependency>
-
-		<!-- J A C K S O N   D A T A B I N D -->
-		<!-- Databind Nullable -->
-		<dependency>
-			<groupId>org.openapitools</groupId>
-			<artifactId>jackson-databind-nullable</artifactId>
-			<version>0.2.6</version>
 		</dependency>
 
 		<!-- G O O G L E -->
@@ -77,13 +69,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.13.1</version>
-		</dependency>
-
-		<!-- M U S T A C H E -->
-		<dependency>
-			<groupId>com.github.spullara.mustache.java</groupId>
-			<artifactId>compiler</artifactId>
-			<version>0.9.14</version>
 		</dependency>
 
 		<dependency>
@@ -102,56 +87,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
-			<!-- <plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.8.0</version>
-				<executions>
-					<execution>
-						<id>generate-api-code</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>${project.basedir}/init/openAPI_v1_2_4.yml</inputSpec>
-							<generatorName>spring</generatorName>
-							<apiPackage>datacat.restapi</apiPackage>
-							<modelPackage>datacat.models</modelPackage>
-                            <output>${project.basedir}</output>
-							<templateDirectory>${project.basedir}/src/main/resources/customtemplates</templateDirectory>
-							<configOptions>
-								<dateLibrary>java8</dateLibrary>
-								<library>spring-boot</library>
-								<delegatePattern>false</delegatePattern>
-								<documentationProvider>springdoc</documentationProvider>
-								<useSpringBoot3>true</useSpringBoot3>
-								<useSpringController>true</useSpringController>
-								<useBeanValidation>true</useBeanValidation>
-								<openApiNullable>true</openApiNullable>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin> -->
-			<!-- <plugin>
-				<groupId>org.sonatype.ossindex.maven</groupId>
-				<artifactId>ossindex-maven-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>audit-dependencies</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>audit</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<reportFile>${project.build.directory}/audit-report.json</reportFile>
-				</configuration>
-			</plugin> -->
 		</plugins>
 	</build>
 

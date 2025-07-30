@@ -20,7 +20,7 @@ public class DictionaryResponseContractV1 {
     private Integer totalCount;
 
     @JsonProperty("offset")
-    private Integer offset;
+    private Integer offset = 0;
 
     @JsonProperty("count")
     private Integer count;

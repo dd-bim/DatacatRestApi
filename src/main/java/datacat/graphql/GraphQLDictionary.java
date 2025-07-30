@@ -19,6 +19,7 @@ public class GraphQLDictionary {
                     .append("lastUpdatedUtc:lastModified ")
                     .append("} ")
                     .append("totalCount:totalElements ")
+                    .append("count:totalElements ")
                     .append("} }");
         return queryBuilder.toString();
     }
@@ -34,6 +35,7 @@ public class GraphQLDictionary {
                     .append("lastUpdatedUtc:lastModified ")
                     .append("} ")
                     .append("totalCount:totalElements ")
+                    .append("count:totalElements ")
                     .append("} }");
         return queryBuilder.toString();
     }
