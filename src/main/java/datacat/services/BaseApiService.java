@@ -123,6 +123,61 @@ public class BaseApiService {
     }
 
     // =====================================================================================================================
+    // Pagination utility methods
+    // =====================================================================================================================
+    
+    /**
+     * Calculates the effective limit based on offset and limit rules:
+     * - When offset > 0 and limit <= 0 → limit = 100
+     * - When offset <= 0 and limit <= 0 → limit = 1000
+     * - Otherwise use the provided limit
+     */
+    public int calculateEffectiveLimit(int queryOffset, int queryLimit) {
+        if (queryOffset > 0 && queryLimit <= 0) {
+            return 100; // Default limit when offset is set but limit is not
+        } else if (queryOffset <= 0 && queryLimit <= 0) {
+            return 1000; // Default limit when neither offset nor limit is set
+        }
+        return queryLimit;
+    }
+    
+    /**
+     * Validates that the offset is within bounds and throws IllegalArgumentException if not.
+     * Set allowEmptyResult to true to allow offset >= totalElements and return empty results.
+     */
+    public void validateOffsetBounds(int queryOffset, int totalElements, String entityType, boolean allowEmptyResult) {
+        if (!allowEmptyResult && queryOffset >= totalElements && totalElements > 0) {
+            log.warn("Query offset {} is higher than or equal to the number of {} items {}", 
+                queryOffset, entityType, totalElements);
+            throw new IllegalArgumentException(String.format("Offset %d is out of bounds. Total elements: %d", 
+                queryOffset, totalElements));
+        }
+        // If allowEmptyResult is true, we don't throw an exception for offset >= totalElements
+    }
+    
+    /**
+     * Validates that the offset is within bounds and throws IllegalArgumentException if not.
+     * This is the legacy method that always throws exceptions for backward compatibility.
+     */
+    public void validateOffsetBounds(int queryOffset, int totalElements, String entityType) {
+        validateOffsetBounds(queryOffset, totalElements, entityType, false);
+    }
+    
+    /**
+     * Calculates the actual count based on offset and limit rules:
+     * - When offset > 0: count = min(effectiveLimit, totalElements - offset)
+     * - Otherwise: count = min(effectiveLimit, totalElements)
+     */
+    public int calculateActualCount(int queryOffset, int effectiveLimit, int totalElements) {
+        if (queryOffset > 0) {
+            int remainingElements = totalElements - queryOffset;
+            return (effectiveLimit > remainingElements) ? remainingElements : effectiveLimit;
+        } else {
+            return Math.min(effectiveLimit, totalElements);
+        }
+    }
+
+    // =====================================================================================================================
     // Getter methods for common dependencies
     // =====================================================================================================================
     

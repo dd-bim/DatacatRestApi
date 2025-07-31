@@ -66,10 +66,9 @@ public class ClassService {
     // ENDPOINT: /api/Class/Properties/v1
     public ClassPropertiesContractV1 classPropertiesGet(String bearerToken, String id, int queryOffset, int queryLimit,
             int pageSize, String languageCode) {
-        // log.info("INPUT PARAMETERS:");
-        // log.info("QUERY OFFSET: {}", queryOffset);
-        // log.info("QUERY LIMIT: {}", queryLimit);
-        // log.info("PAGE SIZE: {}", pageSize);
+        
+        // Apply default limit rules
+        int effectiveLimit = baseApiService.calculateEffectiveLimit(queryOffset, queryLimit);
 
         // STEP 1: Execute the query to fetch the response
         String query = GraphQLClass.getClassPropertiesQuery(id, pageSize, languageCode);
@@ -102,24 +101,41 @@ public class ClassService {
             classProperties.generateUri(baseApiService.getServerUrl());
 
             if (classProperties.getClassProperties() != null) {
-                // Check if the offset is higher than the actual count of elements
-                if (queryOffset >= classPropertyItems.size()) {
-                    log.warn("Query offset {} is higher than the number of class property items {}", queryOffset,
-                            classPropertyItems.size());
-                    return null;
-                }
+                // Validate offset bounds (allow empty results for offset >= totalElements)
+                boolean allowEmptyResult = true; // Set to false if you want the old error behavior
+                baseApiService.validateOffsetBounds(queryOffset, classPropertyItems.size(), "class property", allowEmptyResult);
 
-                // Skip the number of elements specified by queryOffset and limit the results to
-                // queryLimit
-                int endIndex = Math.min(queryOffset + queryLimit, classPropertyItems.size());
-                List<ClassPropertyContractV1> paginatedItems = classPropertyItems.subList(queryOffset, endIndex);
-                log.debug("Total Class Property Items: {}", classPropertyItems.size());
-                log.debug("SubList from {} to {}", queryOffset, endIndex);
-                for (ClassPropertyContractV1 property : paginatedItems) {
-                    property.generateUri(baseApiService.getServerUrl());
-                    property.transformToLowerCase();
+                int totalElements = classPropertyItems.size();
+                
+                // Calculate actual count and handle pagination
+                int actualCount;
+                List<ClassPropertyContractV1> paginatedItems;
+                
+                if (queryOffset >= totalElements) {
+                    // Return empty list but with correct metadata
+                    paginatedItems = List.of(); // Empty list
+                    actualCount = 0;
+                } else {
+                    // Normal pagination
+                    actualCount = baseApiService.calculateActualCount(queryOffset, effectiveLimit, totalElements);
+                    int endIndex = Math.min(queryOffset + actualCount, totalElements);
+                    paginatedItems = classPropertyItems.subList(queryOffset, endIndex);
+                    
+                    for (ClassPropertyContractV1 property : paginatedItems) {
+                        property.generateUri(baseApiService.getServerUrl());
+                        property.transformToLowerCase();
+                    }
                 }
+                
+                log.debug("Total Class Property Items: {}", totalElements);
+                log.debug("SubList from {} to {}", queryOffset, Math.min(queryOffset + actualCount, totalElements));
+                
                 classProperties.setClassProperties(paginatedItems);
+                
+                // Update response with correct offset and count values
+                classProperties.setOffset(queryOffset);
+                classProperties.setCount(actualCount);
+                classProperties.setTotalCount(totalElements);
             } else {
                 log.warn("Class properties are not included or are null for class ID: {}", id);
             }

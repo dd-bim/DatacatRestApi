@@ -251,6 +251,9 @@ public class ClassController {
             ClassPropertiesContractV1 response = classService.classPropertiesGet(bearerToken, ID, queryOffset, queryLimit, pageSize, languageCode);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid request parameters: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (HttpServerErrorException e) {
             log.error("Error executing query for classPropertiesGet", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

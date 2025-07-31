@@ -139,6 +139,7 @@ public class PropertyController {
         
         @Parameter(
             name = "SearchText",
+            deprecated = true,
             description = "Search text to filter classes<br> ! This option is not yet implemented.",
             in = ParameterIn.QUERY
         )
@@ -146,22 +147,21 @@ public class PropertyController {
         
         @Parameter(
             name = "Offset",
-            deprecated = true,
-            description = "Zero-based offset of the first item to be returned. Default is 0.<br> ! This option is not yet implemented.",
+            description = "Zero-based offset of the first item to be returned. Default is 0.",
             in = ParameterIn.QUERY
         )
-        @Valid @RequestParam(value = "Offset", required = false) @Deprecated Integer offset,
+        @Valid @RequestParam(value = "Offset", required = false) Integer offset,
         
         @Parameter(
             name = "Limit",
-            deprecated = true,
-            description = "Limit number of items to be returned. The default and maximum number<br> of items returned is 1000. When Offset is specified, then the<br> default limit is 100.<br> ! This option is not yet implemented.",
+            description = "Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.",
             in = ParameterIn.QUERY
         )
-        @Valid @RequestParam(value = "Limit", required = false) @Deprecated Integer limit,
+        @Valid @RequestParam(value = "Limit", required = false) Integer limit,
         
         @Parameter(
             name = "languageCode",
+            deprecated = true,
             description = "Specify language (case sensitive).<br> For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary<br> ! This option is not yet implemented.",
             in = ParameterIn.QUERY
         )
@@ -189,6 +189,9 @@ public class PropertyController {
             PropertyClassesContractV1 response = propertyService.getPropertyClasses(bearerToken, ID, queryOffset, queryLimit, languageCode);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid request parameters: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (HttpServerErrorException e) {
             log.error("Error executing query for propertyClassesGet", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

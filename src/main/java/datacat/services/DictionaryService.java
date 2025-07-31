@@ -38,8 +38,11 @@ public class DictionaryService {
     public DictionaryResponseContractV1 getDictionaryById(String bearerToken, String id, int queryOffset,
             int queryLimit) {
 
+        // Apply default limit rules
+        int effectiveLimit = baseApiService.calculateEffectiveLimit(queryOffset, queryLimit);
+
         // STEP 1: Execute the query to fetch the response
-        String query = GraphQLDictionary.getDictionaryByIdQuery(id, queryLimit);
+        String query = GraphQLDictionary.getDictionaryByIdQuery(id, effectiveLimit);
         String response = baseApiService.executeQuery(query, bearerToken);
 
         // STEP 2: Deserialize the outer fields of the response
@@ -63,6 +66,28 @@ public class DictionaryService {
                 dictionary.transformToLowerCase();
             }
 
+            // Update response with correct offset and count values
+            int totalElements = dictionaryItems != null ? dictionaryItems.size() : 0;
+            
+            // Validate offset bounds (allow empty results for offset >= totalElements)
+            boolean allowEmptyResult = true; // Set to false if you want the old error behavior
+            baseApiService.validateOffsetBounds(queryOffset, totalElements, "dictionary", allowEmptyResult);
+            
+            // Calculate actual count
+            int actualCount;
+            if (queryOffset >= totalElements) {
+                // Return empty result but with correct metadata
+                actualCount = 0;
+                dictionaryResponse.setDictionaries(List.of()); // Empty list
+            } else {
+                actualCount = baseApiService.calculateActualCount(queryOffset, effectiveLimit, totalElements);
+                // Keep the existing dictionaries list (no additional pagination needed for getDictionaryById)
+            }
+            
+            dictionaryResponse.setOffset(queryOffset);
+            dictionaryResponse.setCount(actualCount);
+            dictionaryResponse.setTotalCount(totalElements);
+
         } else {
             log.warn("Dictionaries are not included or are null for the ID: {}", id);
         }
@@ -73,7 +98,10 @@ public class DictionaryService {
 
     // OPTION 2: query to fetch all dictionaries
     public DictionaryResponseContractV1 getAllDictionaries(String bearerToken, int queryOffset, int queryLimit) {
-        int pageSize = queryOffset + queryLimit; // Calculate pageSize as the sum of offset and limit
+        // Apply default limit rules
+        int effectiveLimit = baseApiService.calculateEffectiveLimit(queryOffset, queryLimit);
+
+        int pageSize = queryOffset + effectiveLimit; // Calculate pageSize as the sum of offset and limit
 
         // STEP 1: Execute the query to fetch the response
         String query = GraphQLDictionary.getAllDictionariesQuery(pageSize);
@@ -100,18 +128,33 @@ public class DictionaryService {
                 dictionary.transformToLowerCase();
             }
 
-            // Check if the offset is higher than the actual count of elements
-            if (queryOffset >= dictionaryItems.size()) {
-                log.warn("Query offset {} is higher than the number of dictionary items {}", queryOffset,
-                        dictionaryItems.size());
-                return null;
-            }
+            // Validate offset bounds (allow empty results for offset >= totalElements)
+            boolean allowEmptyResult = true; // Set to false if you want the old error behavior
+            baseApiService.validateOffsetBounds(queryOffset, dictionaryItems.size(), "dictionary", allowEmptyResult);
 
-            // Skip the number of elements specified by queryOffset and limit the results to
-            // queryLimit
-            int endIndex = Math.min(queryOffset + queryLimit, dictionaryItems.size());
-            List<DictionaryContractV1> paginatedItems = dictionaryItems.subList(queryOffset, endIndex);
+            int totalElements = dictionaryItems.size();
+            
+            // Calculate actual count
+            int actualCount = baseApiService.calculateActualCount(queryOffset, effectiveLimit, totalElements);
+
+            // Handle case where offset >= totalElements
+            List<DictionaryContractV1> paginatedItems;
+            if (queryOffset >= totalElements) {
+                // Return empty list but with correct metadata
+                paginatedItems = List.of(); // Empty list
+                actualCount = 0;
+            } else {
+                // Normal pagination
+                int endIndex = Math.min(queryOffset + actualCount, totalElements);
+                paginatedItems = dictionaryItems.subList(queryOffset, endIndex);
+            }
+            
             dictionaryResponse.setDictionaries(paginatedItems);
+            
+            // Update response with correct offset and count values
+            dictionaryResponse.setOffset(queryOffset);
+            dictionaryResponse.setCount(actualCount);
+            dictionaryResponse.setTotalCount(totalElements);
         } else {
             log.warn("Dictionaries are not included");
         }
@@ -123,6 +166,9 @@ public class DictionaryService {
     // ENDPOINT: /api/Dictionary/v1/Classes
     public DictionaryClassesResponseContractV1Classes getDictionaryClasses(String bearerToken, String id,
             int queryOffset, int queryLimit, int pageSize, String languageCode) {
+        
+        // Apply default limit rules
+        int effectiveLimit = baseApiService.calculateEffectiveLimit(queryOffset, queryLimit);
         
         String response = baseApiService.executeQuery(
             GraphQLDictionary.getDictionaryGroupQuery(id, languageCode), 
@@ -152,22 +198,32 @@ public class DictionaryService {
             classItem.transformToLowerCase();
         });
 
-        // Check pagination bounds
-        if (queryOffset >= allClasses.size()) {
-            log.warn("Query offset {} is higher than the number of class items {}", queryOffset, allClasses.size());
-            return null;
-        }
+        // Validate offset bounds (allow empty results for offset >= totalElements)
+        boolean allowEmptyResult = true; // Set to false if you want the old error behavior
+        baseApiService.validateOffsetBounds(queryOffset, allClasses.size(), "class", allowEmptyResult);
 
-        // Apply pagination
-        int totalClasses = allClasses.size();
-        int endIndex = Math.min(queryOffset + queryLimit, totalClasses);
-        List<ClassListItemContractV1Classes> paginatedClasses = allClasses.subList(queryOffset, endIndex);
+        int totalElements = allClasses.size();
+        
+        // Calculate actual count and handle pagination
+        int actualCount;
+        List<ClassListItemContractV1Classes> paginatedClasses;
+        
+        if (queryOffset >= totalElements) {
+            // Return empty list but with correct metadata
+            paginatedClasses = List.of(); // Empty list
+            actualCount = 0;
+        } else {
+            // Normal pagination
+            actualCount = baseApiService.calculateActualCount(queryOffset, effectiveLimit, totalElements);
+            int endIndex = Math.min(queryOffset + actualCount, totalElements);
+            paginatedClasses = allClasses.subList(queryOffset, endIndex);
+        }
 
         // Update response with paginated data
         dictionaryResponse.setClasses(paginatedClasses);
-        dictionaryResponse.setClassesTotalCount(totalClasses);
+        dictionaryResponse.setClassesTotalCount(totalElements);
         dictionaryResponse.setClassesOffset(queryOffset);
-        dictionaryResponse.setClassesCount(paginatedClasses.size());
+        dictionaryResponse.setClassesCount(actualCount);
 
         return dictionaryResponse;
     }

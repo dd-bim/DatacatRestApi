@@ -124,6 +124,9 @@ public class DictionaryController {
                 DictionaryResponseContractV1 dictionaryResponse = dictionaryService.getAllDictionaries(bearerToken, queryOffset, queryLimit);
                 return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
             }
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid request parameters: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (HttpServerErrorException e) {
             log.error("Error executing query for dictionaryGet", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -234,6 +237,9 @@ public class DictionaryController {
             DictionaryClassesResponseContractV1Classes dictionaryResponse = dictionaryService.getDictionaryClasses(bearerToken, ID, queryOffset, queryLimit, pageSize, languageCode); // No query passed here
             return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
 
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid request parameters: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (HttpServerErrorException e) {
             log.error("Error executing query for getDictionaryClasses", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
