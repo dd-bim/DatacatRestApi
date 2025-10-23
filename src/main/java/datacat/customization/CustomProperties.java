@@ -16,7 +16,7 @@ import lombok.Data;
 // 'private String ...' and considered by getters and setters
 // =====================================================================================================================
 @Component
-@ConfigurationProperties
+@ConfigurationProperties(prefix = "custom")
 @Data
 public class CustomProperties {
 

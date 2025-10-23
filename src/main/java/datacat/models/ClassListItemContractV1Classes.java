@@ -38,6 +38,9 @@ public class ClassListItemContractV1Classes {
     @JsonProperty("descriptionPart")
     private String descriptionPart;
 
+    @JsonProperty("__typename")
+    private String typename;
+
     // @JsonProperty("children")
     // private List<@Valid ClassListItemContractV1Classes> children = new ArrayList<>();
 

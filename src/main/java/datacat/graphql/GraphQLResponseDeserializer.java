@@ -212,4 +212,70 @@ public class GraphQLResponseDeserializer {
     public String extractClassUriFromFindResponse(String response, String rootField) {
         return extractUriFromFindResponse(response, rootField, "classUri");
     }
+    
+    /**
+     * Spezielle Deserialisierungsmethode für Dictionary Classes, die leere Einträge herausfiltert.
+     * Filtert Objekte heraus, die keine echten Daten haben (nur __typename aber keine anderen Felder).
+     * @param response Die GraphQL Response
+     * @param rootField Das root field (normalerweise "getDictionary")
+     * @param modelType Die Zielklasse für die Deserialisierung
+     * @return Liste der gefilterten Objekte
+     */
+    public <T> List<T> deserializeDictionaryClassesWithFiltering(String response, String rootField, Class<T> modelType) {
+        try {
+            JsonNode rootNode = objectMapper.readTree(response);
+            JsonNode dataNode = rootNode.path("data").path(rootField);
+            
+            if (dataNode.isMissingNode()) {
+                log.error("No '{}' field in the 'data' response", rootField);
+                return null;
+            }
+            
+            JsonNode classesNode = dataNode.path("classes").path("nodes");
+            log.debug("Classes Nodes: {}", classesNode);
+            
+            List<T> result = new ArrayList<>();
+            int totalNodes = 0;
+            int filteredNodes = 0;
+            
+            for (JsonNode node : classesNode) {
+                totalNodes++;
+                log.debug("Processing Node: {}", node);
+                
+                // Prüfe, ob das Node echte Daten hat (mehr als nur __typename)
+                boolean hasRealData = false;
+                
+                // Prüfe auf wichtige Felder (außer __typename)
+                if (node.has("uri") && !node.get("uri").isNull() ||
+                    node.has("name") && !node.get("name").isNull() ||
+                    node.has("code") && !node.get("code").isNull() ||
+                    node.has("classType") && !node.get("classType").isNull() ||
+                    node.has("descriptionPart") && !node.get("descriptionPart").isNull()) {
+                    hasRealData = true;
+                }
+                
+                if (hasRealData) {
+                    try {
+                        T item = objectMapper.treeToValue(node, modelType);
+                        log.debug("Deserialized Item: {}", item);
+                        result.add(item);
+                    } catch (Exception e) {
+                        log.error("Error deserializing node: {}", node, e);
+                    }
+                } else {
+                    filteredNodes++;
+                    log.debug("Filtered out empty node: {}", node);
+                }
+            }
+            
+            log.info("Dictionary classes filtering: {} real items from {} total nodes ({} empty filtered out)", 
+                     result.size(), totalNodes, filteredNodes);
+            
+            return result;
+            
+        } catch (Exception e) {
+            log.error("Error deserializing dictionary classes response", e);
+            return null;
+        }
+    }
 }

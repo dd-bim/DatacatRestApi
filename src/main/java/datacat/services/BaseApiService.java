@@ -109,6 +109,10 @@ public class BaseApiService {
     protected <T> List<T> deserializeDictionaryInnerFindResponse(String response, String rootField, Class<T> modelType) {
         return responseDeserializer.deserializeDictionaryInnerFindResponse(response, rootField, modelType);
     }
+    
+    protected <T> List<T> deserializeDictionaryClassesWithFiltering(String response, String rootField, Class<T> modelType) {
+        return responseDeserializer.deserializeDictionaryClassesWithFiltering(response, rootField, modelType);
+    }
 
     protected <T> List<T> deserializeClassInnerFindResponse(String response, String rootField, Class<T> modelType) {
         return responseDeserializer.deserializeClassInnerFindResponse(response, rootField, modelType);

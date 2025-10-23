@@ -1,7 +1,7 @@
 services:
   datacatapi:
     container_name: datacatapi
-    image: schi11er/datacatrestapi:2.0.0
+    image: schi11er/datacatrestapi:2.0.1
     build: .
     ports:
       - "3001:3001"

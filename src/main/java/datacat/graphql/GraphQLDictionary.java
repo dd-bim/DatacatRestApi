@@ -54,13 +54,13 @@ public class GraphQLDictionary {
                     .append("uri:id ")
                     .append("releaseDate:created ")
                     .append("lastUpdatedUtc:lastModified ")
-                    .append("classes:concepts { ... on XtdSubject {")
+                    .append("classes:concepts (pageSize:100000) { nodes {... on XtdSubject {")
                     .append("uri:id ")
                     .append("name ")
                     .append("code:name ")
                     .append("classType:recordType ")
                     .append("descriptionPart:description ")
-                    .append("} } ")
+                    .append("} } }")
                     .append("} } ");
         return queryBuilder.toString();
     }

@@ -41,11 +41,29 @@ public class DictionaryClassesResponseDeserializer extends JsonDeserializer<Dict
             JsonNode classes = node.get("classes");
             List<ClassListItemContractV1Classes> classList = new ArrayList<>();
             
+            // Unterstützung für sowohl Array als auch nodes-Struktur
+            JsonNode conceptsArray = null;
             if (classes.isArray()) {
-                for (JsonNode concept : classes) {
-                    // Prüfen ob das Objekt mindestens ein nicht-leeres Feld hat
+                conceptsArray = classes;
+            } else if (classes.has("nodes") && classes.get("nodes").isArray()) {
+                conceptsArray = classes.get("nodes");
+            }
+            
+            if (conceptsArray != null) {
+                int totalCount = 0;
+                int filteredCount = 0;
+                
+                for (JsonNode concept : conceptsArray) {
+                    totalCount++;
+                    
+                    // Prüfen ob das Objekt mindestens ein nicht-leeres Feld hat (filtert leere {} heraus)
                     if (isValidClassObject(concept)) {
                         ClassListItemContractV1Classes classItem = new ClassListItemContractV1Classes();
+                        
+                        // __typename für Debug-Zwecke
+                        if (concept.has("__typename")) {
+                            classItem.setTypename(concept.get("__typename").asText());
+                        }
                         
                         // URI aus concept extrahieren
                         if (concept.has("uri")) {
@@ -73,8 +91,13 @@ public class DictionaryClassesResponseDeserializer extends JsonDeserializer<Dict
                         }
                         
                         classList.add(classItem);
+                    } else {
+                        filteredCount++;
                     }
                 }
+                
+                System.out.println(String.format("Dictionary Classes Filtering: %d valid items from %d total (%d empty filtered out)", 
+                                                classList.size(), totalCount, filteredCount));
             }
             
             response.setClasses(classList);
@@ -105,7 +128,8 @@ public class DictionaryClassesResponseDeserializer extends JsonDeserializer<Dict
     }
     
     /**
-     * Prüft ob ein JSON-Objekt mindestens ein nicht-leeres, nicht-null Feld enthält
+     * Prüft ob ein JSON-Objekt mindestens ein nicht-leeres, nicht-null Feld enthält.
+     * Filtert leere GraphQL-Objekte heraus, die nur __typename aber keine Daten haben.
      */
     private boolean isValidClassObject(JsonNode concept) {
         // Prüfen ob das Objekt leer ist oder nur leere/null Werte enthält
@@ -113,11 +137,19 @@ public class DictionaryClassesResponseDeserializer extends JsonDeserializer<Dict
             return false;
         }
         
+        // Wenn nur __typename vorhanden ist, ist es ein leeres Objekt
+        if (concept.size() == 1 && concept.has("__typename")) {
+            return false;
+        }
+        
         // Prüfen ob mindestens eines der wichtigen Felder einen gültigen Wert hat
-        return hasValidField(concept, "uri") || 
-               hasValidField(concept, "name") || 
-               hasValidField(concept, "code") || 
-               hasValidField(concept, "classType");
+        boolean hasValidData = hasValidField(concept, "uri") || 
+                              hasValidField(concept, "name") || 
+                              hasValidField(concept, "code") || 
+                              hasValidField(concept, "classType") ||
+                              hasValidField(concept, "descriptionPart");
+        
+        return hasValidData;
     }
     
     /**
