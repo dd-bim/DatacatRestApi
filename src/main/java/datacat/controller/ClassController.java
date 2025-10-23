@@ -74,7 +74,7 @@ public class ClassController {
         
         @Parameter(
             name = "IncludeClassProperties",
-            description = "Use this option to include properties of the class. By default, it is set to true.<br>",
+            description = "Use this option to include properties of the class. By default, it is set to false.<br>",
             in = ParameterIn.QUERY
         )
         @Valid @RequestParam(value = "IncludeClassProperties", required = false) Boolean includeClassProperties,
