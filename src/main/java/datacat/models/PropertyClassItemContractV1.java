@@ -6,13 +6,16 @@ package datacat.models;
 // =====================================================================================================================
 import java.util.*;
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import datacat.customization.DefaultValuesHandler;
+import datacat.models.deserializers.PropertyClassItemContractV1Deserializer;
 
 // =====================================================================================================================
 // M O D E L   C L A S S   S E C T I O N
 // 
 // =====================================================================================================================
 @JsonTypeName("PropertyClassItemContract.v1")
+@JsonDeserialize(using = PropertyClassItemContractV1Deserializer.class)
 public class PropertyClassItemContractV1 {
 
     @JsonProperty("name")
@@ -81,6 +84,9 @@ public class PropertyClassItemContractV1 {
     public void generateUri(String serverUrl) {
         if(this.uri != null) {
             this.uri = serverUrl + "/class/" + this.uri;
+        }
+        if (this.dictionaryUri != null) {
+            this.dictionaryUri = serverUrl + "/model/" + this.dictionaryUri;
         }
     }
 

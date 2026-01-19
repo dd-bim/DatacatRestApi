@@ -31,6 +31,7 @@ public class ClassContractV1Deserializer extends JsonDeserializer<ClassContractV
         
         if (node.has("code")) {
             classContract.setCode(node.get("code").asText());
+            classContract.setReferenceCode(node.get("code").asText());
         }
         
         if (node.has("name")) {

@@ -27,7 +27,7 @@ public class GraphQLProperty {
                 .append("uri:id ")
                 .append("majorVersion ")
                 .append("minorVersion ")
-                .append("allowedValues:possibleValues { values { sortNumber:order orderedValue { uri:id value:name code:name } } } ")
+                .append("allowedValues:possibleValues { values { nodes {sortNumber:order orderedValue { uri:id value:name code:name } } } } ")
                 .append("units { name } ")
                 .append("dataType ")
                 .append("examples { texts { example:text } } ")

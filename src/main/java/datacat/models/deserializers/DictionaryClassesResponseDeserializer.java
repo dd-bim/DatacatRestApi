@@ -60,10 +60,10 @@ public class DictionaryClassesResponseDeserializer extends JsonDeserializer<Dict
                     if (isValidClassObject(concept)) {
                         ClassListItemContractV1Classes classItem = new ClassListItemContractV1Classes();
                         
-                        // __typename für Debug-Zwecke
-                        if (concept.has("__typename")) {
-                            classItem.setTypename(concept.get("__typename").asText());
-                        }
+                        // // __typename für Debug-Zwecke
+                        // if (concept.has("__typename")) {
+                        //     classItem.setTypename(concept.get("__typename").asText());
+                        // }
                         
                         // URI aus concept extrahieren
                         if (concept.has("uri")) {

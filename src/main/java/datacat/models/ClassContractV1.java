@@ -152,5 +152,8 @@ public class ClassContractV1 {
         if (this.code != null) {
             this.code = this.code.toLowerCase();
         }
+        if (this.referenceCode != null) {
+            this.referenceCode = this.referenceCode.toLowerCase();
+        }
     }
 }

@@ -43,11 +43,27 @@ public class PropertyContractV5Deserializer extends JsonDeserializer<PropertyCon
             if (node.has("uri")) {
                 property.setUri(node.get("uri").asText());
             }
+            // Status - Präfix entfernen und formatieren (z.B. STATUS_ACTIVE -> Active)
             if (node.has("status")) {
-                property.setStatus(node.get("status").asText());
+                String status = node.get("status").asText();
+                if (status != null && status.contains("_")) {
+                    status = status.substring(status.indexOf("_") + 1); // Präfix bis zum ersten Unterstrich entfernen
+                    if (!status.isEmpty()) {
+                        status = status.substring(0, 1).toUpperCase() + status.substring(1).toLowerCase();
+                    }
+                }
+                property.setStatus(status);
             }
+            // DataType - Präfix "XTD_" entfernen und formatieren (z.B. XTD_STRING -> String)
             if (node.has("dataType")) {
-                property.setDataType(node.get("dataType").asText());
+                String dataType = node.get("dataType").asText();
+                if (dataType != null && dataType.startsWith("XTD_")) {
+                    dataType = dataType.substring(4); // "XTD_" entfernen
+                    if (!dataType.isEmpty()) {
+                        dataType = dataType.substring(0, 1).toUpperCase() + dataType.substring(1).toLowerCase();
+                    }
+                }
+                property.setDataType(dataType);
             }
             if (node.has("code")) {
                 String code = node.get("code").asText();
@@ -221,7 +237,7 @@ public class PropertyContractV5Deserializer extends JsonDeserializer<PropertyCon
 
     /**
      * Extrahiert Allowed Values aus der allowedValues Struktur:
-     * allowedValues:[{"values":[{"sortNumber":9,"orderedValue":{"uri":"...","value":"...","code":"..."}}]}]
+     * allowedValues:[{"values": { "nodes":[{"sortNumber":9,"orderedValue":{"uri":"...","value":"...","code":"..."}}]}}]
      */
     private List<PropertyValueContractV4> extractAllowedValuesFromStructure(JsonNode allowedValuesNode) {
         List<PropertyValueContractV4> allowedValues = new ArrayList<>();
@@ -229,8 +245,9 @@ public class PropertyContractV5Deserializer extends JsonDeserializer<PropertyCon
             if (allowedValuesNode.isArray()) {
                 for (JsonNode allowedValueGroup : allowedValuesNode) {
                     JsonNode valuesNode = allowedValueGroup.path("values");
-                    if (valuesNode.isArray()) {
-                        for (JsonNode valueNode : valuesNode) {
+                    JsonNode nodesNode = valuesNode.path("nodes");
+                    if (nodesNode.isArray()) {
+                        for (JsonNode valueNode : nodesNode) {
                             PropertyValueContractV4 allowedValue = new PropertyValueContractV4();
 
                             // SortNumber extrahieren

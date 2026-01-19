@@ -54,9 +54,16 @@ public class ClassPropertyContractV1Deserializer extends JsonDeserializer<ClassP
             property.setAllowedValues(allowedValues);
         }
         
-        // DataType
+        // DataType - Präfix "XTD_" entfernen und formatieren (z.B. XTD_STRING -> String)
         if (node.has("dataType")) {
-            property.setDataType(node.get("dataType").asText());
+            String dataType = node.get("dataType").asText();
+            if (dataType != null && dataType.startsWith("XTD_")) {
+                dataType = dataType.substring(4); // "XTD_" entfernen
+                if (!dataType.isEmpty()) {
+                    dataType = dataType.substring(0, 1).toUpperCase() + dataType.substring(1).toLowerCase();
+                }
+            }
+            property.setDataType(dataType);
         }
         
         // Definition aus def:definition Struktur extrahieren
@@ -104,7 +111,7 @@ public class ClassPropertyContractV1Deserializer extends JsonDeserializer<ClassP
     
     /**
      * Extrahiert Allowed Values aus der neuen allowedValues Struktur:
-     * allowedValues:[{"values":[{"sortNumber":9,"orderedValue":{"uri":"bb762202-79a1-42ea-9739-0411cde0f77e","value":"ungebunden 1","code":"ungebunden_1"}}]}]
+     * allowedValues:[{"values": { "nodes":[{"sortNumber":9,"orderedValue":{"uri":"bb762202-79a1-42ea-9739-0411cde0f77e","value":"ungebunden 1","code":"ungebunden_1"}}]}}]
      */
     private List<ClassPropertyValueContractV1> extractAllowedValuesFromStructure(JsonNode allowedValuesNode) {
         List<ClassPropertyValueContractV1> allowedValues = new ArrayList<>();
@@ -113,8 +120,9 @@ public class ClassPropertyContractV1Deserializer extends JsonDeserializer<ClassP
             if (allowedValuesNode.isArray()) {
                 for (JsonNode allowedValueGroup : allowedValuesNode) {
                     JsonNode valuesNode = allowedValueGroup.path("values");
-                    if (valuesNode.isArray()) {
-                        for (JsonNode valueNode : valuesNode) {
+                    JsonNode nodesNode = valuesNode.path("nodes");
+                    if (nodesNode.isArray()) {
+                        for (JsonNode valueNode : nodesNode) {
                             ClassPropertyValueContractV1 allowedValue = new ClassPropertyValueContractV1();
                             
                             // SortNumber extrahieren (auf derselben Ebene wie orderedValue)
