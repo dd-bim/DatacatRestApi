@@ -119,10 +119,12 @@ public class ClassController {
         )
         @Valid @RequestParam(value = "languageCode", required = false) @Deprecated String languageCode
     ) {
+        log.info("===== ClassController.classGet called with URI: {}", uri);
         
         String ID;
         try {
             ID = IdExtractor.extractIdFromUri(uri, "/class/");
+            log.debug("Extracted ID: {}", ID);
         } catch (URISyntaxException e) {
             log.error("Invalid URI format: {}", uri, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -135,13 +137,22 @@ public class ClassController {
             HttpHeaders headers = authenticationService.getAuthorizationHeaders();
             String authHeader = headers.getFirst("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                log.error("Invalid or missing Authorization header");
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
             String bearerToken = authHeader.substring(7);
             boolean includeProperties = includeClassProperties != null ? includeClassProperties : false; // default value is false
             String language = languageCode != null ? languageCode : "de"; // default value is "de" (german)
 
+            log.debug("Calling classService.getClassDetails with ID: {}, includeProperties: {}, language: {}", ID, includeProperties, language);
             ClassContractV1 classDetails = classService.getClassDetails(bearerToken, ID, includeProperties, language);
+            log.info("ClassDetails retrieved: {}", classDetails != null ? "SUCCESS" : "NULL");
+            
+            if (classDetails == null) {
+                log.warn("ClassDetails is null, returning INTERNAL_SERVER_ERROR");
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            
             return new ResponseEntity<>(classDetails, HttpStatus.OK);
 
         } catch (HttpServerErrorException e) {

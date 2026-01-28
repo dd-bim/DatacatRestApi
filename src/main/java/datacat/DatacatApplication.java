@@ -6,6 +6,7 @@ package datacat;
 // Spring Boot
 import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,6 +25,7 @@ import datacat.customization.CustomProperties;
 )
 @EnableConfigurationProperties(CustomProperties.class) // enables the use of custom properties
 @EnableScheduling
+@EnableRetry
 
 // =====================================================================================================================
 // M A I N   C L A S S   S E C T I O N

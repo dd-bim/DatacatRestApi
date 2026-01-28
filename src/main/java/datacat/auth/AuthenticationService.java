@@ -71,7 +71,15 @@ public class AuthenticationService {
 
     private String extractTokenFromResponse(String responseBody) {
         JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-        return jsonObject.getAsJsonObject("data").get("login").getAsString();
+        JsonObject dataObject = jsonObject.getAsJsonObject("data");
+        if (dataObject == null || !dataObject.has("login")) {
+            throw new RuntimeException("Invalid authentication response: missing 'data.login' field");
+        }
+        JsonElement loginElement = dataObject.get("login");
+        if (loginElement == null || loginElement.isJsonNull()) {
+            throw new RuntimeException("Invalid authentication response: 'login' field is null");
+        }
+        return loginElement.getAsString();
     }
 
     public String getBearerToken() {

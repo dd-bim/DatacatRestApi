@@ -26,6 +26,7 @@ public class DictionaryResponseContractV1 {
     private Integer count;
 
     @JsonProperty("dictionaries")
+    @JsonAlias("nodes")
     private List<@Valid DictionaryContractV1> dictionaries;
 
 

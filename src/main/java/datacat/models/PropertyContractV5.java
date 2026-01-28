@@ -192,6 +192,14 @@ public class PropertyContractV5 {
         if(this.dictionaryUri != null) {
             this.dictionaryUri = serverUrl + "/model/" + this.dictionaryUri;
         }
+        // Generate URIs for all allowedValues
+        if(this.allowedValues != null && !this.allowedValues.isEmpty()) {
+            for(PropertyValueContractV4 allowedValue : this.allowedValues) {
+                if(allowedValue != null) {
+                    allowedValue.generateUri(serverUrl);
+                }
+            }
+        }
     }
 
 

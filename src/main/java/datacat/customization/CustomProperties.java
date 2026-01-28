@@ -26,5 +26,21 @@ public class CustomProperties {
     private String username;
     private String password;
 
+    // HTTP Client Configuration
+    private Http http = new Http();
+
+    @Data
+    public static class Http {
+        private int connectionTimeout = 5000;
+        private int readTimeout = 30000;
+        private Pool pool = new Pool();
+
+        @Data
+        public static class Pool {
+            private int maxTotal = 50;
+            private int maxPerRoute = 20;
+        }
+    }
+
     // private String dictTag;
 }

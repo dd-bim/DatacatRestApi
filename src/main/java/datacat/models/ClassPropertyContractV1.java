@@ -144,6 +144,14 @@ public class ClassPropertyContractV1 {
             this.uri = serverUrl + "/property/" + this.uri;
             this.propertyUri = this.uri;
         }
+        // Generate URIs for all allowedValues
+        if(this.allowedValues != null && !this.allowedValues.isEmpty()) {
+            for(ClassPropertyValueContractV1 allowedValue : this.allowedValues) {
+                if(allowedValue != null) {
+                    allowedValue.generateUri(serverUrl);
+                }
+            }
+        }
     }
 
     public void transformToLowerCase() {

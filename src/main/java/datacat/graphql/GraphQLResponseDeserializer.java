@@ -59,6 +59,7 @@ public class GraphQLResponseDeserializer {
     // outer find response
     public <T> T deserializeOuterFindResponse(String response, String rootField, Class<T> modelType) {
         try {
+            log.debug("Starting deserializeOuterFindResponse for rootField: {}, modelType: {}", rootField, modelType.getSimpleName());
             JsonNode rootNode = objectMapper.readTree(response);
             JsonNode dataNode = rootNode.path("data").path(rootField);
             log.debug("Data Node: {}", dataNode);
@@ -68,11 +69,13 @@ public class GraphQLResponseDeserializer {
                 return null;
             }
 
+            log.debug("About to deserialize data node to {}", modelType.getSimpleName());
             T result = objectMapper.treeToValue(dataNode, modelType);
+            log.debug("Successfully deserialized to {}: {}", modelType.getSimpleName(), result);
             return result;
 
         } catch (Exception e) {
-            log.error("Error deserializing response", e);
+            log.error("Error deserializing response for rootField: {}, modelType: {}", rootField, modelType.getSimpleName(), e);
             return null;
         }
     }

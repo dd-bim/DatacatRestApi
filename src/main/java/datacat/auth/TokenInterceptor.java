@@ -9,7 +9,6 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.lang.NonNull;
 import lombok.extern.slf4j.Slf4j;
 // Logging
 import java.io.IOException;
@@ -30,8 +29,7 @@ public class TokenInterceptor implements ClientHttpRequestInterceptor {
     }
 
     @Override
-    @NonNull
-    public ClientHttpResponse intercept(@NonNull HttpRequest request, @NonNull byte[] body, @NonNull ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         log.debug("Intercepting request to: {}", request.getURI());
 
         try {

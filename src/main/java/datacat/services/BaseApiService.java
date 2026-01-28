@@ -7,7 +7,9 @@ package datacat.services;
 import org.springframework.http.*;
 import org.springframework.web.client.*;
 import org.springframework.stereotype.Service;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 
 // Java
 import java.util.List;
@@ -32,9 +34,10 @@ public class BaseApiService {
     private final GraphQLResponseDeserializer responseDeserializer;
     private final String serverUrl; // Cache the server URL to avoid repeated calls
 
-    public BaseApiService(CustomProperties customProperties, RestTemplateBuilder restTemplateBuilder,
+    public BaseApiService(CustomProperties customProperties,
+            @Qualifier("securedRestTemplate") RestTemplate restTemplate,
             GraphQLResponseDeserializer responseDeserializer) {
-        this.restTemplate = restTemplateBuilder.build();
+        this.restTemplate = restTemplate;
         this.customProperties = customProperties;
         this.responseDeserializer = responseDeserializer;
         this.serverUrl = customProperties.getServerUrl(); // Initialize once
@@ -46,6 +49,11 @@ public class BaseApiService {
     // =====================================================================================================================
     
     // main logic for query execution
+    @Retryable(
+        retryFor = {HttpServerErrorException.class, ResourceAccessException.class},
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000)
+    )
     public String executeQuery(String query, String bearerToken) {
         log.info(" E X E C U T I O N ");
 
