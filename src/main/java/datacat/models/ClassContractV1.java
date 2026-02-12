@@ -156,4 +156,10 @@ public class ClassContractV1 {
             this.referenceCode = this.referenceCode.toLowerCase();
         }
     }
+
+    public void changeClassType() {
+        if (this.classType != null && this.classType.equals("Subject")) {
+            this.classType = "Class";
+        }
+    }
 }

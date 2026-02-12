@@ -15,11 +15,11 @@ public class DefaultValuesHandler {
     private static final Map<String, Object> defaultValues = new HashMap<>();
 
     static {
-        defaultValues.put("status", "active");
+        defaultValues.put("status", "Active");
         defaultValues.put("creatorLanguageCode", "de");
         defaultValues.put("defaultLanguageCode", "de");
         // defaultValues.put("countryOfOrigin", "DE");
-        defaultValues.put("propertyStatus", "active");
+        defaultValues.put("propertyStatus", "Active");
         defaultValues.put("licence", "GPLv3");
         defaultValues.put("licenceUrl", "https://www.gnu.org/licenses/gpl-3.0.html");
         defaultValues.put("isLatestVersion", true);

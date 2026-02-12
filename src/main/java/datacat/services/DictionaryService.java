@@ -164,14 +164,13 @@ public class DictionaryService {
 
     // =====================================================================================================================
     // ENDPOINT: /api/Dictionary/v1/Classes
-    public DictionaryClassesResponseContractV1Classes getDictionaryClasses(String bearerToken, String id,
-            int queryOffset, int queryLimit, int pageSize, String languageCode) {
-        
+        public DictionaryClassesResponseContractV1Classes getDictionaryClasses(String bearerToken, String id,
+            int queryOffset, int queryLimit, int pageSize, String languageCode, String searchText, String classType) {
         // Apply default limit rules
         int effectiveLimit = baseApiService.calculateEffectiveLimit(queryOffset, queryLimit);
-        
+
         String response = baseApiService.executeQuery(
-            GraphQLDictionary.getDictionaryGroupQuery(id, languageCode), 
+            GraphQLDictionary.getDictionaryGroupQuery(id, languageCode),
             bearerToken
         );
 
@@ -191,23 +190,45 @@ public class DictionaryService {
         if (allClasses == null || allClasses.isEmpty()) {
             return dictionaryResponse;
         }
-
-        // Apply URI generation and transformation to all classes
         allClasses.forEach(classItem -> {
+            classItem.changeClassType();
+        });
+
+        // Filter nach searchText (case-insensitive, im Namen) und ClassType (exakt, case-insensitive)
+        List<ClassListItemContractV1Classes> filteredClasses = allClasses;
+        if ((searchText != null && !searchText.isBlank()) || (classType != null && !classType.isBlank())) {
+            filteredClasses = allClasses.stream()
+                .filter(classItem -> {
+                    boolean matches = true;
+                    if (searchText != null && !searchText.isBlank()) {
+                        String name = classItem.getName();
+                        matches = name != null && name.toLowerCase().contains(searchText.toLowerCase());
+                    }
+                    if (matches && classType != null && !classType.isBlank()) {
+                        String type = classItem.getClassType();
+                        matches = type != null && type.equalsIgnoreCase(classType);
+                    }
+                    return matches;
+                })
+                .toList();
+        }
+
+        // Apply URI generation and transformation zu allen gefilterten Klassen
+        filteredClasses.forEach(classItem -> {
             classItem.generateUri(baseApiService.getServerUrl());
             classItem.transformToLowerCase();
         });
 
         // Validate offset bounds (allow empty results for offset >= totalElements)
         boolean allowEmptyResult = true; // Set to false if you want the old error behavior
-        baseApiService.validateOffsetBounds(queryOffset, allClasses.size(), "class", allowEmptyResult);
+        baseApiService.validateOffsetBounds(queryOffset, filteredClasses.size(), "class", allowEmptyResult);
 
-        int totalElements = allClasses.size();
-        
+        int totalElements = filteredClasses.size();
+
         // Calculate actual count and handle pagination
         int actualCount;
         List<ClassListItemContractV1Classes> paginatedClasses;
-        
+
         if (queryOffset >= totalElements) {
             // Return empty list but with correct metadata
             paginatedClasses = List.of(); // Empty list
@@ -216,7 +237,7 @@ public class DictionaryService {
             // Normal pagination
             actualCount = baseApiService.calculateActualCount(queryOffset, effectiveLimit, totalElements);
             int endIndex = Math.min(queryOffset + actualCount, totalElements);
-            paginatedClasses = allClasses.subList(queryOffset, endIndex);
+            paginatedClasses = filteredClasses.subList(queryOffset, endIndex);
         }
 
         // Update response with paginated data

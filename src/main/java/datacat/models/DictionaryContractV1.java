@@ -31,7 +31,7 @@ public class DictionaryContractV1 {
     private String name;
 
     @JsonProperty("version")
-    private String version;
+    private String version = "1.0";
 
     @JsonProperty("organizationCodeOwner")
     private String organizationCodeOwner;
@@ -98,6 +98,7 @@ public class DictionaryContractV1 {
         if(this.uri != null) {
             this.uri = serverUrl + "/model/" + this.uri;
         }
+        this.organizationNameOwner = serverUrl;
     }
 
     public void transformToLowerCase() {

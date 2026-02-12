@@ -48,6 +48,7 @@ public class ClassService {
         if (classDetails != null) {
             classDetails.generateUri(baseApiService.getServerUrl());
             classDetails.transformToLowerCase();
+            classDetails.changeClassType();
 
             if (includeProperties && classDetails.getClassProperties() != null) {
                 for (ClassPropertyContractV1 property : classDetails.getClassProperties()) {

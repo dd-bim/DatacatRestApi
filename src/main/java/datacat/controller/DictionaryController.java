@@ -101,7 +101,7 @@ public class DictionaryController {
             int queryLimit = limit != null ? limit : (queryOffset != 0 ? 100 : 1000); // default value is 1000, but 100 if offset is not 0
             // int pageSize = queryOffset + queryLimit; // pageSize is the sum of offset and limit
     
-            if (uri != null) {
+            if (uri != null && !uri.isEmpty()) {
                 String ID;
                 try {
                     ID = IdExtractor.extractIdFromUri(uri, "/model/");
@@ -170,19 +170,17 @@ public class DictionaryController {
         
         @Parameter(
             name = "ClassType",
-            deprecated = true,
-            description = "! This option is not compatible with datacat.org or any of its instances",
+            description = "Filtert die Klassen nach classType (case-insensitive, exakter Vergleich)",
             in = ParameterIn.QUERY
         )
-        @Valid @RequestParam(value = "ClassType", required = false) @Deprecated String classType,
+        @Valid @RequestParam(value = "ClassType", required = false) String classType,
         
         @Parameter(
             name = "SearchText",
-            deprecated = true,
-            description = "! This option is not compatible with datacat.org or any of its instances",
+            description = "Filtert die Klassen nach Namen (case-insensitive)",
             in = ParameterIn.QUERY
         )
-        @Valid @RequestParam(value = "SearchText", required = false) @Deprecated String searchText,
+        @Valid @RequestParam(value = "SearchText", required = false) String searchText,
         
         @Parameter(
             name = "RelatedIfcEntity",
@@ -231,10 +229,11 @@ public class DictionaryController {
             @SuppressWarnings("null")
             String bearerToken = headers.getFirst("Authorization").substring(7);
             int queryOffset = offset != null ? offset : 0; // default value is 0
-            int queryLimit = limit != null ? limit : (queryOffset != 0 ? 100 : 1000); // default value is 1000, but 100 if offset is not 0
-            int pageSize = queryOffset + queryLimit; // pageSize is the sum of offset and limit
+            int queryLimit = limit != null ? limit : (queryOffset != 0 ? 100 : 1000); // default value is 1000, aber 100 wenn offset != 0
+            int pageSize = queryOffset + queryLimit; // pageSize ist die Summe aus offset und limit
 
-            DictionaryClassesResponseContractV1Classes dictionaryResponse = dictionaryService.getDictionaryClasses(bearerToken, ID, queryOffset, queryLimit, pageSize, languageCode); // No query passed here
+            DictionaryClassesResponseContractV1Classes dictionaryResponse = dictionaryService.getDictionaryClasses(
+                bearerToken, ID, queryOffset, queryLimit, pageSize, languageCode, searchText, classType);
             return new ResponseEntity<>(dictionaryResponse, HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {

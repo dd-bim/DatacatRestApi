@@ -29,7 +29,7 @@ public class SpringDocConfiguration {
                         .license(new License()
                                 .name("GPLv3 Lizenz")
                                 .url("https://www.gnu.org/licenses/gpl-3.0.html"))
-                        .version("2.0.0"))
+                        .version("2.0.3"))
                 .tags(List.of(
                         new Tag().name("Class").description("Operations about classes"),
                         new Tag().name("Dictionary").description("Operations about dictionaries"),

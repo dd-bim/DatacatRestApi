@@ -78,6 +78,7 @@ public class DictionaryClassesResponseDeserializer extends JsonDeserializer<Dict
                         // Code aus concept extrahieren
                         if (concept.has("code")) {
                             classItem.setCode(concept.get("code").asText());
+                            classItem.setReferenceCode(concept.get("code").asText());
                         }
                         
                         // ClassType aus concept extrahieren

@@ -16,6 +16,9 @@ import lombok.Data;
 @JsonTypeName("ClassListItemContract.v1.Classes")
 @Data
 public class ClassListItemContractV1Classes {
+    public String getClassType() {
+        return classType;
+    }
 
     @JsonProperty("uri")
     private String uri;
@@ -64,6 +67,12 @@ public class ClassListItemContractV1Classes {
             this.code = this.code.toLowerCase();
         } else {
             this.code = this.name.toLowerCase();
+        }
+    }
+
+    public void changeClassType() {
+        if (this.classType != null && this.classType.equals("Subject")) {
+            this.classType = "Class";
         }
     }
 }
