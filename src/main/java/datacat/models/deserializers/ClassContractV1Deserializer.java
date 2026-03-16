@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import datacat.models.ClassContractV1;
 import datacat.models.ClassPropertyContractV1;
 
@@ -89,7 +91,8 @@ public class ClassContractV1Deserializer extends JsonDeserializer<ClassContractV
         
         // Properties explizit verarbeiten
         if (node.has("classProperties")) {
-            List<ClassPropertyContractV1> properties = extractClassProperties(node.get("classProperties"));
+            List<String> pSetsClassNames = extractPSetsClassNames(node);
+            List<ClassPropertyContractV1> properties = extractClassProperties(node.get("classProperties"), pSetsClassNames);
             classContract.setClassProperties(properties);
         }
         
@@ -154,18 +157,54 @@ public class ClassContractV1Deserializer extends JsonDeserializer<ClassContractV
     }
     
     /**
-     * Extrahiert die Class Properties und verwendet den ClassPropertyContractV1Deserializer
+     * Extrahiert pSetsClassName-Werte aus connectedSubjects[].targetSubjects[].pSetsClassName auf Subject-Ebene.
      */
-    private List<ClassPropertyContractV1> extractClassProperties(JsonNode classPropertiesNode) {
+    private List<String> extractPSetsClassNames(JsonNode subjectNode) {
+        List<String> names = new ArrayList<>();
+        try {
+            JsonNode connectedSubjectsNode = subjectNode.path("connectedSubjects");
+            if (connectedSubjectsNode.isArray()) {
+                for (JsonNode connNode : connectedSubjectsNode) {
+                    JsonNode targetSubjectsNode = connNode.path("targetSubjects");
+                    if (targetSubjectsNode.isArray()) {
+                        for (JsonNode targetNode : targetSubjectsNode) {
+                            if (targetNode.has("pSetsClassName") && !targetNode.get("pSetsClassName").isNull()) {
+                                String name = targetNode.get("pSetsClassName").asText();
+                                if (name != null && !name.isEmpty()) {
+                                    names.add(name);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error extracting pSetsClassNames: " + e.getMessage());
+        }
+        return names;
+    }
+
+    /**
+     * Extrahiert die Class Properties und verwendet den ClassPropertyContractV1Deserializer.
+     * Injiziert pSetsClassNames in jeden Property-Node.
+     */
+    private List<ClassPropertyContractV1> extractClassProperties(JsonNode classPropertiesNode, List<String> pSetsClassNames) {
         List<ClassPropertyContractV1> properties = new ArrayList<>();
         try {
             if (classPropertiesNode.isArray()) {
                 ObjectMapper mapper = new ObjectMapper();
                 ClassPropertyContractV1Deserializer propertyDeserializer = new ClassPropertyContractV1Deserializer();
-                
+
                 for (JsonNode propertyNode : classPropertiesNode) {
+                    // pSetsClassNames in den Property-Node injizieren
+                    ObjectNode augmented = ((ObjectNode) propertyNode.deepCopy());
+                    ArrayNode namesArray = augmented.putArray("_pSetsClassNames");
+                    for (String name : pSetsClassNames) {
+                        namesArray.add(name);
+                    }
+
                     ClassPropertyContractV1 property = propertyDeserializer.deserialize(
-                        propertyNode.traverse(mapper), 
+                        augmented.traverse(mapper),
                         null
                     );
                     if (property != null) {

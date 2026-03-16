@@ -44,6 +44,7 @@ public class GraphQLClass {
 
         if (includeProperties == true) {
             queryBuilder.append(getClassPropertyQuery());
+            queryBuilder.append("connectedSubjects { targetSubjects { pSetsClassName:name}} ");
             log.debug("Query includes properties");
         } else {
             log.debug("Query does not include properties");
@@ -68,6 +69,7 @@ public class GraphQLClass {
                 .append("dataType ")
                 .append("examples { texts { example:text } } ")
                 .append("dictionary { propertyDictionaryUri:id } ")
+                .append("subjects { tags { tagName:name } pSetPropName:name } ")
                 .append("}");
 
         return queryBuilder.toString();
@@ -97,8 +99,10 @@ public class GraphQLClass {
                 .append("dataType ")
                 .append("examples { texts { example:text } } ")
                 .append("dictionary { propertyDictionaryUri:id } ")
+                .append("subjects { tags { tagName:name } pSetPropName:name }")
                 .append("}")
                 .append("classUri:id ")
+                .append("connectedSubjects { targetSubjects { pSetsClassName:name}} ")
                 .append("}")
                 .append("} }");
 

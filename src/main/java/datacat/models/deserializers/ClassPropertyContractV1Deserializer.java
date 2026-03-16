@@ -6,11 +6,14 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import datacat.models.ClassPropertyContractV1;
 import datacat.models.ClassPropertyValueContractV1;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 public class ClassPropertyContractV1Deserializer extends JsonDeserializer<ClassPropertyContractV1> {
     
     @Override
@@ -83,7 +86,14 @@ public class ClassPropertyContractV1Deserializer extends JsonDeserializer<ClassP
             String propertyDictionaryUri = extractPropertyDictionaryUri(node.get("dictionary"));
             property.setPropertyDictionaryUri(propertyDictionaryUri);
         }
-        
+
+        // propertySet: pSetPropName (aus subjects) mit pSetsClassName (aus connectedSubjects) vergleichen
+        List<String> pSetPropNames = extractPSetPropNames(node);
+        List<String> pSetsClassNames = extractPSetsClassNames(node);
+        String resolvedPropertySet = resolvePropertySet(pSetPropNames, pSetsClassNames,
+                property.getPropertyCode());
+            property.setPropertySet(resolvedPropertySet != null ? resolvedPropertySet : "undefined_set");
+
         return property;
     }
     
@@ -182,6 +192,100 @@ public class ClassPropertyContractV1Deserializer extends JsonDeserializer<ClassP
         return null;
     }
     
+    /**
+     * Extrahiert pSetPropName-Werte aus subjects[].
+     * Nur Subjects, bei denen mindestens ein Tag den tagName "Merkmalsgruppe" trägt,
+     * werden für den Vergleich berücksichtigt.
+     */
+    private static final String REQUIRED_TAG = "Merkmalsgruppe";
+
+    private List<String> extractPSetPropNames(JsonNode propertyNode) {
+        List<String> names = new ArrayList<>();
+        try {
+            JsonNode subjectsNode = propertyNode.path("subjects");
+            if (subjectsNode.isArray()) {
+                for (JsonNode n : subjectsNode) {
+                    if (hasTag(n, REQUIRED_TAG) && n.has("pSetPropName") && !n.get("pSetPropName").isNull()) {
+                        String name = n.get("pSetPropName").asText();
+                        if (name != null && !name.isEmpty()) {
+                            names.add(name);
+                        }
+                    }
+                }
+            } else if (!subjectsNode.isMissingNode() && hasTag(subjectsNode, REQUIRED_TAG)
+                    && subjectsNode.has("pSetPropName")) {
+                String name = subjectsNode.get("pSetPropName").asText();
+                if (name != null && !name.isEmpty()) {
+                    names.add(name);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Error extracting pSetPropNames: {}", e.getMessage());
+        }
+        return names;
+    }
+
+    /**
+     * Prüft, ob ein subjects-Knoten mindestens ein Tag mit dem gegebenen tagName besitzt.
+     * Struktur: { tags: [{ tagName: "..." }, ...] }
+     */
+    private boolean hasTag(JsonNode subjectNode, String requiredTagName) {
+        JsonNode tagsNode = subjectNode.path("tags");
+        if (tagsNode.isArray()) {
+            for (JsonNode tag : tagsNode) {
+                if (tag.has("tagName") && requiredTagName.equals(tag.get("tagName").asText())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liest die pSetsClassNames aus dem injizierten _pSetsClassNames-Feld im Property-Node.
+     * Dieses Feld wird vom Deserializer auf Subject-/Node-Ebene vor der Deserialisierung injiziert.
+     */
+    private List<String> extractPSetsClassNames(JsonNode propertyNode) {
+        List<String> names = new ArrayList<>();
+        try {
+            JsonNode injected = propertyNode.path("_pSetsClassNames");
+            if (injected.isArray()) {
+                for (JsonNode n : injected) {
+                    String name = n.asText();
+                    if (name != null && !name.isEmpty()) {
+                        names.add(name);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Error extracting _pSetsClassNames: {}", e.getMessage());
+        }
+        return names;
+    }
+
+    /**
+     * Vergleicht pSetPropNames und pSetsClassNames und gibt den ersten gemeinsamen Namen zurück.
+     * Wenn mehrere gemeinsame Namen existieren, wird eine Warnung geloggt.
+     */
+    private String resolvePropertySet(List<String> pSetPropNames, List<String> pSetsClassNames,
+            String propertyCode) {
+        if (pSetPropNames.isEmpty() || pSetsClassNames.isEmpty()) {
+            return null;
+        }
+        List<String> matches = pSetPropNames.stream()
+                .filter(pSetsClassNames::contains)
+                .collect(Collectors.toList());
+        if (matches.isEmpty()) {
+            return null;
+        }
+        if (matches.size() > 1) {
+            log.warn("Multiple matching propertySet names found for property '{}': {}. Using first: '{}'",
+                    propertyCode, matches, matches.get(0));
+        }
+        log.debug("Resolved propertySet '{}' for property '{}'", matches.get(0), propertyCode);
+        return matches.get(0);
+    }
+
     /**
      * Extrahiert die Property Dictionary URI aus der dictionary Struktur:
      * "dictionary":{"propertyDictionaryUri":"..."}

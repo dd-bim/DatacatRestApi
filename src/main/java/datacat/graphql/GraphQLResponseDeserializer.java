@@ -5,6 +5,8 @@ package datacat.graphql;
 // =====================================================================================================================
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
@@ -154,10 +156,86 @@ public class GraphQLResponseDeserializer {
     }
 
     /**
-     * Class inner find response - extrahiert aus classProperties Array
+     * Class inner find response – extrahiert aus classProperties Array und injiziert
+     * pSetsClassNames (aus connectedSubjects auf Node-Ebene) in jeden Property-Node.
      */
     public <T> List<T> deserializeClassInnerFindResponse(String response, String rootField, Class<T> modelType) {
-        return deserializeInnerFindResponse(response, rootField, modelType, "classProperties");
+        try {
+            JsonNode rootNode = objectMapper.readTree(response);
+            JsonNode dataNode = rootNode.path("data").path(rootField);
+
+            if (dataNode.isMissingNode()) {
+                log.error("No '{}' field in the 'data' response", rootField);
+                return null;
+            }
+
+            JsonNode nodesNode = dataNode.path("nodes");
+            List<T> result = new ArrayList<>();
+
+            for (JsonNode node : nodesNode) {
+                // pSetsClassNames auf Subject-/Node-Ebene extrahieren
+                List<String> pSetsClassNames = extractPSetsClassNamesFromNode(node);
+
+                JsonNode classPropertiesNode = node.path("classProperties");
+                if (classPropertiesNode.isArray()) {
+                    for (JsonNode propertyNode : classPropertiesNode) {
+                        // pSetsClassNames in den Property-Node injizieren
+                        ObjectNode augmented = (ObjectNode) propertyNode.deepCopy();
+                        ArrayNode namesArray = augmented.putArray("_pSetsClassNames");
+                        for (String name : pSetsClassNames) {
+                            namesArray.add(name);
+                        }
+                        try {
+                            T item = objectMapper.treeToValue(augmented, modelType);
+                            result.add(item);
+                        } catch (Exception e) {
+                            log.error("Error deserializing property node: {}", propertyNode, e);
+                        }
+                    }
+                } else {
+                    log.warn("Expected an array for 'classProperties' but found: {}", classPropertiesNode);
+                }
+            }
+
+            if (result.isEmpty()) {
+                log.error("No information found in the '{}' field", rootField);
+                return null;
+            }
+
+            return result;
+
+        } catch (Exception e) {
+            log.error("Error deserializing class inner find response", e);
+            return null;
+        }
+    }
+
+    /**
+     * Extrahiert pSetsClassName-Werte aus connectedSubjects[].targetSubjects[].pSetsClassName auf Node-Ebene.
+     */
+    private List<String> extractPSetsClassNamesFromNode(JsonNode subjectNode) {
+        List<String> names = new ArrayList<>();
+        try {
+            JsonNode connectedSubjectsNode = subjectNode.path("connectedSubjects");
+            if (connectedSubjectsNode.isArray()) {
+                for (JsonNode connNode : connectedSubjectsNode) {
+                    JsonNode targetSubjectsNode = connNode.path("targetSubjects");
+                    if (targetSubjectsNode.isArray()) {
+                        for (JsonNode targetNode : targetSubjectsNode) {
+                            if (targetNode.has("pSetsClassName") && !targetNode.get("pSetsClassName").isNull()) {
+                                String name = targetNode.get("pSetsClassName").asText();
+                                if (name != null && !name.isEmpty()) {
+                                    names.add(name);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Error extracting pSetsClassNames from node: {}", e.getMessage());
+        }
+        return names;
     }
 
     /**
